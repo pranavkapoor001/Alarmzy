@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
@@ -72,11 +71,13 @@ public class AlarmRecViewAdapter extends RecyclerView.Adapter<AlarmRecViewAdapte
             public void onClick(View view) {
                 if (!holder.switchAlarmEnabled.isChecked()) {
                     ah.cancelAlarm(currentItem.getAlarmId(), false);
-                    Toast.makeText(context, "Alarm for " + formatted + " disabled", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, "Alarm for " + formatted + " disabled", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
                 } else {
                     ah.oldAlarmId = currentItem.getAlarmId();
                     ah.reEnableAlarm(alarmTimeInMillis);
-                    Toast.makeText(context, "Alarm Set for " + formatted, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, "Alarm Set for " + formatted, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
                 }
             }
         });
