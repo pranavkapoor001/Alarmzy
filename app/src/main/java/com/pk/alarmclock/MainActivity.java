@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,13 +15,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.pk.alarmclock.alarm.AlarmHelper;
 import com.pk.alarmclock.alarm.AlarmRecViewAdapter;
 import com.pk.alarmclock.alarm.db.AlarmEntity;
 import com.pk.alarmclock.alarm.db.AlarmViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -85,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
                 int adapterPos = viewHolder.getAdapterPosition();
                 int alarmIdRecView = mAdapter.getAlarmIdRecView(adapterPos);
                 alarmHelper.cancelAlarm(alarmIdRecView, true);
-                Toast.makeText(MainActivity.this, "Alarm Removed", Toast.LENGTH_SHORT).show();
+                Snackbar.make(viewHolder.itemView, "Alarm Removed", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
         helper.attachToRecyclerView(mRecyclerView);
@@ -105,11 +108,13 @@ public class MainActivity extends AppCompatActivity {
                 mMinute = minute;
                 Log.e(TAG, "HourOfDay: " + hourOfDay);
 
+                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
+                        Locale.getDefault());
+                final String formatted = sdf.format(c.getTime());
+
                 alarmHelper.createAlarm(c);
-                Toast.makeText(MainActivity.this, "Alarm Set", Toast.LENGTH_SHORT).show();
-                /*SnackBar.make(view, "Hint: Swipe alarms to remove", SnackBar.LENGTH_LONG)
+                Snackbar.make(findViewById(android.R.id.content), "Alarm Set for " + formatted, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                 */
             }
         };
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
