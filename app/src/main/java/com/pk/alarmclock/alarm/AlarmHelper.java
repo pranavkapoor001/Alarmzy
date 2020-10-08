@@ -82,12 +82,12 @@ public class AlarmHelper {
         Log.e(TAG, "createAlarm: isNew: " + isNew);
         Log.e(TAG, "createAlarm: TimeInMs: " + c.getTimeInMillis());
 
-        AlarmEntity alarm = new AlarmEntity(alarmTime, alarmId, true);
-        // Delete old alarm from db (Was disabled by toggle)
+        // Update alarmId of alarm enabled by Toggle
         if (!isNew) {
             Log.e(TAG, "createAlarm: Not New");
             ar.updateAlarmId(oldAlarmId, alarmId);
         } else {
+            AlarmEntity alarm = new AlarmEntity(alarmTime, alarmId, true);
             ar.insert(alarm);
         }
     }
