@@ -27,6 +27,10 @@ public class AlarmRepository {
         return allAlarms;
     }
 
+    public List<AlarmEntity> getAllAlarmsReSched() {
+        return alarmDao.getAllAlarmsReSched();
+    }
+
     public void insert(final AlarmEntity alarmEntity) {
         databaseWriteExecutor.execute(new Runnable() {
             @Override

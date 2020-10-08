@@ -92,8 +92,13 @@ public class AlarmHelper {
         }
     }
 
-    // Create alarm when Toggle is enabled
+    /* Create alarm when Toggle is enabled
+     * REQUIRED: Set old alarmId using AlarmHelpers obj
+     */
     public void reEnableAlarm(long alarmTime) {
+        if (oldAlarmId == 0)
+            Log.e(TAG, "reEnableAlarm: oldAlarmId NOT SET !");
+
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(alarmTime);
         isNew = false;

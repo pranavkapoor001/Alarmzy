@@ -14,8 +14,13 @@ public interface AlarmDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(AlarmEntity alarmEntity);
 
+    // Fetch all alarms in List<> wrapped in liveData to observe
     @Query("SELECT * FROM alarm_table")
     LiveData<List<AlarmEntity>> getAllAlarms();
+
+    // Fetch all alarms in List<> to ReSchedule()
+    @Query(("SELECT * FROM alarm_table"))
+    List<AlarmEntity> getAllAlarmsReSched();
 
     // Pass alarm id to delete from db
     @Query("DELETE FROM alarm_table WHERE mAlarmId = :id")

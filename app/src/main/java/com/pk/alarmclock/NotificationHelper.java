@@ -16,8 +16,8 @@ import com.pk.alarmclock.alarm.AlarmTriggerActivity;
 public class NotificationHelper {
 
     static final String PRIMARY_CHANNEL_ID = "primary_channel_id";
-    NotificationManager mNotifyManager;
     public int mAlarmId;
+    NotificationManager mNotifyManager;
     Context mContext;
 
     public NotificationHelper(Context context, int alarmId) {
