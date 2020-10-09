@@ -6,12 +6,12 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "alarm_table")
 public class AlarmEntity {
 
-    // mAlarmTime is used only for setting alarmTime
-    @PrimaryKey
-    private long mAlarmTime;
-
     // ID used to disable / enable / delete alarms
+    @PrimaryKey
     private int mAlarmId;
+
+    // Trigger time for alarm
+    private long mAlarmTime;
     private boolean mAlarmEnabled;
 
     public AlarmEntity(long alarmTime, int alarmId, boolean alarmEnabled) {
