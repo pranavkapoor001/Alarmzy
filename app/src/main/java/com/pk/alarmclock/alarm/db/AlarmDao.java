@@ -15,7 +15,7 @@ public interface AlarmDao {
     void insert(AlarmEntity alarmEntity);
 
     // Fetch all alarms in List<> wrapped in liveData to observe
-    @Query("SELECT * FROM alarm_table")
+    @Query("SELECT * FROM alarm_table ORDER BY mAlarmTime ASC")
     LiveData<List<AlarmEntity>> getAllAlarms();
 
     // Fetch all alarms in List<> to ReSchedule()
