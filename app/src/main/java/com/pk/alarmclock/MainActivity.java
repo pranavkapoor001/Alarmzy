@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        AlarmViewModel alarmViewModel = new ViewModelProvider(this).get(AlarmViewModel.class);
+        final AlarmViewModel alarmViewModel = new ViewModelProvider(this).get(AlarmViewModel.class);
         alarmViewModel.getAllAlarms().observe(this, new Observer<List<AlarmEntity>>() {
             @Override
             public void onChanged(List<AlarmEntity> alarmEntities) {
@@ -85,8 +85,8 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 // This also cancels the alarm
                 int adapterPos = viewHolder.getAdapterPosition();
-                int alarmIdRecView = mAdapter.getAlarmIdRecView(adapterPos);
-                alarmHelper.cancelAlarm(alarmIdRecView, true);
+                AlarmEntity currentEntity = mAdapter.getAlarmRecView(adapterPos);
+                alarmHelper.cancelAlarm(currentEntity, true, true, -1);
                 Snackbar.make(viewHolder.itemView, "Alarm Removed", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }

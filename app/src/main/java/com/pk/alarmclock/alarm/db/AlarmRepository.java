@@ -27,6 +27,10 @@ public class AlarmRepository {
         return allAlarms;
     }
 
+    public AlarmEntity getAlarm(int alarmId) {
+        return alarmDao.getAlarm(alarmId);
+    }
+
     public List<AlarmEntity> getAllAlarmsReSched() {
         return alarmDao.getAllAlarmsReSched();
     }
@@ -36,6 +40,15 @@ public class AlarmRepository {
             @Override
             public void run() {
                 alarmDao.insert(alarmEntity);
+            }
+        });
+    }
+
+    public void update(final AlarmEntity alarmEntity) {
+        databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                alarmDao.update(alarmEntity);
             }
         });
     }
@@ -59,11 +72,11 @@ public class AlarmRepository {
         });
     }
 
-    public void updateAlarmId(final int oldAlarmId, final int newAlarmId) {
+    public void updateAlarmIdTime(final int oldAlarmId, final int newAlarmId, final long alarmTime) {
         databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                alarmDao.updateAlarmId(oldAlarmId, newAlarmId);
+                alarmDao.updateAlarmIdTime(oldAlarmId, newAlarmId, alarmTime);
                 // Update Toggle Value
                 updateAlarmStatus(newAlarmId, true);
             }

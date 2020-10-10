@@ -39,7 +39,7 @@ public class ReSchedAlarmService extends JobIntentService {
             if (ae.getAlarmEnabled()) {
                 //Set old alarmId
                 ah.oldAlarmId = ae.getAlarmId();
-                ah.reEnableAlarm(ae.getAlarmTime());
+                ah.reEnableAlarm(ae);
                 Log.e("ReSchedAlarmService", "AlarmEnabled(OldId): " + ae.getAlarmId());
             }
         }
