@@ -1,6 +1,5 @@
 package com.pk.alarmclock.alarm;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +24,12 @@ public class AlarmRecViewAdapter extends RecyclerView.Adapter<AlarmRecViewHolder
     }
 
     // Gets current position for ItemTouchHelper (Drag to del)
-    public int getAlarmIdRecView(int position) {
+    public AlarmEntity getAlarmRecView(int position) {
         // Return alarmId for selected alarm
         final AlarmEntity currentItem = mAlarmDataList.get(position);
-        return currentItem.getAlarmId();
+        AlarmEntity currentEntity = new AlarmEntity(currentItem.getAlarmTime(),
+                currentItem.getAlarmId(), currentItem.getAlarmEnabled(), currentItem.getDaysOfRepeatArr());
+        return currentEntity;
     }
 
     @NonNull

@@ -27,6 +27,10 @@ public class AlarmRepository {
         return allAlarms;
     }
 
+    public AlarmEntity getAlarm(int alarmId) {
+        return alarmDao.getAlarm(alarmId);
+    }
+
     public List<AlarmEntity> getAllAlarmsReSched() {
         return alarmDao.getAllAlarmsReSched();
     }
@@ -36,6 +40,15 @@ public class AlarmRepository {
             @Override
             public void run() {
                 alarmDao.insert(alarmEntity);
+            }
+        });
+    }
+
+    public void update(final AlarmEntity alarmEntity) {
+        databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                alarmDao.update(alarmEntity);
             }
         });
     }
