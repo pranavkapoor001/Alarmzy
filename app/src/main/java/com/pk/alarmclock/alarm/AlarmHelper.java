@@ -252,8 +252,8 @@ public class AlarmHelper {
                 new AlarmManager.AlarmClockInfo(cal.getTimeInMillis(), null);
 
         // Set childAlarm
-        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
-
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY*7,pendingIntent);
 
         /* this will update only daysOfRepeatArr
          * all other values will be same
