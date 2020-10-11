@@ -68,35 +68,45 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
         Boolean[] daysOfRepeatArr = currentItem.getDaysOfRepeatArr();
         Log.e(TAG, "Array: " + Arrays.toString(daysOfRepeatArr));
         // Tick checkbox if child alarm for sunday is enabled
-        for (int i = 1; i < daysOfRepeatArr.length; i++) {
-            // this should be checked
-            if (daysOfRepeatArr[i] != null) {
-                switch (i) {
-                    case DaysOfWeek.SUNDAY:
-                        cbSun.setChecked(daysOfRepeatArr[DaysOfWeek.SUNDAY]);
-                        break;
-                    case DaysOfWeek.MONDAY:
-                        cbMon.setChecked(daysOfRepeatArr[DaysOfWeek.MONDAY]);
-                        break;
-                    case DaysOfWeek.TUESDAY:
-                        cbTue.setChecked(daysOfRepeatArr[DaysOfWeek.TUESDAY]);
-                        break;
-                    case DaysOfWeek.WEDNESDAY:
-                        cbWed.setChecked(daysOfRepeatArr[DaysOfWeek.WEDNESDAY]);
-                        break;
-                    case DaysOfWeek.THURSDAY:
-                        cbThu.setChecked(daysOfRepeatArr[DaysOfWeek.THURSDAY]);
-                        break;
-                    case DaysOfWeek.FRIDAY:
-                        cbFri.setChecked(daysOfRepeatArr[DaysOfWeek.FRIDAY]);
-                        break;
-                    case DaysOfWeek.SATURDAY:
-                        cbSat.setChecked(daysOfRepeatArr[DaysOfWeek.SATURDAY]);
-                        break;
-                    default:
-                        // what now
+        if (daysOfRepeatArr[DaysOfWeek.IsRECURRING]) {
+            for (int i = 1; i < daysOfRepeatArr.length; i++) {
+                // this should be checked
+                if (daysOfRepeatArr[i] != null) {
+                    switch (i) {
+                        case DaysOfWeek.SUNDAY:
+                            cbSun.setChecked(daysOfRepeatArr[DaysOfWeek.SUNDAY]);
+                            break;
+                        case DaysOfWeek.MONDAY:
+                            cbMon.setChecked(daysOfRepeatArr[DaysOfWeek.MONDAY]);
+                            break;
+                        case DaysOfWeek.TUESDAY:
+                            cbTue.setChecked(daysOfRepeatArr[DaysOfWeek.TUESDAY]);
+                            break;
+                        case DaysOfWeek.WEDNESDAY:
+                            cbWed.setChecked(daysOfRepeatArr[DaysOfWeek.WEDNESDAY]);
+                            break;
+                        case DaysOfWeek.THURSDAY:
+                            cbThu.setChecked(daysOfRepeatArr[DaysOfWeek.THURSDAY]);
+                            break;
+                        case DaysOfWeek.FRIDAY:
+                            cbFri.setChecked(daysOfRepeatArr[DaysOfWeek.FRIDAY]);
+                            break;
+                        case DaysOfWeek.SATURDAY:
+                            cbSat.setChecked(daysOfRepeatArr[DaysOfWeek.SATURDAY]);
+                            break;
+                        default:
+                            // what now
+                    }
                 }
             }
+        } else {
+            cbSun.setChecked(false);
+            cbMon.setChecked(false);
+            cbTue.setChecked(false);
+            cbWed.setChecked(false);
+            cbThu.setChecked(false);
+            cbFri.setChecked(false);
+            cbSat.setChecked(false);
         }
 
         tvAlarmTime.setText(formattedTime);

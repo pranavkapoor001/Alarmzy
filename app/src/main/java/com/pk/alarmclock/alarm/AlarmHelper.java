@@ -280,8 +280,11 @@ public class AlarmHelper {
 
         // Cancel if dummy Alarm
         if (!create) {
-            alarmManager.cancel(PendingIntent.getForegroundService(context, dummyAlarmId,
-                    intent, PendingIntent.FLAG_NO_CREATE));
+            if (PendingIntent.getForegroundService(context, dummyAlarmId,
+                    intent, PendingIntent.FLAG_NO_CREATE) != null)
+                alarmManager.cancel(PendingIntent.getForegroundService(context, dummyAlarmId,
+                        intent, PendingIntent.FLAG_NO_CREATE));
+
             return;
         }
 
