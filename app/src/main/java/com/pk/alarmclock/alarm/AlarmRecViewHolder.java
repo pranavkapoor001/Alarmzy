@@ -68,10 +68,36 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
         Boolean[] daysOfRepeatArr = currentItem.getDaysOfRepeatArr();
         Log.e(TAG, "Array: " + Arrays.toString(daysOfRepeatArr));
         // Tick checkbox if child alarm for sunday is enabled
-        if (daysOfRepeatArr[DaysOfWeek.SUNDAY] != null)
-            cbSun.setChecked(daysOfRepeatArr[DaysOfWeek.SUNDAY]);
-        else
-            cbSun.setChecked(false);
+        for (int i = 1; i < daysOfRepeatArr.length; i++) {
+            // this should be checked
+            if (daysOfRepeatArr[i] != null) {
+                switch (i) {
+                    case DaysOfWeek.SUNDAY:
+                        cbSun.setChecked(daysOfRepeatArr[DaysOfWeek.SUNDAY]);
+                        break;
+                    case DaysOfWeek.MONDAY:
+                        cbMon.setChecked(daysOfRepeatArr[DaysOfWeek.MONDAY]);
+                        break;
+                    case DaysOfWeek.TUESDAY:
+                        cbTue.setChecked(daysOfRepeatArr[DaysOfWeek.TUESDAY]);
+                        break;
+                    case DaysOfWeek.WEDNESDAY:
+                        cbWed.setChecked(daysOfRepeatArr[DaysOfWeek.WEDNESDAY]);
+                        break;
+                    case DaysOfWeek.THURSDAY:
+                        cbThu.setChecked(daysOfRepeatArr[DaysOfWeek.THURSDAY]);
+                        break;
+                    case DaysOfWeek.FRIDAY:
+                        cbFri.setChecked(daysOfRepeatArr[DaysOfWeek.FRIDAY]);
+                        break;
+                    case DaysOfWeek.SATURDAY:
+                        cbSat.setChecked(daysOfRepeatArr[DaysOfWeek.SATURDAY]);
+                        break;
+                    default:
+                        // what now
+                }
+            }
+        }
 
         tvAlarmTime.setText(formattedTime);
         switchAlarmEnabled.setChecked(currentItem.getAlarmEnabled());
@@ -104,14 +130,49 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
                         .setAction("Action", null).show();
                 break;
             case R.id.cb_sunday:
-                Log.e(TAG, "cbSun Clicked: Pos: " + getAdapterPosition());
-                if (cbSun.isChecked()) {
-                    // Pass this to repeatingAlarm
+                if (cbSun.isChecked())
                     ah.repeatingAlarm(currentEntity, DaysOfWeek.SUNDAY);
-                } else {
+                else
                     ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.SUNDAY);
-                }
+                break;
+            case R.id.cb_monday:
+                if (cbMon.isChecked())
+                    ah.repeatingAlarm(currentEntity, DaysOfWeek.MONDAY);
+                else
+                    ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.MONDAY);
+                break;
+            case R.id.cb_tuesday:
+                if (cbTue.isChecked())
+                    ah.repeatingAlarm(currentEntity, DaysOfWeek.TUESDAY);
+                else
+                    ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.TUESDAY);
+                break;
+            case R.id.cb_wednesday:
+                if (cbWed.isChecked())
+                    ah.repeatingAlarm(currentEntity, DaysOfWeek.WEDNESDAY);
+                else
+                    ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.WEDNESDAY);
+                break;
+            case R.id.cb_thursday:
+                if (cbThu.isChecked())
+                    ah.repeatingAlarm(currentEntity, DaysOfWeek.THURSDAY);
+                else
+                    ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.THURSDAY);
+                break;
+            case R.id.cb_friday:
+                if (cbFri.isChecked())
+                    ah.repeatingAlarm(currentEntity, DaysOfWeek.FRIDAY);
+                else
+                    ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.FRIDAY);
+                break;
+            case R.id.cb_saturday:
+                if (cbSat.isChecked())
+                    ah.repeatingAlarm(currentEntity, DaysOfWeek.SATURDAY);
+                else
+                    ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.SATURDAY);
                 break;
         }
+        // TODO: Remove bloat code
+        // TODO: Add cb to show repeating state, show these cb only if repeating is enabled
     }
 }
