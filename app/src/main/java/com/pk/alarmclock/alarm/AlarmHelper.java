@@ -68,6 +68,8 @@ public class AlarmHelper {
 
             // Cancel child alarms
             if (daysOfRepeatArr != null && daysOfRepeatArr[DaysOfWeek.IsRECURRING]) {
+                // Cancel dummy alarm
+                dummyAlarm(parentAlarmId, false);
                 int childAlarmId;
                 for (int i = 1; i < daysOfRepeatArr.length; i++) {
                     if (daysOfRepeatArr[i] != null) {
@@ -248,12 +250,9 @@ public class AlarmHelper {
 
         Log.e(TAG, "repeatingAlarm: NewTime: : " + cal.getTime() + " In millis: " + cal.getTimeInMillis());
 
-        AlarmManager.AlarmClockInfo alarmClockInfo =
-                new AlarmManager.AlarmClockInfo(cal.getTimeInMillis(), null);
-
         // Set childAlarm
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY*7,pendingIntent);
+                AlarmManager.INTERVAL_DAY * 7, pendingIntent);
 
         /* this will update only daysOfRepeatArr
          * all other values will be same
@@ -263,5 +262,38 @@ public class AlarmHelper {
         alarmEntity = new AlarmEntity(alarmEntity.getAlarmTime(), parentAlarmId,
                 alarmEntity.getAlarmEnabled(), daysOfRepeatArr);
         ar.update(alarmEntity);
+
+        // Create new alarm far in future.. just to show alarm icon to user
+        dummyAlarm(parentAlarmId, true);
+    }
+
+    // dummyAlarmId = parentAlarmId + 20;
+    public void dummyAlarm(int dummyAlarmId, boolean create) {
+        context = MyApplication.getContext();
+
+        Log.e(TAG, "dummyAlarm Called with id: " + dummyAlarmId);
+
+        dummyAlarmId = dummyAlarmId + 20;
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmService.class);
+
+        // Cancel if dummy Alarm
+        if (!create) {
+            alarmManager.cancel(PendingIntent.getForegroundService(context, dummyAlarmId,
+                    intent, PendingIntent.FLAG_NO_CREATE));
+            return;
+        }
+
+        // Now we want to create a dummy alarm
+        PendingIntent pendingIntent = PendingIntent.getForegroundService(context,
+                dummyAlarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar calDummy = Calendar.getInstance();
+        calDummy.set(Calendar.YEAR, 3020);
+
+        AlarmManager.AlarmClockInfo alarmClockInfo =
+                new AlarmManager.AlarmClockInfo(calDummy.getTimeInMillis(), null);
+        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
     }
 }
