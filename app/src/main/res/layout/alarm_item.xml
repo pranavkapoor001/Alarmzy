@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -12,118 +11,117 @@
         app:cardCornerRadius="@dimen/_6sdp"
         app:cardElevation="@dimen/_6sdp">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             android:padding="@dimen/_8sdp">
 
-            <RelativeLayout
+            <TextView
+                android:id="@+id/item_alarm_time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/item_alarm_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_20sdp"
-                    android:fontFamily="sans-serif-thin"
-                    android:text="00:00"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textSize="@dimen/_26sdp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/item_alarm_time"
-                    android:orientation="vertical">
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cb_monday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Mon"
-                        app:useMaterialThemeColors="true" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cb_tuesday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tue"
-                        app:useMaterialThemeColors="true" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cb_wednesday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Wed"
-                        app:useMaterialThemeColors="true" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cb_thursday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Thu"
-                        app:useMaterialThemeColors="true" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cb_friday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Fri"
-                        app:useMaterialThemeColors="true" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cb_saturday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sat"
-                        app:useMaterialThemeColors="true" />
-
-                    <com.google.android.material.checkbox.MaterialCheckBox
-                        android:id="@+id/cb_sunday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Sun"
-                        app:useMaterialThemeColors="true" />
-                </LinearLayout>
-
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_2sdp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:layout_gravity="center|start"
+                android:layout_margin="@dimen/_4sdp"
+                android:fontFamily="sans-serif-thin"
+                android:text="00:00"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textSize="@dimen/_26sdp" />
 
-                <EditText
-                    android:id="@+id/item_alarm_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed-medium"
-                    android:text="Alarm"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="@dimen/_12sdp"
-                    tools:text="Alarm Title" />
+            <ImageButton
+                android:id="@+id/item_alarm_show_repeat"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:src="@drawable/ic_arrow_down"
+                android:textColor="@color/colorAccent" />
 
-            </LinearLayout>
+            <ImageButton
+                android:id="@+id/item_alarm_hide_repeat"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:src="@drawable/ic_arrow_up"
+                android:visibility="gone" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/item_alarm_enabled"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="@dimen/_3sdp" />
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="@dimen/_60sdp" />
 
             <ImageButton
                 android:id="@+id/item_alarm_delete"
                 style="?attr/borderlessButtonStyle"
-                android:layout_width="@dimen/_20sdp"
+                android:layout_width="@dimen/_50sdp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/_3sdp"
                 android:src="@drawable/ic_delete" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/repeat_days_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="60dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cb_monday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="M"
+                app:useMaterialThemeColors="true" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cb_tuesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="T"
+                app:useMaterialThemeColors="true" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cb_wednesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="W"
+                app:useMaterialThemeColors="true" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cb_thursday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="T"
+                app:useMaterialThemeColors="true" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cb_friday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="F"
+                app:useMaterialThemeColors="true" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cb_saturday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="S"
+                app:useMaterialThemeColors="true" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cb_sunday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="S"
+                app:useMaterialThemeColors="true" />
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

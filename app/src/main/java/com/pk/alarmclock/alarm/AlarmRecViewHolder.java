@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,19 +25,23 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
     TextView tvAlarmTime;
     EditText etAlarmTitle;
     SwitchCompat switchAlarmEnabled;
-    ImageButton ibAlarmDelete;
+    ImageButton ibAlarmDelete, ibShowRepeat, ibHideRepeat;
     AlarmEntity currentItem;
     String formattedTime;
     long alarmTimeInMillis;
     AlarmHelper ah;
     MaterialCheckBox cbMon, cbTue, cbWed, cbThu, cbFri, cbSat, cbSun;
+    LinearLayout repeatDaysLayout;
 
     public AlarmRecViewHolder(@NonNull View itemView) {
         super(itemView);
         tvAlarmTime = itemView.findViewById(R.id.item_alarm_time);
-        etAlarmTitle = itemView.findViewById(R.id.item_alarm_title);
+        //etAlarmTitle = itemView.findViewById(R.id.item_alarm_title);
         switchAlarmEnabled = itemView.findViewById(R.id.item_alarm_enabled);
         ibAlarmDelete = itemView.findViewById(R.id.item_alarm_delete);
+        ibShowRepeat = itemView.findViewById(R.id.item_alarm_show_repeat);
+        ibHideRepeat = itemView.findViewById(R.id.item_alarm_hide_repeat);
+        repeatDaysLayout = itemView.findViewById(R.id.repeat_days_layout);
         cbMon = itemView.findViewById(R.id.cb_monday);
         cbTue = itemView.findViewById(R.id.cb_tuesday);
         cbWed = itemView.findViewById(R.id.cb_wednesday);
@@ -55,6 +60,10 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
         cbFri.setOnClickListener(this);
         cbSat.setOnClickListener(this);
         cbSun.setOnClickListener(this);
+        ibShowRepeat.setOnClickListener(this);
+        ibHideRepeat.setOnClickListener(this);
+
+        repeatDaysLayout.setVisibility(View.GONE);
     }
 
     public void bindTo(AlarmEntity currentItem) {
@@ -138,6 +147,16 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
                 ah.cancelAlarm(currentEntity, true, true, -1);
                 Snackbar.make(v, "Alarm Deleted", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                break;
+            case R.id.item_alarm_show_repeat:
+                repeatDaysLayout.setVisibility(View.VISIBLE);
+                ibShowRepeat.setVisibility(View.GONE);
+                ibHideRepeat.setVisibility(View.VISIBLE);
+                break;
+            case R.id.item_alarm_hide_repeat:
+                repeatDaysLayout.setVisibility(View.GONE);
+                ibShowRepeat.setVisibility(View.VISIBLE);
+                ibHideRepeat.setVisibility(View.GONE);
                 break;
             case R.id.cb_sunday:
                 if (cbSun.isChecked())
