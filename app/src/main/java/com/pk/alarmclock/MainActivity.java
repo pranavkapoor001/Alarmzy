@@ -4,6 +4,8 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView.LayoutManager mLayoutManager;
     AlarmRecViewAdapter mAdapter;
     AlarmHelper alarmHelper;
+    ImageView noAlarmsImage;
+    TextView noAlarmsText;
     // Store selected hour, minute by TimePicker
     private int mHour, mMinute;
 
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        noAlarmsImage = findViewById(R.id.image_when_empty);
+        noAlarmsText = findViewById(R.id.text_when_empty);
         mRecyclerView = findViewById(R.id.item_alarm_recyclerView);
         alarmHelper = new AlarmHelper();
 
@@ -58,6 +64,13 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<AlarmEntity> alarmEntities) {
                 mAdapter.setAlarms(alarmEntities);
                 mAdapter.notifyDataSetChanged();
+                if (mAdapter.getItemCount() == 0) {
+                    noAlarmsImage.setVisibility(View.VISIBLE);
+                    noAlarmsText.setVisibility(View.VISIBLE);
+                } else {
+                    noAlarmsImage.setVisibility(View.GONE);
+                    noAlarmsText.setVisibility(View.GONE);
+                }
             }
         });
 
