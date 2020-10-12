@@ -10,6 +10,7 @@ import android.util.Log;
 import com.pk.alarmclock.alarm.db.AlarmEntity;
 import com.pk.alarmclock.alarm.db.AlarmRepository;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -73,7 +74,7 @@ public class AlarmHelper {
                 dummyAlarm(parentAlarmId, false);
                 int childAlarmId;
                 for (int i = 1; i < daysOfRepeatArr.length; i++) {
-                    if (daysOfRepeatArr[i] != null) {
+                    if (daysOfRepeatArr[i]) {
                         // This child alarm is enabled
                         Log.e(TAG, "cancelAlarm, Child Alarm was Enabled: " + i);
                         childAlarmId = parentAlarmId + i;
@@ -136,7 +137,8 @@ public class AlarmHelper {
             ar.updateAlarmId(oldAlarmId, alarmId);
         } else {
             Boolean[] daysOfRepeatArr = new Boolean[8];
-            daysOfRepeatArr[DaysOfWeek.IsRECURRING] = false;
+            // Populate array with all elements set to false (New alarm, not recurring)
+            Arrays.fill(daysOfRepeatArr, false);
             AlarmEntity alarm = new AlarmEntity(alarmTime, alarmId, true, daysOfRepeatArr);
             ar.insert(alarm);
         }
@@ -187,7 +189,7 @@ public class AlarmHelper {
                 Boolean[] daysOfRepeatArr = currentEntity.getDaysOfRepeatArr();
                 if (daysOfRepeatArr[DaysOfWeek.IsRECURRING]) {
                     for (int i = 1; i < daysOfRepeatArr.length; i++) {
-                        if (daysOfRepeatArr[i] != null && daysOfRepeatArr[i]) {
+                        if (daysOfRepeatArr[i]) {
                             // This child alarm toggle is enabled
                             Log.e(TAG, "reEnableAlarm: Going to reEnable Child alarm at: " + i
                                     + " With ParentId: " + newParentAlarmId);

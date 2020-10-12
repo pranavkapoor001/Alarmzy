@@ -71,7 +71,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
         if (daysOfRepeatArr[DaysOfWeek.IsRECURRING]) {
             for (int i = 1; i < daysOfRepeatArr.length; i++) {
                 // this should be checked
-                if (daysOfRepeatArr[i] != null) {
+                if (daysOfRepeatArr[i]) {
                     switch (i) {
                         case DaysOfWeek.SUNDAY:
                             cbSun.setChecked(daysOfRepeatArr[DaysOfWeek.SUNDAY]);
