@@ -74,25 +74,25 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
                 if (daysOfRepeatArr[i]) {
                     switch (i) {
                         case DaysOfWeek.SUNDAY:
-                            cbSun.setChecked(daysOfRepeatArr[DaysOfWeek.SUNDAY]);
+                            cbSun.setChecked(true);
                             break;
                         case DaysOfWeek.MONDAY:
-                            cbMon.setChecked(daysOfRepeatArr[DaysOfWeek.MONDAY]);
+                            cbMon.setChecked(true);
                             break;
                         case DaysOfWeek.TUESDAY:
-                            cbTue.setChecked(daysOfRepeatArr[DaysOfWeek.TUESDAY]);
+                            cbTue.setChecked(true);
                             break;
                         case DaysOfWeek.WEDNESDAY:
-                            cbWed.setChecked(daysOfRepeatArr[DaysOfWeek.WEDNESDAY]);
+                            cbWed.setChecked(true);
                             break;
                         case DaysOfWeek.THURSDAY:
-                            cbThu.setChecked(daysOfRepeatArr[DaysOfWeek.THURSDAY]);
+                            cbThu.setChecked(true);
                             break;
                         case DaysOfWeek.FRIDAY:
-                            cbFri.setChecked(daysOfRepeatArr[DaysOfWeek.FRIDAY]);
+                            cbFri.setChecked(true);
                             break;
                         case DaysOfWeek.SATURDAY:
-                            cbSat.setChecked(daysOfRepeatArr[DaysOfWeek.SATURDAY]);
+                            cbSat.setChecked(true);
                             break;
                         default:
                             // what now
