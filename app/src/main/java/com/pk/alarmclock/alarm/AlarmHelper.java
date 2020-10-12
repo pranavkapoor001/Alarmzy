@@ -11,6 +11,7 @@ import com.pk.alarmclock.alarm.db.AlarmEntity;
 import com.pk.alarmclock.alarm.db.AlarmRepository;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -239,13 +240,29 @@ public class AlarmHelper {
         // childAlarm Time is same as parent
         cal.setTimeInMillis(alarmEntity.getAlarmTime());
 
-        /* Since Calendar Week starts on sunday
-         * Add week to Calendar
-         * otherwise it set alarmDay to last sunday(past)
+        /* If day of repeat is same as day today
+         * Increment it to next week
          */
-        if (dayOfRepeat == Calendar.SUNDAY)
+        Calendar todayCal = Calendar.getInstance();
+        Date date = new Date();
+        todayCal.setTime(date);
+        int dayToday = todayCal.get(Calendar.DAY_OF_WEEK);
+
+        if (dayOfRepeat == dayToday)
             cal.add(Calendar.WEEK_OF_MONTH, 1);
 
+        /* Since Calendar Week starts on sunday
+         * Add a week to Calendar if today is not sunday
+         * and we want to set recurring alarm for sunday
+         * otherwise it set alarmDay to last sunday(past)
+         *
+         * (If today is sunday condition is handled
+         * by above if(): same as other days of week)
+         */
+        if (dayToday != Calendar.SUNDAY && dayOfRepeat == Calendar.SUNDAY)
+            cal.add(Calendar.WEEK_OF_MONTH, 1);
+
+        // Set recurring alarms day to dayOfRepeat
         cal.set(Calendar.DAY_OF_WEEK, dayOfRepeat);
 
         Log.e(TAG, "repeatingAlarm: NewTime: : " + cal.getTime() + " In millis: " + cal.getTimeInMillis());
