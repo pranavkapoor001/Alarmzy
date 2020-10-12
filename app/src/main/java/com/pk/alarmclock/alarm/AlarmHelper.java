@@ -92,6 +92,27 @@ public class AlarmHelper {
             alarmEntity = new AlarmEntity(alarmEntity.getAlarmTime(), alarmEntity.getAlarmId(),
                     alarmEntity.getAlarmEnabled(), daysOfRepeatArr);
             ar.update(alarmEntity);
+
+            // Check if all child alarms are disabled
+            boolean flag = false;
+            for (int i = 1; i < daysOfRepeatArr.length; i++) {
+                // Some child alarm is enabled
+                // leave parent toggle enabled
+                if (daysOfRepeatArr[i]) {
+                    flag = true;
+                    break;
+                }
+            }
+
+            /* Disable parent toggle if all child alarms are disabled
+             * and parent alarm time has passed
+             * also delete the dummy alarm
+             */
+            if (!flag && alarmEntity.getAlarmTime() < System.currentTimeMillis()) {
+                daysOfRepeatArr[DaysOfWeek.IsRECURRING] = false;
+                ar.updateAlarmStatus(alarmEntity.getAlarmId(), false);
+                dummyAlarm(alarmEntity.getAlarmId(), false);
+            }
         }
     }
 
