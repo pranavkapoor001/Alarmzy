@@ -20,4 +20,23 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/alarm_item" />
 
+    <ImageView
+        android:id="@+id/image_when_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_no_alarms"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/text_when_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_when_empty"
+        android:layout_centerInParent="true"
+        android:layout_margin="@dimen/_8sdp"
+        android:text="@string/no_alarms_set"
+        android:visibility="gone" />
+
 </RelativeLayout>
