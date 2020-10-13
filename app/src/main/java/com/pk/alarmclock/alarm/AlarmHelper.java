@@ -274,15 +274,13 @@ public class AlarmHelper {
         if (dayOfRepeat == dayToday)
             cal.add(Calendar.WEEK_OF_MONTH, 1);
 
-        /* Since Calendar Week starts on sunday
-         * Add a week to Calendar if today is not sunday
-         * and we want to set recurring alarm for sunday
-         * otherwise it set alarmDay to last sunday(past)
-         *
-         * (If today is sunday condition is handled
-         * by above if(): same as other days of week)
+        // Set recurring alarms day to dayOfRepeat
+        cal.set(Calendar.DAY_OF_WEEK, dayOfRepeat);
+
+        /* If repeating alarm is set for
+         * day < today then increment it to next week
          */
-        if (dayToday != Calendar.SUNDAY && dayOfRepeat == Calendar.SUNDAY)
+        if (cal.before(Calendar.getInstance()))
             cal.add(Calendar.WEEK_OF_MONTH, 1);
 
         // Set recurring alarms day to dayOfRepeat
