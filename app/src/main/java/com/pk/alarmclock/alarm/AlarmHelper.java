@@ -104,6 +104,10 @@ public class AlarmHelper {
                 }
             }
 
+            // Set recurring flag to false
+            if (!flag)
+                daysOfRepeatArr[DaysOfWeek.IsRECURRING] = false;
+
             /* Disable parent toggle if all child alarms are disabled
              * and parent alarm time has passed
              * also delete the dummy alarm

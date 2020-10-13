@@ -24,9 +24,17 @@
                 android:layout_gravity="center|start"
                 android:layout_margin="@dimen/_4sdp"
                 android:fontFamily="sans-serif-thin"
-                android:text="00:00"
+                android:text="00:00 AM"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textSize="@dimen/_26sdp" />
+
+            <ImageView
+                android:id="@+id/item_repeat_icon"
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_110sdp"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:src="@drawable/ic_repeat" />
 
             <ImageButton
                 android:id="@+id/item_alarm_show_repeat"

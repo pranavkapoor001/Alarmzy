@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
     AlarmHelper ah;
     MaterialCheckBox cbMon, cbTue, cbWed, cbThu, cbFri, cbSat, cbSun;
     LinearLayout repeatDaysLayout;
+    ImageView ivRepeatIcon;
 
     public AlarmRecViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -41,6 +43,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
         ibAlarmDelete = itemView.findViewById(R.id.item_alarm_delete);
         ibShowRepeat = itemView.findViewById(R.id.item_alarm_show_repeat);
         ibHideRepeat = itemView.findViewById(R.id.item_alarm_hide_repeat);
+        ivRepeatIcon = itemView.findViewById(R.id.item_repeat_icon);
         repeatDaysLayout = itemView.findViewById(R.id.repeat_days_layout);
         cbMon = itemView.findViewById(R.id.cb_monday);
         cbTue = itemView.findViewById(R.id.cb_tuesday);
@@ -78,6 +81,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
         Log.e(TAG, "Array: " + Arrays.toString(daysOfRepeatArr));
         // Tick checkbox if child alarm for sunday is enabled
         if (daysOfRepeatArr[DaysOfWeek.IsRECURRING]) {
+            ivRepeatIcon.setVisibility(View.VISIBLE);
             for (int i = 1; i < daysOfRepeatArr.length; i++) {
                 // this should be checked
                 if (daysOfRepeatArr[i]) {
@@ -109,6 +113,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
                 }
             }
         } else {
+            ivRepeatIcon.setVisibility(View.GONE);
             cbSun.setChecked(false);
             cbMon.setChecked(false);
             cbTue.setChecked(false);
