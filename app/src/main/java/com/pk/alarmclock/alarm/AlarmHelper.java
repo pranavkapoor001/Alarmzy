@@ -13,7 +13,6 @@ import com.pk.alarmclock.alarm.db.AlarmRepository;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -279,8 +278,6 @@ public class AlarmHelper {
          * Increment it to next week
          */
         Calendar todayCal = Calendar.getInstance();
-        Date date = new Date();
-        todayCal.setTime(date);
         int dayToday = todayCal.get(Calendar.DAY_OF_WEEK);
 
         if (dayOfRepeat == dayToday)
