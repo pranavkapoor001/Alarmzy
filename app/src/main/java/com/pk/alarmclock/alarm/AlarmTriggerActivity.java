@@ -1,15 +1,16 @@
 package com.pk.alarmclock.alarm;
 
 import android.app.Application;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ncorti.slidetoact.SlideToActView;
 import com.pk.alarmclock.R;
 import com.pk.alarmclock.alarm.db.AlarmEntity;
 import com.pk.alarmclock.alarm.db.AlarmRepository;
@@ -22,7 +23,7 @@ import java.util.concurrent.Executors;
 
 public class AlarmTriggerActivity extends AppCompatActivity {
 
-    Button btnDismissAlarm;
+    SlideToActView btnDismissAlarm, btnSnoozeAlarm;
     TextView alarmTime, alarmTitle;
 
     @Override
@@ -38,6 +39,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         Log.e("AlarmTriggerActivity", "Got alarmIdKey: " + alarmId);
 
         btnDismissAlarm = findViewById(R.id.btn_dismiss_alarm);
+        btnSnoozeAlarm = findViewById(R.id.btn_snooze_alarm);
 
         Application app = AlarmTriggerActivity.this.getApplication();
         final AlarmRepository ar = new AlarmRepository(app);
@@ -61,27 +63,59 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                 } catch (NullPointerException e) {
                     Log.e("AlarmTrig: ", "Array is null, This is a child alarm");
 
-                    // Get today's day of week
-                    Calendar todayCal = Calendar.getInstance();
-                    int dayToday = todayCal.get(Calendar.DAY_OF_WEEK);
+                    try {
+                        // Get today's day of week
+                        Calendar todayCal = Calendar.getInstance();
+                        int dayToday = todayCal.get(Calendar.DAY_OF_WEEK);
 
 
-                    /* Since child alarms are scheduled
-                     * with ID as parent id + dayToday(Calendar.DAY_OF_WEEK)
-                     * sub dayToday from received id to get parent alarm id
-                     * which is stored in db
-                     */
-                    int parentAlarmId = alarmId - dayToday;
+                        /* Since child alarms are scheduled
+                         * with ID as parent id + dayToday(Calendar.DAY_OF_WEEK)
+                         * sub dayToday from received id to get parent alarm id
+                         * which is stored in db
+                         */
+                        int parentAlarmId = alarmId - dayToday;
 
-                    AlarmEntity parentEntity = ar.getAlarm(parentAlarmId);
-                    displayInfo(parentEntity);
+                        AlarmEntity parentEntity = ar.getAlarm(parentAlarmId);
+                        displayInfo(parentEntity);
+                    } catch (NullPointerException e1) {
+                        Log.e("AlarmTrig: ", "This is a snoozed alarm");
+
+                        // Simply show current time and "Snoozed Alarm"
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
+                                Locale.getDefault());
+                        String formattedTime = sdf.format(System.currentTimeMillis());
+                        alarmTime.setText(formattedTime);
+
+                        alarmTitle.setText(R.string.snoozed_alarm);
+
+                        // Cancel notification
+                        NotificationManager mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        mNotifyManager.cancelAll();
+                    }
                 }
             }
         });
 
-        btnDismissAlarm.setOnClickListener(new View.OnClickListener() {
+        // Dismiss Alarm
+        btnDismissAlarm.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
             @Override
-            public void onClick(View view) {
+            public void onSlideComplete(SlideToActView slideToActView) {
+                // Stop service and finish this activity
+                Intent intent = new Intent(AlarmTriggerActivity.this, AlarmService.class);
+                stopService(intent);
+                finish();
+            }
+        });
+
+        // Snooze Alarm
+        btnSnoozeAlarm.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
+            @Override
+            public void onSlideComplete(SlideToActView slideToActView) {
+                // Create new snooze alarm
+                AlarmHelper ah = new AlarmHelper();
+                ah.snoozeAlarm();
 
                 // Stop service and finish this activity
                 Intent intent = new Intent(AlarmTriggerActivity.this, AlarmService.class);

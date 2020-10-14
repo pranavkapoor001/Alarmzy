@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -28,11 +29,33 @@
         android:textAppearance="?attr/textAppearanceHeadline6"
         android:textSize="@dimen/_16sdp" />
 
-    <Button
+    <com.ncorti.slidetoact.SlideToActView
         android:id="@+id/btn_dismiss_alarm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="@string/dismiss" />
+        app:area_margin="@dimen/_3sdp"
+        app:icon_margin="@dimen/_3sdp"
+        app:outer_color="?attr/colorPrimary"
+        app:slider_height="@dimen/_40sdp"
+        app:slider_locked="false"
+        app:text="Slide To Dismiss"
+        app:text_style="bold" />
+
+    <com.ncorti.slidetoact.SlideToActView
+        android:id="@+id/btn_snooze_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_dismiss_alarm"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_20sdp"
+        app:area_margin="@dimen/_3sdp"
+        app:icon_margin="@dimen/_3sdp"
+        app:outer_color="?attr/colorPrimary"
+        app:slider_height="@dimen/_40sdp"
+        app:slider_locked="false"
+        app:slider_reversed="true"
+        app:text="Slide To Snooze (10 Min)"
+        app:text_style="bold" />
 
 </RelativeLayout>
