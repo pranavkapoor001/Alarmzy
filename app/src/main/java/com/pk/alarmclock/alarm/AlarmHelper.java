@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.pk.alarmclock.NotificationHelper;
 import com.pk.alarmclock.R;
 import com.pk.alarmclock.alarm.db.AlarmEntity;
 import com.pk.alarmclock.alarm.db.AlarmRepository;
@@ -347,4 +348,29 @@ public class AlarmHelper {
         alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
     }
 
+    public void snoozeAlarm() {
+        context = MyApplication.getContext();
+        app = new Application();
+        ar = new AlarmRepository(app);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmService.class);
+        int alarmId = new Random().nextInt(Integer.MAX_VALUE);
+        intent.putExtra("alarmIdKey", alarmId);
+        Log.e("AlarmHelper", "Putting alarmIdKey: " + alarmId);
+        PendingIntent pendingIntent = PendingIntent.getForegroundService(context,
+                alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // TODO: Add configurable snooze timeout
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MINUTE, 10);
+        c.set(Calendar.SECOND, 0);
+
+        AlarmManager.AlarmClockInfo alarmClockInfo =
+                new AlarmManager.AlarmClockInfo(c.getTimeInMillis(), null);
+
+        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+        NotificationHelper notificationHelper = new NotificationHelper(context, alarmId);
+        notificationHelper.deliverPersistentNotification();
+    }
 }

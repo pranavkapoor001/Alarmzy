@@ -4,4 +4,6 @@
     <string name="no_alarms_set">No Alarms Set</string>
     <string name="alarm_title">Alarm Title</string>
     <string name="alarm">Alarm</string>
+    <string name="snooze">Snooze</string>
+    <string name="snoozed_alarm">Snoozed Alarm</string>
 </resources>

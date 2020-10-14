@@ -11,7 +11,12 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.pk.alarmclock.alarm.AlarmBroadcastReceiver;
 import com.pk.alarmclock.alarm.AlarmTriggerActivity;
+import com.pk.alarmclock.alarm.MyApplication;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class NotificationHelper {
 
@@ -49,10 +54,15 @@ public class NotificationHelper {
         PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(mContext,
                 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        // Display Alarm Time in notification
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
+                Locale.getDefault());
+        String formattedTime = sdf.format(System.currentTimeMillis());
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 mContext, PRIMARY_CHANNEL_ID)
-                .setContentTitle("Alarm Triggered")
-                .setContentText("Notification From Alarm1")
+                .setContentTitle("Alarm")
+                .setContentText(formattedTime)
                 .setSmallIcon(R.drawable.ic_alarm)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -66,5 +76,40 @@ public class NotificationHelper {
         // Return a Notification object to be used by startForeground()
         Notification notification = builder.build();
         return notification;
+    }
+
+    public void deliverPersistentNotification() {
+        String ACTION_DISMISS = BuildConfig.APPLICATION_ID + ".ACTION_DISMISS";
+
+        mNotifyManager = (NotificationManager) MyApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent dismissIntent = new Intent(mContext, AlarmBroadcastReceiver.class);
+        dismissIntent.setAction(ACTION_DISMISS);
+        // AlarmId received from constructor
+        dismissIntent.putExtra("alarmId", mAlarmId);
+        PendingIntent dismissPendingIntent = PendingIntent.getBroadcast(mContext,
+                mAlarmId, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Display Alarm Time in notification
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
+                Locale.getDefault());
+        String formattedTime = sdf.format(System.currentTimeMillis());
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                mContext, PRIMARY_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_alarm)
+                .setContentTitle("Alarm")
+                .setContentText("Snoozing... " + formattedTime)
+                .setOngoing(true)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setCategory(NotificationCompat.CATEGORY_ALARM)
+                .addAction(R.drawable.ic_alarm_dismiss, mContext.getResources().getString(R.string.dismiss),
+                        dismissPendingIntent);
+
+        /* Build notification with id as alarmID
+         * So it can be cancelled by Receiver using alarmId
+         *
+         */
+        mNotifyManager.notify(mAlarmId, builder.build());
     }
 }
