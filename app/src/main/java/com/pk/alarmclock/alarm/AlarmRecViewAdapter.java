@@ -27,9 +27,9 @@ public class AlarmRecViewAdapter extends RecyclerView.Adapter<AlarmRecViewHolder
     public AlarmEntity getAlarmRecView(int position) {
         // Return alarmId for selected alarm
         final AlarmEntity currentItem = mAlarmDataList.get(position);
-        AlarmEntity currentEntity = new AlarmEntity(currentItem.getAlarmTime(),
-                currentItem.getAlarmId(), currentItem.getAlarmEnabled(), currentItem.getDaysOfRepeatArr());
-        return currentEntity;
+        return new AlarmEntity(currentItem.getAlarmTime(),
+                currentItem.getAlarmId(), currentItem.getAlarmEnabled(),
+                currentItem.getDaysOfRepeatArr(), currentItem.getAlarmTitle());
     }
 
     @NonNull

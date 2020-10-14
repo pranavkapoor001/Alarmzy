@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.pk.alarmclock.R;
 import com.pk.alarmclock.alarm.db.AlarmEntity;
 import com.pk.alarmclock.alarm.db.AlarmRepository;
 
@@ -90,7 +91,7 @@ public class AlarmHelper {
             assert daysOfRepeatArr != null;
             daysOfRepeatArr[dayOfRepeat] = false;
             alarmEntity = new AlarmEntity(alarmEntity.getAlarmTime(), alarmEntity.getAlarmId(),
-                    alarmEntity.getAlarmEnabled(), daysOfRepeatArr);
+                    alarmEntity.getAlarmEnabled(), daysOfRepeatArr, alarmEntity.getAlarmTitle());
             ar.update(alarmEntity);
 
             // Check if all child alarms are disabled
@@ -164,7 +165,8 @@ public class AlarmHelper {
             Boolean[] daysOfRepeatArr = new Boolean[8];
             // Populate array with all elements set to false (New alarm, not recurring)
             Arrays.fill(daysOfRepeatArr, false);
-            AlarmEntity alarm = new AlarmEntity(alarmTime, alarmId, true, daysOfRepeatArr);
+            AlarmEntity alarm = new AlarmEntity(alarmTime, alarmId, true,
+                    daysOfRepeatArr, context.getString(R.string.alarm_title));
             ar.insert(alarm);
         }
         return alarmId;
@@ -243,7 +245,7 @@ public class AlarmHelper {
             Log.e(TAG, "repeatingAlarm: ParentAlarmDisabled, Skipping");
             Log.e(TAG, "repeatingAlarm: ParentAlarmId" + alarmEntity.getAlarmId());
             alarmEntity = new AlarmEntity(alarmEntity.getAlarmTime(), alarmEntity.getAlarmId(),
-                    alarmEntity.getAlarmEnabled(), daysOfRepeatArr);
+                    alarmEntity.getAlarmEnabled(), daysOfRepeatArr, alarmEntity.getAlarmTitle());
             ar.update(alarmEntity);
             return;
         }
@@ -302,7 +304,7 @@ public class AlarmHelper {
          * keep parent alarmId and update all entries
          */
         alarmEntity = new AlarmEntity(alarmEntity.getAlarmTime(), parentAlarmId,
-                alarmEntity.getAlarmEnabled(), daysOfRepeatArr);
+                alarmEntity.getAlarmEnabled(), daysOfRepeatArr, alarmEntity.getAlarmTitle());
         ar.update(alarmEntity);
 
         // Create new alarm far in future.. just to show alarm icon to user
@@ -341,4 +343,5 @@ public class AlarmHelper {
                 new AlarmManager.AlarmClockInfo(calDummy.getTimeInMillis(), null);
         alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
     }
+
 }

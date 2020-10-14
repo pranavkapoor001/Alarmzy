@@ -14,15 +14,18 @@ public class AlarmEntity {
     // Trigger time for alarm
     private long mAlarmTime;
     private boolean mAlarmEnabled;
+    private String mAlarmTitle;
 
     @TypeConverters({Converter.class})
     private Boolean[] mDaysOfRepeatArr;
 
-    public AlarmEntity(long alarmTime, int alarmId, boolean alarmEnabled, Boolean[] daysOfRepeatArr) {
+    public AlarmEntity(long alarmTime, int alarmId, boolean alarmEnabled,
+                       Boolean[] daysOfRepeatArr, String alarmTitle) {
         this.mAlarmTime = alarmTime;
         this.mAlarmId = alarmId;
         this.mAlarmEnabled = alarmEnabled;
         this.mDaysOfRepeatArr = daysOfRepeatArr;
+        this.mAlarmTitle = alarmTitle;
     }
 
     public int getAlarmId() {
@@ -39,5 +42,9 @@ public class AlarmEntity {
 
     public Boolean[] getDaysOfRepeatArr() {
         return mDaysOfRepeatArr;
+    }
+
+    public String getAlarmTitle() {
+        return mAlarmTitle;
     }
 }
