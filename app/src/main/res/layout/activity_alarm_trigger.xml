@@ -6,6 +6,28 @@
     android:keepScreenOn="true"
     tools:context=".alarm.AlarmTriggerActivity">
 
+    <TextView
+        android:id="@+id/trigger_alarm_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_100sdp"
+        android:fontFamily="sans-serif-thin"
+        android:text="00:00 AM"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textSize="@dimen/_26sdp" />
+
+    <TextView
+        android:id="@+id/trigger_alarm_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_150sdp"
+        android:fontFamily="sans-serif-thin"
+        android:text="Alarm Title"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textSize="@dimen/_16sdp" />
+
     <Button
         android:id="@+id/btn_dismiss_alarm"
         android:layout_width="wrap_content"
