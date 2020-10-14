@@ -41,4 +41,7 @@ public interface AlarmDao {
     @Query("SELECT * FROM alarm_table WHERE mAlarmId=:id")
     AlarmEntity getAlarm(int id);
 
+    @Query("UPDATE alarm_table SET mAlarmTitle = :alarmTitle WHERE mAlarmId = :alarmId")
+    void setAlarmTitle(String alarmTitle, long alarmId);
+
 }

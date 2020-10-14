@@ -1,7 +1,13 @@
 package com.pk.alarmclock.alarm;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,6 +22,7 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
 import com.pk.alarmclock.R;
 import com.pk.alarmclock.alarm.db.AlarmEntity;
+import com.pk.alarmclock.alarm.db.AlarmRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -38,7 +45,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
     public AlarmRecViewHolder(@NonNull View itemView) {
         super(itemView);
         tvAlarmTime = itemView.findViewById(R.id.item_alarm_time);
-        //etAlarmTitle = itemView.findViewById(R.id.item_alarm_title);
+        etAlarmTitle = itemView.findViewById(R.id.item_alarm_title);
         switchAlarmEnabled = itemView.findViewById(R.id.item_alarm_enabled);
         ibAlarmDelete = itemView.findViewById(R.id.item_alarm_delete);
         ibShowRepeat = itemView.findViewById(R.id.item_alarm_show_repeat);
@@ -65,6 +72,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
         cbSun.setOnClickListener(this);
         ibShowRepeat.setOnClickListener(this);
         ibHideRepeat.setOnClickListener(this);
+        etAlarmTitle.setOnClickListener(this);
 
         repeatDaysLayout.setVisibility(View.GONE);
     }
@@ -125,6 +133,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
 
         tvAlarmTime.setText(formattedTime);
         switchAlarmEnabled.setChecked(currentItem.getAlarmEnabled());
+        etAlarmTitle.setText(currentItem.getAlarmTitle());
         Log.e(TAG, "bindTo Called");
     }
 
@@ -133,7 +142,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
         ah = new AlarmHelper();
         AlarmEntity currentEntity = new AlarmEntity(currentItem.getAlarmTime(),
                 currentItem.getAlarmId(), currentItem.getAlarmEnabled(),
-                currentItem.getDaysOfRepeatArr());
+                currentItem.getDaysOfRepeatArr(), currentItem.getAlarmTitle());
         switch (v.getId()) {
             case R.id.item_alarm_enabled:
                 if (!switchAlarmEnabled.isChecked()) {
@@ -157,11 +166,13 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
                 repeatDaysLayout.setVisibility(View.VISIBLE);
                 ibShowRepeat.setVisibility(View.GONE);
                 ibHideRepeat.setVisibility(View.VISIBLE);
+                etAlarmTitle.setVisibility(View.VISIBLE);
                 break;
             case R.id.item_alarm_hide_repeat:
                 repeatDaysLayout.setVisibility(View.GONE);
                 ibShowRepeat.setVisibility(View.VISIBLE);
                 ibHideRepeat.setVisibility(View.GONE);
+                etAlarmTitle.setVisibility(View.GONE);
                 break;
             case R.id.cb_sunday:
                 if (cbSun.isChecked())
@@ -205,8 +216,56 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
                 else
                     ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.SATURDAY);
                 break;
+            case R.id.item_alarm_title:
+                alarmTitleBuilder();
+                break;
         }
-        // TODO: Remove bloat code
-        // TODO: Add cb to show repeating state, show these cb only if repeating is enabled
+    }
+
+    public void alarmTitleBuilder() {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(itemView.getContext());
+        alertBuilder.setTitle("Alarm Title");
+
+        final EditText titleInput = new EditText(MyApplication.getContext());
+        titleInput.setTextColor(Color.WHITE);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        titleInput.setLayoutParams(lp);
+        alertBuilder.setView(titleInput);
+
+        // Show soft Keyboard
+        titleInput.requestFocus();
+        InputMethodManager imm = (InputMethodManager) MyApplication.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+        alertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                AlarmRepository ar = new AlarmRepository(MyApplication.getContext());
+
+                if (!TextUtils.isEmpty(titleInput.getText())) {
+                    etAlarmTitle.setText(titleInput.getText().toString());
+                    ar.setAlarmTitle(titleInput.getText().toString(), currentItem.getAlarmId());
+                }
+            }
+        });
+        alertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Nothing
+            }
+        });
+
+        alertBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                titleInput.clearFocus();
+                // Hide soft Keyboard
+                InputMethodManager imm = (InputMethodManager) MyApplication.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+            }
+        });
+        alertBuilder.show();
     }
 }

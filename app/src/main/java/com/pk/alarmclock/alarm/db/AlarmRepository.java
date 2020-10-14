@@ -83,4 +83,13 @@ public class AlarmRepository {
         });
 
     }
+
+    public void setAlarmTitle(final String alarmTitle, final long alarmId) {
+        databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                alarmDao.setAlarmTitle(alarmTitle, alarmId);
+            }
+        });
+    }
 }
