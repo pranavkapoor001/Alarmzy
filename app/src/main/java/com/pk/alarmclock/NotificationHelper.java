@@ -6,10 +6,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import com.pk.alarmclock.alarm.AlarmBroadcastReceiver;
 import com.pk.alarmclock.alarm.AlarmTriggerActivity;
@@ -17,6 +19,7 @@ import com.pk.alarmclock.alarm.MyApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Objects;
 
 public class NotificationHelper {
 
@@ -80,6 +83,7 @@ public class NotificationHelper {
 
     public void deliverPersistentNotification() {
         String ACTION_DISMISS = BuildConfig.APPLICATION_ID + ".ACTION_DISMISS";
+        final String KEY_SNOOZE_LENGTH = "snoozeLength";
 
         mNotifyManager = (NotificationManager) MyApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -93,7 +97,15 @@ public class NotificationHelper {
         // Display Alarm Time in notification
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
                 Locale.getDefault());
-        String formattedTime = sdf.format(System.currentTimeMillis());
+
+        // Get snoozeLength
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        int snoozeLength = Integer.parseInt(Objects.requireNonNull(
+                sharedPref.getString(KEY_SNOOZE_LENGTH, "10")));
+
+        // Add current time to snoozeLength(Min)* millis
+        long snoozeTargetTime = System.currentTimeMillis() + snoozeLength * 60000;
+        String formattedTime = sdf.format(snoozeTargetTime);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 mContext, PRIMARY_CHANNEL_ID)
