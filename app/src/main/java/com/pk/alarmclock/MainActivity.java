@@ -1,8 +1,11 @@
 package com.pk.alarmclock;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +25,7 @@ import com.pk.alarmclock.alarm.AlarmHelper;
 import com.pk.alarmclock.alarm.AlarmRecViewAdapter;
 import com.pk.alarmclock.alarm.db.AlarmEntity;
 import com.pk.alarmclock.alarm.db.AlarmViewModel;
+import com.pk.alarmclock.settings.SettingsActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -133,5 +137,22 @@ public class MainActivity extends AppCompatActivity {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 timeSetListener, mHour, mMinute, false);
         timePickerDialog.show();
+    }
+
+    // Inflate menu layout
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
