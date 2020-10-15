@@ -10,4 +10,10 @@
         android:title="Snooze Time"
         app:defaultValue="10" />
 
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="vibrateEnabled"
+        android:summary="Vibrate with alarm"
+        android:title="Enable vibration" />
+
 </PreferenceScreen>

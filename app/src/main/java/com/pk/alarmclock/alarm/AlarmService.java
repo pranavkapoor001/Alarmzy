@@ -1,15 +1,20 @@
 package com.pk.alarmclock.alarm;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import com.pk.alarmclock.NotificationHelper;
 
@@ -17,6 +22,8 @@ import com.pk.alarmclock.NotificationHelper;
 
 public class AlarmService extends Service {
     private static final String TAG = "AlarmService";
+    final String KEY_VIBRATE = "vibrateEnabled";
+    Vibrator v;
     private MediaPlayer player;
 
 
@@ -85,6 +92,22 @@ public class AlarmService extends Service {
                 player.start();
             }
         });
+        vibrateAlarm();
+    }
+
+    public void vibrateAlarm() {
+        // Check if vibration is enabled
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean vibrationEnabled = sharedPref.getBoolean(KEY_VIBRATE, true);
+
+        // Get vibrator service
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrationEnabled) {
+            // Start vibration with pattern
+            long[] vibratePattern = new long[]{0, 500, 1000};
+            VibrationEffect effect = VibrationEffect.createWaveform(vibratePattern, 0);
+            v.vibrate(effect);
+        }
     }
 
     @Override
@@ -94,6 +117,8 @@ public class AlarmService extends Service {
             Log.e(TAG, "MediaPlayer Released");
             player.release();
             player = null;
+            // Stop vibration
+            v.cancel();
         }
     }
 
