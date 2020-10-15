@@ -27,4 +27,11 @@
         <item>25</item>
         <item>30</item>
     </string-array>
+
+    <string-array name="silence_timeout">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+    </string-array>
+
 </resources>

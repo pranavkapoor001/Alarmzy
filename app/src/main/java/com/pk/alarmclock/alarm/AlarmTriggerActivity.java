@@ -4,12 +4,14 @@ import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import com.ncorti.slidetoact.SlideToActView;
 import com.pk.alarmclock.NotificationHelper;
@@ -20,10 +22,13 @@ import com.pk.alarmclock.alarm.db.AlarmRepository;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class AlarmTriggerActivity extends AppCompatActivity {
+
+    final String KEY_SILENCE_TIMEOUT = "silenceTimeout";
 
     SlideToActView btnDismissAlarm, btnSnoozeAlarm;
     TextView alarmTime, alarmTitle;
@@ -121,7 +126,12 @@ public class AlarmTriggerActivity extends AppCompatActivity {
             }
         });
 
-        /* If not dismissed under 10 minutes
+        // Get silence timeout
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        int silenceTimeout = Integer.parseInt(Objects.requireNonNull(
+                sharedPref.getString(KEY_SILENCE_TIMEOUT, "10")));
+
+        /* If not dismissed under x minutes
          * Stop alarm
          * Post missed alarm notification
          */
@@ -138,8 +148,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                 stopAlarmService();
             }
         };
-        handler.postDelayed(r, 600000); // 10 Minutes
-        //TODO: Add configurable missed alarm timeout
+        handler.postDelayed(r, silenceTimeout * 60000); // x Minutes * millis
     }
 
     // Display alarmTime and alarmTitle

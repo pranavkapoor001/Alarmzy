@@ -10,6 +10,14 @@
         android:title="Snooze Time"
         app:defaultValue="10" />
 
+    <ListPreference
+        android:defaultValue="10"
+        android:entries="@array/silence_timeout"
+        android:entryValues="@array/silence_timeout"
+        android:key="silenceTimeout"
+        android:summary="Silence alarm after (minutes)"
+        android:title="Silence Timeout" />
+
     <SwitchPreferenceCompat
         android:defaultValue="true"
         android:key="vibrateEnabled"
