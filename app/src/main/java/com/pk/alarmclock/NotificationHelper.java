@@ -112,4 +112,25 @@ public class NotificationHelper {
          */
         mNotifyManager.notify(mAlarmId, builder.build());
     }
+
+    public void deliverMissedNotification() {
+        mNotifyManager = (NotificationManager) MyApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Display Alarm Time in notification
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
+                Locale.getDefault());
+        String formattedTime = sdf.format(System.currentTimeMillis());
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                mContext, PRIMARY_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_alarm)
+                .setContentTitle("Alarm")
+                .setContentText("Missed Alarm: " + formattedTime)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setCategory(NotificationCompat.CATEGORY_ALARM);
+
+        // Use alarmId just to create a unique notification
+        mNotifyManager.notify(mAlarmId, builder.build());
+    }
 }
