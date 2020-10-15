@@ -5,12 +5,14 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ncorti.slidetoact.SlideToActView;
+import com.pk.alarmclock.NotificationHelper;
 import com.pk.alarmclock.R;
 import com.pk.alarmclock.alarm.db.AlarmEntity;
 import com.pk.alarmclock.alarm.db.AlarmRepository;
@@ -103,9 +105,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
             @Override
             public void onSlideComplete(SlideToActView slideToActView) {
                 // Stop service and finish this activity
-                Intent intent = new Intent(AlarmTriggerActivity.this, AlarmService.class);
-                stopService(intent);
-                finish();
+                stopAlarmService();
             }
         });
 
@@ -117,12 +117,29 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                 AlarmHelper ah = new AlarmHelper();
                 ah.snoozeAlarm();
 
-                // Stop service and finish this activity
-                Intent intent = new Intent(AlarmTriggerActivity.this, AlarmService.class);
-                stopService(intent);
-                finish();
+                stopAlarmService();
             }
         });
+
+        /* If not dismissed under 10 minutes
+         * Stop alarm
+         * Post missed alarm notification
+         */
+        Handler handler = new Handler();
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                /* Deliver notification using id as -1
+                 * since id will not be used here
+                 */
+                NotificationHelper nh = new NotificationHelper(getApplicationContext(), alarmId);
+                nh.deliverMissedNotification();
+
+                stopAlarmService();
+            }
+        };
+        handler.postDelayed(r, 600000); // 10 Minutes
+        //TODO: Add configurable missed alarm timeout
     }
 
     // Display alarmTime and alarmTitle
@@ -142,5 +159,12 @@ public class AlarmTriggerActivity extends AppCompatActivity {
             alarmTitle.setText(R.string.alarm);
         else
             alarmTitle.setText(alarmEntity.getAlarmTitle());
+    }
+
+    // Stop service and finish activity
+    public void stopAlarmService() {
+        Intent intent = new Intent(AlarmTriggerActivity.this, AlarmService.class);
+        stopService(intent);
+        finish();
     }
 }
