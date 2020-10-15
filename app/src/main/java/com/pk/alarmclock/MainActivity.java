@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -109,6 +110,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         helper.attachToRecyclerView(mRecyclerView);
+
+        // Set default values on first launch
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
     // Show dialog and set Time: Store selected time in Calendar object

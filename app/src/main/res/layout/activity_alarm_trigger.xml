@@ -55,7 +55,7 @@
         app:slider_height="@dimen/_40sdp"
         app:slider_locked="false"
         app:slider_reversed="true"
-        app:text="Slide To Snooze (10 Min)"
+        app:text="Slide To Snooze"
         app:text_style="bold" />
 
 </RelativeLayout>

@@ -5,7 +5,10 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
+
+import androidx.preference.PreferenceManager;
 
 import com.pk.alarmclock.NotificationHelper;
 import com.pk.alarmclock.R;
@@ -14,6 +17,7 @@ import com.pk.alarmclock.alarm.db.AlarmRepository;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -343,6 +347,8 @@ public class AlarmHelper {
     }
 
     public void snoozeAlarm() {
+        final String KEY_SNOOZE_LENGTH = "snoozeLength";
+
         context = MyApplication.getContext();
         app = new Application();
         ar = new AlarmRepository(app);
@@ -355,9 +361,14 @@ public class AlarmHelper {
         PendingIntent pendingIntent = PendingIntent.getForegroundService(context,
                 alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // TODO: Add configurable snooze timeout
+        // Get Snooze Length
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        int snoozeLength = Integer.parseInt(Objects.requireNonNull(
+                sharedPref.getString(KEY_SNOOZE_LENGTH, "10")));
+
+        // Add snooze length
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.MINUTE, 10);
+        c.add(Calendar.MINUTE, snoozeLength);
 
         AlarmManager.AlarmClockInfo alarmClockInfo =
                 new AlarmManager.AlarmClockInfo(c.getTimeInMillis(), null);

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="dummyPref"
-        android:summary="Ha ha ha ha"
-        android:title="Enable This" />
+    <ListPreference
+        android:entries="@array/snooze_length_entries"
+        android:entryValues="@array/snooze_length_entryValues"
+        android:key="snoozeLength"
+        android:summary="Select timeout for snooze"
+        android:title="Snooze Time"
+        app:defaultValue="10" />
 
 </PreferenceScreen>
