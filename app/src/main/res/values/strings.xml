@@ -6,4 +6,5 @@
     <string name="alarm">Alarm</string>
     <string name="snooze">Snooze</string>
     <string name="snoozed_alarm">Snoozed Alarm</string>
+    <string name="settings">Settings</string>
 </resources>

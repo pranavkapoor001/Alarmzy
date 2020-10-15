@@ -15,6 +15,10 @@
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents">
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:parentActivityName=".MainActivity" />
+
         <receiver
             android:name=".alarm.AlarmBroadcastReceiver"
             android:enabled="true"
