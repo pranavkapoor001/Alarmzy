@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AlarmClock</string>
+    <string name="app_name">Alarm Clock</string>
     <string name="dismiss">Dismiss</string>
     <string name="no_alarms_set">No Alarms Set</string>
     <string name="alarm_title">Alarm Title</string>
