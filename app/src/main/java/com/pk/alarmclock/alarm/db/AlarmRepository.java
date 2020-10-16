@@ -72,11 +72,11 @@ public class AlarmRepository {
         });
     }
 
-    public void updateAlarmId(final int oldAlarmId, final int newAlarmId) {
+    public void updateAlarmIdTime(final int oldAlarmId, final int newAlarmId, final long alarmTime) {
         databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                alarmDao.updateAlarmId(oldAlarmId, newAlarmId);
+                alarmDao.updateAlarmIdTime(oldAlarmId, newAlarmId, alarmTime);
                 // Update Toggle Value
                 updateAlarmStatus(newAlarmId, true);
             }

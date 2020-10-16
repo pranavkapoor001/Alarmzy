@@ -34,9 +34,9 @@ public interface AlarmDao {
     @Query("UPDATE alarm_table SET mAlarmEnabled = :isAlarmEnabled WHERE mAlarmId = :id")
     void updateAlarmStatus(int id, boolean isAlarmEnabled);
 
-    // ReEnable Alarm: Update Id and avoid reInsertion
-    @Query("UPDATE alarm_table SET mAlarmId=:newAlarmId WHERE mAlarmId=:oldAlarmId")
-    void updateAlarmId(int oldAlarmId, int newAlarmId);
+    // ReEnable Alarm: Update Id,Time and avoid reInsertion
+    @Query("UPDATE alarm_table SET mAlarmId=:newAlarmId, mAlarmTime=:alarmTime WHERE mAlarmId=:oldAlarmId")
+    void updateAlarmIdTime(int oldAlarmId, int newAlarmId, long alarmTime);
 
     @Query("SELECT * FROM alarm_table WHERE mAlarmId=:id")
     AlarmEntity getAlarm(int id);

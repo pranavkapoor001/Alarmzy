@@ -118,8 +118,8 @@ public class AlarmHelper {
              * also delete the dummy alarm
              */
             if (!flag && alarmEntity.getAlarmTime() < System.currentTimeMillis()) {
-                Log.e(TAG, "ParentTime: "+alarmEntity.getAlarmTime());
-                Log.e(TAG, "CurrentTime: "+System.currentTimeMillis());
+                Log.e(TAG, "ParentTime: " + alarmEntity.getAlarmTime());
+                Log.e(TAG, "CurrentTime: " + System.currentTimeMillis());
                 daysOfRepeatArr[DaysOfWeek.IsRECURRING] = false;
                 ar.updateAlarmStatus(alarmEntity.getAlarmId(), false);
                 dummyAlarm(alarmEntity.getAlarmId(), false);
@@ -166,7 +166,7 @@ public class AlarmHelper {
         // Update alarmId of alarm enabled by Toggle
         if (!isNew) {
             Log.e(TAG, "createAlarm: Not New");
-            ar.updateAlarmId(oldAlarmId, alarmId);
+            ar.updateAlarmIdTime(oldAlarmId, alarmId, alarmTime);
         } else {
             Boolean[] daysOfRepeatArr = new Boolean[8];
             // Populate array with all elements set to false (New alarm, not recurring)
