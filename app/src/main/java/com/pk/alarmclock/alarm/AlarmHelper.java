@@ -90,6 +90,12 @@ public class AlarmHelper {
                     }
                 }
             }
+
+            /* Cancel dummy alarm
+             * Since parent and all child alarms are disabled now
+             */
+            dummyAlarm(alarmEntity.getAlarmId(), false);
+
         } else {
             // child alarm is disabled: reflect in toggle here
             assert daysOfRepeatArr != null;
