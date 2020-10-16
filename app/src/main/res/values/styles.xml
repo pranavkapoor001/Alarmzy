@@ -7,4 +7,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="RoundCheckBox" parent="Theme.MaterialComponents">
+        <item name="android:button">@drawable/ic_check_circle</item>
+    </style>
+
 </resources>
