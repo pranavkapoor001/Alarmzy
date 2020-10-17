@@ -28,8 +28,10 @@ import java.util.concurrent.Executors;
 
 public class AlarmTriggerActivity extends AppCompatActivity {
 
-    SlideToActView btnDismissAlarm, btnSnoozeAlarm;
-    TextView alarmTime, alarmTitle;
+    private SlideToActView btnDismissAlarm, btnSnoozeAlarm;
+    private TextView alarmTime, alarmTitle;
+    private Handler handler;
+    private Runnable r;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                AlarmEntity currentEntity = ar.getAlarm(alarmId);
+                final AlarmEntity currentEntity = ar.getAlarm(alarmId);
                 /* If alarmId is not matched in db and daysOfRepeat is null
                  * Then it is a child alarm
                  */
@@ -149,13 +151,11 @@ public class AlarmTriggerActivity extends AppCompatActivity {
          * Stop alarm
          * Post missed alarm notification
          */
-        Handler handler = new Handler();
-        Runnable r = new Runnable() {
+        handler = new Handler();
+        r = new Runnable() {
             @Override
             public void run() {
-                /* Deliver notification using id as -1
-                 * since id will not be used here
-                 */
+                // Deliver notification using id
                 NotificationHelper nh = new NotificationHelper(getApplicationContext(), alarmId);
                 nh.deliverMissedNotification();
 
@@ -166,28 +166,40 @@ public class AlarmTriggerActivity extends AppCompatActivity {
     }
 
     // Display alarmTime and alarmTitle
-    public void displayInfo(AlarmEntity alarmEntity) {
-        // Get alarm time
-        long alarmTimeInMillis = alarmEntity.getAlarmTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
-                Locale.getDefault());
-        String formattedTime = sdf.format(alarmTimeInMillis);
-        alarmTime.setText(formattedTime);
+    public void displayInfo(final AlarmEntity alarmEntity) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Get alarm time
+                long alarmTimeInMillis = alarmEntity.getAlarmTime();
+                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
+                        Locale.getDefault());
+                String formattedTime = sdf.format(alarmTimeInMillis);
+                alarmTime.setText(formattedTime);
 
-        /* Get alarm title
-         * If alarmTitle is "Alarm Title" (User didn't set any custom title)
-         * then show title as "Alarm"
-         */
-        if (alarmEntity.getAlarmTitle().trim().equals(this.getResources().getString(R.string.alarm_title)))
-            alarmTitle.setText(R.string.alarm);
-        else
-            alarmTitle.setText(alarmEntity.getAlarmTitle());
+                /* Get alarm title
+                 * If alarmTitle is "Alarm Title" (User didn't set any custom title)
+                 * then show title as "Alarm"
+                 */
+                if (alarmEntity.getAlarmTitle().trim().equals(getString(R.string.alarm_title)))
+                    alarmTitle.setText(R.string.alarm);
+                else
+                    alarmTitle.setText(alarmEntity.getAlarmTitle());
+            }
+        });
     }
 
     // Stop service and finish activity
     public void stopAlarmService() {
         Intent intent = new Intent(AlarmTriggerActivity.this, AlarmService.class);
         stopService(intent);
+        handler.removeCallbacks(r);
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler = null;
     }
 }
