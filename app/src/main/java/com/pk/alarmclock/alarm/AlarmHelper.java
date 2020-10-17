@@ -124,8 +124,8 @@ public class AlarmHelper {
              * also delete the dummy alarm
              */
             if (!flag && alarmEntity.getAlarmTime() < System.currentTimeMillis()) {
-                Log.e(TAG, "ParentTime: "+alarmEntity.getAlarmTime());
-                Log.e(TAG, "CurrentTime: "+System.currentTimeMillis());
+                Log.e(TAG, "ParentTime: " + alarmEntity.getAlarmTime());
+                Log.e(TAG, "CurrentTime: " + System.currentTimeMillis());
                 daysOfRepeatArr[DaysOfWeek.IsRECURRING] = false;
                 ar.updateAlarmStatus(alarmEntity.getAlarmId(), false);
                 dummyAlarm(alarmEntity.getAlarmId(), false);
@@ -281,13 +281,16 @@ public class AlarmHelper {
         // childAlarm Time is same as parent
         cal.setTimeInMillis(alarmEntity.getAlarmTime());
 
-        /* If day of repeat is same as day today
+        /* If day of repeat is same as day of parent alarm
          * Increment it to next week
+         *
+         * Get day of week of current parent alarm
          */
-        Calendar todayCal = Calendar.getInstance();
-        int dayToday = todayCal.get(Calendar.DAY_OF_WEEK);
+        Calendar parentTime = Calendar.getInstance();
+        parentTime.setTimeInMillis(alarmEntity.getAlarmTime());
+        int parentAlarmDay = parentTime.get(Calendar.DAY_OF_WEEK);
 
-        if (dayOfRepeat == dayToday)
+        if (dayOfRepeat == parentAlarmDay)
             cal.add(Calendar.WEEK_OF_MONTH, 1);
 
         // Set recurring alarms day to dayOfRepeat
