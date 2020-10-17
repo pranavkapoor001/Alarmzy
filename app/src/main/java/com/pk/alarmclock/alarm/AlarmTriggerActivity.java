@@ -29,7 +29,7 @@ import java.util.concurrent.Executors;
 public class AlarmTriggerActivity extends AppCompatActivity {
 
     private SlideToActView btnDismissAlarm, btnSnoozeAlarm;
-    private TextView alarmTime, alarmTitle;
+    private TextView tvAlarmTime, tvAlarmTitle;
     private Handler handler;
     private Runnable r;
 
@@ -38,8 +38,8 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_trigger);
 
-        alarmTime = findViewById(R.id.trigger_alarm_time);
-        alarmTitle = findViewById(R.id.trigger_alarm_title);
+        tvAlarmTime = findViewById(R.id.trigger_alarm_time);
+        tvAlarmTitle = findViewById(R.id.trigger_alarm_title);
 
         Intent intent = getIntent();
         final int alarmId = intent.getExtras().getInt("alarmIdKey", -1);
@@ -93,9 +93,9 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
                                 Locale.getDefault());
                         String formattedTime = sdf.format(System.currentTimeMillis());
-                        alarmTime.setText(formattedTime);
+                        tvAlarmTime.setText(formattedTime);
 
-                        alarmTitle.setText(R.string.snoozed_alarm);
+                        tvAlarmTitle.setText(R.string.snoozed_alarm);
 
                         // Cancel notification
                         NotificationManager mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -138,7 +138,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
 
         // Get silence timeout
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        int silenceTimeout = Integer.parseInt(Objects.requireNonNull(
+        final int silenceTimeout = Integer.parseInt(Objects.requireNonNull(
                 sharedPref.getString(KEY_SILENCE_TIMEOUT, "0")));
 
         /* If silenceTimeout is set to Never(0)
@@ -157,7 +157,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
             public void run() {
                 // Deliver notification using id
                 NotificationHelper nh = new NotificationHelper(getApplicationContext(), alarmId);
-                nh.deliverMissedNotification();
+                nh.deliverMissedNotification(silenceTimeout);
 
                 stopAlarmService();
             }
@@ -175,16 +175,16 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
                         Locale.getDefault());
                 String formattedTime = sdf.format(alarmTimeInMillis);
-                alarmTime.setText(formattedTime);
+                tvAlarmTime.setText(formattedTime);
 
                 /* Get alarm title
                  * If alarmTitle is "Alarm Title" (User didn't set any custom title)
                  * then show title as "Alarm"
                  */
                 if (alarmEntity.getAlarmTitle().trim().equals(getString(R.string.alarm_title)))
-                    alarmTitle.setText(R.string.alarm);
+                    tvAlarmTitle.setText(R.string.alarm);
                 else
-                    alarmTitle.setText(alarmEntity.getAlarmTitle());
+                    tvAlarmTitle.setText(alarmEntity.getAlarmTitle());
             }
         });
     }

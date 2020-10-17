@@ -125,13 +125,15 @@ public class NotificationHelper {
         mNotifyManager.notify(mAlarmId, builder.build());
     }
 
-    public void deliverMissedNotification() {
+    // Use silenceTimeout to show actual alarmId instead of current time
+    public void deliverMissedNotification(int silenceTimeout) {
         mNotifyManager = (NotificationManager) MyApplication.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Display Alarm Time in notification
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
                 Locale.getDefault());
-        String formattedTime = sdf.format(System.currentTimeMillis());
+        // Set formattedTime to currentTime - silenceTimeout(minutes) * millis
+        String formattedTime = sdf.format(System.currentTimeMillis() - silenceTimeout * 60000);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 mContext, PRIMARY_CHANNEL_ID)
