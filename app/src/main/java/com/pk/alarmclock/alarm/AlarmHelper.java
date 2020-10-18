@@ -18,9 +18,6 @@ import com.pk.alarmclock.alarm.db.AlarmRepository;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class AlarmHelper {
 
@@ -131,11 +128,8 @@ public class AlarmHelper {
         }
     }
 
-    /* Create new alarm with Calendar data
-     * Return newParentAlarmId to Schedule its child alarms
-     *      (Only for ReEnableAlarm())
-     */
-    public int createAlarm(Calendar c) {
+    // Create new alarm with Calendar data
+    public void createAlarm(Calendar c) {
 
         context = MyApplication.getContext();
         app = new Application();
@@ -177,7 +171,6 @@ public class AlarmHelper {
                     daysOfRepeatArr, context.getString(R.string.alarm_title));
             ar.insert(alarm);
         }
-        return alarmId;
     }
 
     /* Create alarm when Toggle is enabled
@@ -191,50 +184,11 @@ public class AlarmHelper {
         cal.setTimeInMillis(alarmEntity.getAlarmTime());
         isNew = false;
         /* Schedule parentAlarm
-         * Using parentAlarmsId Schedule its child alarms
+         * Using parentAlarmsTime Cal, Schedule its child alarms
          */
-        int newParentAlarmId = createAlarm(cal);
-        reEnableAlarmChild(newParentAlarmId);
+        createAlarm(cal);
     }
 
-    public void reEnableAlarmChild(final int newParentAlarmId) {
-
-        /* Since we need to fetch AlarmEntity using Id from Db
-         * Wait till parent toggle value is updated (createAlarm()-updateAlarmStatus()): Fixed timeout
-         * Then run it on bg thread
-         */
-        final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(1);
-        databaseWriteExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // wait for updateAlarmStatus to finish
-                    databaseWriteExecutor.awaitTermination(1, TimeUnit.SECONDS);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                AlarmEntity currentEntity = ar.getAlarm(newParentAlarmId);
-                if (currentEntity == null)
-                    return;
-
-                Log.i(TAG, "PARENT ALARM SAYS: " + currentEntity.getAlarmEnabled()
-                        + " WITH ID: " + currentEntity.getAlarmId());
-
-                Boolean[] daysOfRepeatArr = currentEntity.getDaysOfRepeatArr();
-                if (daysOfRepeatArr[DaysOfWeek.IsRECURRING]) {
-                    for (int i = 1; i < daysOfRepeatArr.length; i++) {
-                        if (daysOfRepeatArr[i]) {
-                            // This child alarm toggle is enabled
-                            Log.i(TAG, "reEnableAlarm: Going to reEnable Child alarm at: " + i
-                                    + " With ParentId: " + newParentAlarmId);
-                            repeatingAlarm(currentEntity, i);
-                        }
-                    }
-                }
-            }
-        });
-    }
 
     public void repeatingAlarm(AlarmEntity alarmEntity, int dayOfRepeat) {
         context = MyApplication.getContext();

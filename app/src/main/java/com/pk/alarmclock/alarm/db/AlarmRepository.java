@@ -5,14 +5,17 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import com.pk.alarmclock.alarm.AlarmHelper;
+import com.pk.alarmclock.alarm.DaysOfWeek;
+import com.pk.alarmclock.alarm.MyApplication;
+
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class AlarmRepository {
 
-    private static final int NUMBER_OF_THREADS = 1;
-    static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+    private static final String TAG = "AlarmRepository";
     private AlarmDao alarmDao;
     private LiveData<List<AlarmEntity>> allAlarms;
 
@@ -36,7 +39,7 @@ public class AlarmRepository {
     }
 
     public void insert(final AlarmEntity alarmEntity) {
-        databaseWriteExecutor.execute(new Runnable() {
+        MyApplication.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 alarmDao.insert(alarmEntity);
@@ -45,7 +48,7 @@ public class AlarmRepository {
     }
 
     public void update(final AlarmEntity alarmEntity) {
-        databaseWriteExecutor.execute(new Runnable() {
+        MyApplication.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 alarmDao.update(alarmEntity);
@@ -63,7 +66,7 @@ public class AlarmRepository {
     }
 
     public void updateAlarmStatus(final int alarmId, final boolean isAlarmEnabled) {
-        databaseWriteExecutor.execute(new Runnable() {
+        MyApplication.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 alarmDao.updateAlarmStatus(alarmId, isAlarmEnabled);
@@ -73,22 +76,61 @@ public class AlarmRepository {
     }
 
     public void updateAlarmIdTime(final int oldAlarmId, final int newAlarmId, final long alarmTime) {
-        databaseWriteExecutor.execute(new Runnable() {
+        MyApplication.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 alarmDao.updateAlarmIdTime(oldAlarmId, newAlarmId, alarmTime);
                 // Update Toggle Value
                 updateAlarmStatus(newAlarmId, true);
+
+                // Re enable all enabled
+                reEnableAlarmChild(newAlarmId);
             }
         });
 
     }
 
     public void setAlarmTitle(final String alarmTitle, final long alarmId) {
-        databaseWriteExecutor.execute(new Runnable() {
+        MyApplication.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 alarmDao.setAlarmTitle(alarmTitle, alarmId);
+            }
+        });
+    }
+
+    public void reEnableAlarmChild(final int newParentAlarmId) {
+
+        MyApplication.databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // wait for updateAlarmStatus to finish
+                    MyApplication.databaseWriteExecutor.awaitTermination(1, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                AlarmEntity currentEntity = getAlarm(newParentAlarmId);
+                if (currentEntity == null)
+                    return;
+
+                Log.i(TAG, "PARENT ALARM SAYS: " + currentEntity.getAlarmEnabled()
+                        + " WITH ID: " + currentEntity.getAlarmId());
+
+                AlarmHelper ah = new AlarmHelper();
+
+                Boolean[] daysOfRepeatArr = currentEntity.getDaysOfRepeatArr();
+                if (daysOfRepeatArr[DaysOfWeek.IsRECURRING]) {
+                    for (int i = 1; i < daysOfRepeatArr.length; i++) {
+                        if (daysOfRepeatArr[i]) {
+                            // This child alarm toggle is enabled
+                            Log.i(TAG, "reEnableAlarm: Going to reEnable Child alarm at: " + i
+                                    + " With ParentId: " + newParentAlarmId);
+                            ah.repeatingAlarm(currentEntity, i);
+                        }
+                    }
+                }
             }
         });
     }

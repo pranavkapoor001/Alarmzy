@@ -23,8 +23,6 @@ import com.pk.alarmclock.alarm.db.AlarmRepository;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class AlarmTriggerActivity extends AppCompatActivity {
 
@@ -59,10 +57,9 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         Application app = AlarmTriggerActivity.this.getApplication();
         final AlarmRepository ar = new AlarmRepository(app);
 
-        final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(1);
         // Temp var for inner class
         final int finalAlarmId = alarmId;
-        databaseWriteExecutor.execute(new Runnable() {
+        MyApplication.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 final AlarmEntity currentEntity = ar.getAlarm(finalAlarmId);
