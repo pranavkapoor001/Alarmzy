@@ -15,6 +15,7 @@ import java.util.List;
 public class ReSchedAlarmService extends JobIntentService {
 
     public static final int JOB_ID = 1;
+    private static final String TAG = "ReSchedAlarmService";
     List<AlarmEntity> alarms;
 
     public static void enqueueWork(Context context, Intent jobServiceIntent) {
@@ -24,7 +25,7 @@ public class ReSchedAlarmService extends JobIntentService {
     // JobIntentService already holds a wakelock for us: Simply run the job
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
-        Log.e("PK: ReSchedAlarmService", "onHandleWorkTriggered");
+        Log.i(TAG, "onHandleWork: Triggered");
 
         AlarmHelper ah = new AlarmHelper();
 
@@ -40,7 +41,7 @@ public class ReSchedAlarmService extends JobIntentService {
                 //Set old alarmId
                 ah.oldAlarmId = ae.getAlarmId();
                 ah.reEnableAlarm(ae);
-                Log.e("ReSchedAlarmService", "AlarmEnabled(OldId): " + ae.getAlarmId());
+                Log.i(TAG, "onHandleWork: AlarmEnabled(OldId): " + ae.getAlarmId());
             }
         }
     }

@@ -17,7 +17,6 @@ import com.pk.alarmclock.alarm.db.AlarmRepository;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AlarmHelper {
 
-    private static String TAG = "AlarmHelper";
+    private static final String TAG = "AlarmHelper";
     Context context;
     Application app;
     AlarmRepository ar;
@@ -51,9 +50,8 @@ public class AlarmHelper {
         /* daysOfRepeatArr is set through obj of ah class
          * It should not be null
          */
-        if (daysOfRepeatArr == null) {
-            Log.e(TAG, "cancelAlarm, array is null");
-        }
+        if (daysOfRepeatArr == null)
+            Log.e(TAG, "cancelAlarm: " + "array is null");
 
         if (cancelParent) {
             // Cancel Parent alarm start
@@ -81,7 +79,7 @@ public class AlarmHelper {
                 for (int i = 1; i < daysOfRepeatArr.length; i++) {
                     if (daysOfRepeatArr[i]) {
                         // This child alarm is enabled
-                        Log.e(TAG, "cancelAlarm, Child Alarm was Enabled: " + i);
+                        Log.i(TAG, "cancelAlarm: Child Alarm was Enabled" + i);
                         childAlarmId = parentAlarmId + i;
                         pendingIntent = PendingIntent.getForegroundService(context,
                                 childAlarmId, intent, 0);
@@ -124,8 +122,8 @@ public class AlarmHelper {
              * also delete the dummy alarm
              */
             if (!flag && alarmEntity.getAlarmTime() < System.currentTimeMillis()) {
-                Log.e(TAG, "ParentTime: " + alarmEntity.getAlarmTime());
-                Log.e(TAG, "CurrentTime: " + System.currentTimeMillis());
+                Log.i(TAG, "cancelAlarm: No child alarms / ParentTime passed");
+                Log.i(TAG, "cancelAlarm: Going to disable parent toggle");
                 daysOfRepeatArr[DaysOfWeek.IsRECURRING] = false;
                 ar.updateAlarmStatus(alarmEntity.getAlarmId(), false);
                 dummyAlarm(alarmEntity.getAlarmId(), false);
@@ -147,7 +145,7 @@ public class AlarmHelper {
         Intent intent = new Intent(context, AlarmService.class);
         int alarmId = new Random().nextInt(Integer.MAX_VALUE);
         intent.putExtra("alarmIdKey", alarmId);
-        Log.e("AlarmHelper", "Putting alarmIdKey: " + alarmId);
+        Log.i(TAG, "createAlarm: Putting alarmIdKey: " + alarmId);
         PendingIntent pendingIntent = PendingIntent.getForegroundService(context,
                 alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -163,15 +161,13 @@ public class AlarmHelper {
         // Get alarmTime in milliSeconds
         long alarmTime = c.getTimeInMillis();
 
-        Log.e(TAG, "createAlarm: AlarmHour" + c.get(Calendar.HOUR_OF_DAY));
-        Log.e(TAG, "createAlarm: AlarmHour" + c.get(Calendar.MINUTE));
-        Log.e(TAG, "createAlarm: AlarmID: " + alarmId);
-        Log.e(TAG, "createAlarm: isNew: " + isNew);
-        Log.e(TAG, "createAlarm: Time: " + c.getTime());
+        Log.i(TAG, "createAlarm: AlarmID" + alarmId);
+        Log.i(TAG, "createAlarm: isNew: " + isNew);
+        Log.i(TAG, "createAlarm: Time: " + c.getTime());
 
         // Update alarmId of alarm enabled by Toggle
         if (!isNew) {
-            Log.e(TAG, "createAlarm: Not New");
+            Log.i(TAG, "createAlarm: Not New");
             ar.updateAlarmIdTime(oldAlarmId, alarmId, alarmTime);
         } else {
             Boolean[] daysOfRepeatArr = new Boolean[8];
@@ -222,7 +218,7 @@ public class AlarmHelper {
                 if (currentEntity == null)
                     return;
 
-                Log.e(TAG, "PARENT ALARM SAYS: " + currentEntity.getAlarmEnabled()
+                Log.i(TAG, "PARENT ALARM SAYS: " + currentEntity.getAlarmEnabled()
                         + " WITH ID: " + currentEntity.getAlarmId());
 
                 Boolean[] daysOfRepeatArr = currentEntity.getDaysOfRepeatArr();
@@ -230,7 +226,7 @@ public class AlarmHelper {
                     for (int i = 1; i < daysOfRepeatArr.length; i++) {
                         if (daysOfRepeatArr[i]) {
                             // This child alarm toggle is enabled
-                            Log.e(TAG, "reEnableAlarm: Going to reEnable Child alarm at: " + i
+                            Log.i(TAG, "reEnableAlarm: Going to reEnable Child alarm at: " + i
                                     + " With ParentId: " + newParentAlarmId);
                             repeatingAlarm(currentEntity, i);
                         }
@@ -254,8 +250,8 @@ public class AlarmHelper {
          * Just update daysOfRepeatArr and return
          */
         if (!alarmEntity.getAlarmEnabled()) {
-            Log.e(TAG, "repeatingAlarm: ParentAlarmDisabled, Skipping");
-            Log.e(TAG, "repeatingAlarm: ParentAlarmId" + alarmEntity.getAlarmId());
+            Log.i(TAG, "repeatingAlarm: ParentAlarmDisabled, Skipping");
+            Log.i(TAG, "repeatingAlarm: ParentAlarmId" + alarmEntity.getAlarmId());
             alarmEntity = new AlarmEntity(alarmEntity.getAlarmTime(), alarmEntity.getAlarmId(),
                     alarmEntity.getAlarmEnabled(), daysOfRepeatArr, alarmEntity.getAlarmTitle());
             ar.update(alarmEntity);
@@ -273,7 +269,7 @@ public class AlarmHelper {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmService.class);
         intent.putExtra("alarmIdKey", childAlarmId);
-        Log.e(TAG, "repeatingAlarm: Putting childAlarmIdKey: " + childAlarmId);
+        Log.i(TAG, "repeatingAlarm: Putting childAlarmIdKey: " + childAlarmId);
         PendingIntent pendingIntent = PendingIntent.getForegroundService(context,
                 childAlarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -305,7 +301,7 @@ public class AlarmHelper {
         // Set recurring alarms day to dayOfRepeat
         cal.set(Calendar.DAY_OF_WEEK, dayOfRepeat);
 
-        Log.e(TAG, "repeatingAlarm: NewTime: : " + cal.getTime() + " In millis: " + cal.getTimeInMillis());
+        Log.i(TAG, "repeatingAlarm: NewTime: : " + cal.getTime() + " In millis: " + cal.getTimeInMillis());
 
         // Set childAlarm
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
@@ -328,7 +324,7 @@ public class AlarmHelper {
     public void dummyAlarm(int dummyAlarmId, boolean create) {
         context = MyApplication.getContext();
 
-        Log.e(TAG, "dummyAlarm Called with id: " + dummyAlarmId);
+        Log.i(TAG, "dummyAlarm Called with id: " + dummyAlarmId);
 
         dummyAlarmId = dummyAlarmId + 20;
 
@@ -368,18 +364,25 @@ public class AlarmHelper {
         Intent intent = new Intent(context, AlarmService.class);
         int alarmId = new Random().nextInt(Integer.MAX_VALUE);
         intent.putExtra("alarmIdKey", alarmId);
-        Log.e("AlarmHelper", "Putting alarmIdKey: " + alarmId);
+        Log.i("AlarmHelper", "Putting alarmIdKey: " + alarmId);
         PendingIntent pendingIntent = PendingIntent.getForegroundService(context,
                 alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Get Snooze Length
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        int snoozeLength = Integer.parseInt(Objects.requireNonNull(
-                sharedPref.getString(KEY_SNOOZE_LENGTH, "10")));
+        String snoozeLengthStr = sharedPref.getString(KEY_SNOOZE_LENGTH, "10");
+
+        /* Set default value to 10
+         * Add null check to avoid warning
+         * and npe later
+         */
+        int snoozeLengthInt = 10;
+        if (snoozeLengthStr != null)
+            snoozeLengthInt = Integer.parseInt(snoozeLengthStr);
 
         // Add snooze length
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.MINUTE, snoozeLength);
+        c.add(Calendar.MINUTE, snoozeLengthInt);
         c.set(Calendar.SECOND, 0);
 
         AlarmManager.AlarmClockInfo alarmClockInfo =

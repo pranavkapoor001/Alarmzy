@@ -42,8 +42,15 @@ public class AlarmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "AlarmService Started");
-        int alarmId = intent.getExtras().getInt("alarmIdKey", -1);
-        Log.e(TAG, "Got alarmIdKey" + alarmId);
+
+        /* This can produce npe
+         * Check if key exists then fetch value
+         */
+        int alarmId = -1;
+        if (intent.hasExtra("alarmIdKey"))
+            alarmId = intent.getIntExtra("alarmIdKey", -1);
+
+        Log.i(TAG, "Got alarmIdKey: " + alarmId);
 
 
         // deliver notification with alarmId to disable toggle when alarm is dismissed
@@ -114,7 +121,6 @@ public class AlarmService extends Service {
     public void onDestroy() {
         super.onDestroy();
         if (player != null) {
-            Log.e(TAG, "MediaPlayer Released");
             player.release();
             player = null;
             // Stop vibration

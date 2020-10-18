@@ -19,11 +19,11 @@ import com.pk.alarmclock.alarm.MyApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-import java.util.Objects;
 
 public class NotificationHelper {
 
     static final String PRIMARY_CHANNEL_ID = "primary_channel_id";
+    private static final String TAG = "NotificationHelper";
     public int mAlarmId;
     NotificationManager mNotifyManager;
     Context mContext;
@@ -45,15 +45,15 @@ public class NotificationHelper {
         notificationChannel.setDescription("Notifications From Alarm1");
         mNotifyManager.createNotificationChannel(notificationChannel);
 
-        Log.i("NotificationHelper ", "Channel Created");
+        Log.i(TAG, "createNotificationChannel: Channel Created");
     }
 
     public Notification deliverNotification() {
 
 
         Intent fullScreenIntent = new Intent(mContext, AlarmTriggerActivity.class);
+        Log.i(TAG, "deliverNotification: Putting alarmIdKey: " + mAlarmId);
         fullScreenIntent.putExtra("alarmIdKey", mAlarmId);
-        Log.e("NotificationHelper", "obj saved alarmIdKey = " + mAlarmId);
         PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(mContext,
                 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -77,8 +77,7 @@ public class NotificationHelper {
                 .setFullScreenIntent(fullScreenPendingIntent, true);
 
         // Return a Notification object to be used by startForeground()
-        Notification notification = builder.build();
-        return notification;
+        return builder.build();
     }
 
     public void deliverPersistentNotification() {
@@ -90,7 +89,7 @@ public class NotificationHelper {
         Intent dismissIntent = new Intent(mContext, AlarmBroadcastReceiver.class);
         dismissIntent.setAction(ACTION_DISMISS);
         // AlarmId received from constructor
-        dismissIntent.putExtra("alarmId", mAlarmId);
+        dismissIntent.putExtra("alarmIdKey", mAlarmId);
         PendingIntent dismissPendingIntent = PendingIntent.getBroadcast(mContext,
                 mAlarmId, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -100,11 +99,19 @@ public class NotificationHelper {
 
         // Get snoozeLength
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
-        int snoozeLength = Integer.parseInt(Objects.requireNonNull(
-                sharedPref.getString(KEY_SNOOZE_LENGTH, "10")));
+        String snoozeLengthStr = sharedPref.getString(KEY_SNOOZE_LENGTH, "10");
+
+        /* Set default value to 10
+         * Add null check to avoid warning
+         * and npe later
+         */
+        int snoozeLengthInt = 10;
+        if (snoozeLengthStr != null)
+            snoozeLengthInt = Integer.parseInt(snoozeLengthStr);
+
 
         // Add current time to snoozeLength(Min)* millis
-        long snoozeTargetTime = System.currentTimeMillis() + snoozeLength * 60000;
+        long snoozeTargetTime = System.currentTimeMillis() + snoozeLengthInt * 60000;
         String formattedTime = sdf.format(snoozeTargetTime);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(

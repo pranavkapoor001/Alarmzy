@@ -14,11 +14,12 @@ import java.util.Objects;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
+    private static final String TAG = "AlarmBroadcastReceiver";
     String ACTION_DISMISS = BuildConfig.APPLICATION_ID + ".ACTION_DISMISS";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("AlarmBroadcastReceiver: ", "TRIGGERED");
+        Log.e(TAG, "onReceive: " + "TRIGGERED");
 
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             Intent jobServiceIntent = new Intent(context, ReSchedAlarmService.class);
@@ -26,7 +27,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
         } else if (Objects.equals(intent.getAction(), ACTION_DISMISS)) {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            int alarmId = Objects.requireNonNull(intent.getExtras()).getInt("alarmId", -1);
+            int alarmId = intent.getIntExtra("alarmIdKey", -1);
 
             // Cancel alarm
             Intent alarmCancelIntent = new Intent(context, AlarmService.class);

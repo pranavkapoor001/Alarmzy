@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
@@ -22,12 +23,12 @@ import com.pk.alarmclock.alarm.db.AlarmRepository;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class AlarmTriggerActivity extends AppCompatActivity {
 
+    private static final String TAG = "AlarmTriggerActivity";
     private SlideToActView btnDismissAlarm, btnSnoozeAlarm;
     private TextView tvAlarmTime, tvAlarmTitle;
     private Handler handler;
@@ -42,8 +43,15 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         tvAlarmTitle = findViewById(R.id.trigger_alarm_title);
 
         Intent intent = getIntent();
-        final int alarmId = intent.getExtras().getInt("alarmIdKey", -1);
-        Log.e("AlarmTriggerActivity", "Got alarmIdKey: " + alarmId);
+
+        /* This can produce npe
+         * Check if key exists then fetch value
+         */
+        int alarmId = -1;
+        if (intent.hasExtra("alarmIdKey"))
+            alarmId = intent.getIntExtra("alarmIdKey", -1);
+
+        Log.i(TAG, "onCreate: Got alarmIdKey: " + alarmId);
 
         btnDismissAlarm = findViewById(R.id.btn_dismiss_alarm);
         btnSnoozeAlarm = findViewById(R.id.btn_snooze_alarm);
@@ -52,10 +60,12 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         final AlarmRepository ar = new AlarmRepository(app);
 
         final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(1);
+        // Temp var for inner class
+        final int finalAlarmId = alarmId;
         databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                final AlarmEntity currentEntity = ar.getAlarm(alarmId);
+                final AlarmEntity currentEntity = ar.getAlarm(finalAlarmId);
                 /* If alarmId is not matched in db and daysOfRepeat is null
                  * Then it is a child alarm
                  */
@@ -63,12 +73,12 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                     Boolean[] daysOfRepeat = currentEntity.getDaysOfRepeatArr();
                     // Disable toggle if alarm is not recurring type
                     if (!daysOfRepeat[DaysOfWeek.IsRECURRING])
-                        ar.updateAlarmStatus(alarmId, false);
+                        ar.updateAlarmStatus(finalAlarmId, false);
 
                     displayInfo(currentEntity);
 
                 } catch (NullPointerException e) {
-                    Log.e("AlarmTrig: ", "Array is null, This is a child alarm");
+                    Log.e(TAG, "run: Array is null, This is a child alarm");
 
                     try {
                         // Get today's day of week
@@ -81,12 +91,12 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                          * sub dayToday from received id to get parent alarm id
                          * which is stored in db
                          */
-                        int parentAlarmId = alarmId - dayToday;
+                        int parentAlarmId = finalAlarmId - dayToday;
 
                         AlarmEntity parentEntity = ar.getAlarm(parentAlarmId);
                         displayInfo(parentEntity);
                     } catch (NullPointerException e1) {
-                        Log.e("AlarmTrig: ", "This is a snoozed alarm");
+                        Log.e(TAG, "run: This is a snoozed alarm");
 
                         // Simply show current time and "Snoozed Alarm"
 
@@ -108,7 +118,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         // Dismiss Alarm
         btnDismissAlarm.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
             @Override
-            public void onSlideComplete(SlideToActView slideToActView) {
+            public void onSlideComplete(@NonNull SlideToActView slideToActView) {
                 // Stop service and finish this activity
                 stopAlarmService();
             }
@@ -117,7 +127,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         // Snooze Alarm
         btnSnoozeAlarm.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
             @Override
-            public void onSlideComplete(SlideToActView slideToActView) {
+            public void onSlideComplete(@NonNull SlideToActView slideToActView) {
                 // Create new snooze alarm
                 AlarmHelper ah = new AlarmHelper();
                 ah.snoozeAlarm();
@@ -138,40 +148,49 @@ public class AlarmTriggerActivity extends AppCompatActivity {
 
         // Get silence timeout
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        final int silenceTimeout = Integer.parseInt(Objects.requireNonNull(
-                sharedPref.getString(KEY_SILENCE_TIMEOUT, "0")));
+        final String silenceTimeStr = sharedPref.getString(KEY_SILENCE_TIMEOUT, "0");
+
+        /* Set default and add null check
+         * to avoid warning and npe later
+         */
+        int silenceTimeoutInt = 0;
+        if (silenceTimeStr != null)
+            silenceTimeoutInt = Integer.parseInt(silenceTimeStr);
 
         /* If silenceTimeout is set to Never(0)
          * Return from here
          */
-        if (silenceTimeout == 0)
+        if (silenceTimeoutInt == 0)
             return;
 
         /* If not dismissed under x minutes
          * Stop alarm
          * Post missed alarm notification
          */
-        handler = new Handler();
+        handler = new Handler(getMainLooper());
+        // Create temp final var for inner class
+        final int finalSilenceTimeoutInt = silenceTimeoutInt;
         r = new Runnable() {
             @Override
             public void run() {
                 // Deliver notification using id
                 NotificationHelper nh = new NotificationHelper(getApplicationContext(), alarmId);
-                nh.deliverMissedNotification(silenceTimeout);
+                nh.deliverMissedNotification(finalSilenceTimeoutInt);
 
                 stopAlarmService();
             }
         };
-        handler.postDelayed(r, silenceTimeout * 60000); // x Minutes * millis
+        handler.postDelayed(r, silenceTimeoutInt * 60000); // x Minutes * millis
     }
 
     // Display alarmTime and alarmTitle
     public void displayInfo(final AlarmEntity alarmEntity) {
+        // Fetch from db (running on bg thread)
+        final long alarmTimeInMillis = alarmEntity.getAlarmTime();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 // Get alarm time
-                long alarmTimeInMillis = alarmEntity.getAlarmTime();
                 SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
                         Locale.getDefault());
                 String formattedTime = sdf.format(alarmTimeInMillis);
@@ -193,6 +212,11 @@ public class AlarmTriggerActivity extends AppCompatActivity {
     public void stopAlarmService() {
         Intent intent = new Intent(AlarmTriggerActivity.this, AlarmService.class);
         stopService(intent);
+
+        /* Runnable has not yet executed
+         * and alarm has been dismissed by user
+         * no need to post work now
+         */
         handler.removeCallbacks(r);
         finish();
     }
