@@ -91,6 +91,13 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                         int parentAlarmId = finalAlarmId - dayToday;
 
                         AlarmEntity parentEntity = ar.getAlarm(parentAlarmId);
+
+                        /* This is a repeating alarm
+                         * Now set this alarm for next week
+                         */
+                        AlarmHelper ah = new AlarmHelper();
+                        ah.repeatingAlarm(parentEntity, dayToday);
+
                         displayInfo(parentEntity);
                     } catch (NullPointerException e1) {
                         Log.e(TAG, "run: This is a snoozed alarm");

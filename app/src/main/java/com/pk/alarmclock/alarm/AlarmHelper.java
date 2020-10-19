@@ -85,6 +85,12 @@ public class AlarmHelper {
             }
 
         } else {
+            // Get child alarmId to be cancelled
+            int childAlarmId = alarmEntity.getAlarmId() + dayOfRepeat;
+            PendingIntent pendingIntent = PendingIntent.getForegroundService(context, childAlarmId, intent, 0);
+            alarmManager.cancel(pendingIntent);
+
+            Log.i(TAG, "cancelAlarm: Cancelled child AlarmID: " + childAlarmId);
             // child alarm is disabled: reflect in toggle here
             assert daysOfRepeatArr != null;
             daysOfRepeatArr[dayOfRepeat] = false;
@@ -248,9 +254,10 @@ public class AlarmHelper {
 
         Log.i(TAG, "repeatingAlarm: NewTime: : " + cal.getTime() + " In millis: " + cal.getTimeInMillis());
 
-        // Set childAlarm
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+        // Set alarm
+        AlarmManager.AlarmClockInfo alarmClockInfo =
+                new AlarmManager.AlarmClockInfo(cal.getTimeInMillis(), null);
+        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
 
         /* this will update only daysOfRepeatArr
          * all other values will be same
