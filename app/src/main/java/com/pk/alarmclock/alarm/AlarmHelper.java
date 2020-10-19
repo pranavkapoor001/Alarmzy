@@ -70,8 +70,6 @@ public class AlarmHelper {
 
             // Cancel child alarms
             if (daysOfRepeatArr != null && daysOfRepeatArr[DaysOfWeek.IsRECURRING]) {
-                // Cancel dummy alarm
-                dummyAlarm(parentAlarmId, false);
                 int childAlarmId;
                 for (int i = 1; i < daysOfRepeatArr.length; i++) {
                     if (daysOfRepeatArr[i]) {
@@ -85,11 +83,6 @@ public class AlarmHelper {
                     }
                 }
             }
-
-            /* Cancel dummy alarm
-             * Since parent and all child alarms are disabled now
-             */
-            dummyAlarm(alarmEntity.getAlarmId(), false);
 
         } else {
             // child alarm is disabled: reflect in toggle here
@@ -116,14 +109,12 @@ public class AlarmHelper {
 
             /* Disable parent toggle if all child alarms are disabled
              * and parent alarm time has passed
-             * also delete the dummy alarm
              */
             if (!flag && alarmEntity.getAlarmTime() < System.currentTimeMillis()) {
                 Log.i(TAG, "cancelAlarm: No child alarms / ParentTime passed");
                 Log.i(TAG, "cancelAlarm: Going to disable parent toggle");
                 daysOfRepeatArr[DaysOfWeek.IsRECURRING] = false;
                 ar.updateAlarmStatus(alarmEntity.getAlarmId(), false);
-                dummyAlarm(alarmEntity.getAlarmId(), false);
             }
         }
     }
@@ -269,42 +260,6 @@ public class AlarmHelper {
         alarmEntity = new AlarmEntity(alarmEntity.getAlarmTime(), parentAlarmId,
                 alarmEntity.getAlarmEnabled(), daysOfRepeatArr, alarmEntity.getAlarmTitle());
         ar.update(alarmEntity);
-
-        // Create new alarm far in future.. just to show alarm icon to user
-        dummyAlarm(parentAlarmId, true);
-    }
-
-    // dummyAlarmId = parentAlarmId + 20;
-    public void dummyAlarm(int dummyAlarmId, boolean create) {
-        context = MyApplication.getContext();
-
-        Log.i(TAG, "dummyAlarm Called with id: " + dummyAlarmId);
-
-        dummyAlarmId = dummyAlarmId + 20;
-
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmService.class);
-
-        // Cancel if dummy Alarm
-        if (!create) {
-            if (PendingIntent.getForegroundService(context, dummyAlarmId,
-                    intent, PendingIntent.FLAG_NO_CREATE) != null)
-                alarmManager.cancel(PendingIntent.getForegroundService(context, dummyAlarmId,
-                        intent, PendingIntent.FLAG_NO_CREATE));
-
-            return;
-        }
-
-        // Now we want to create a dummy alarm
-        PendingIntent pendingIntent = PendingIntent.getForegroundService(context,
-                dummyAlarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Calendar calDummy = Calendar.getInstance();
-        calDummy.set(Calendar.YEAR, 3020);
-
-        AlarmManager.AlarmClockInfo alarmClockInfo =
-                new AlarmManager.AlarmClockInfo(calDummy.getTimeInMillis(), null);
-        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
     }
 
     public void snoozeAlarm() {
