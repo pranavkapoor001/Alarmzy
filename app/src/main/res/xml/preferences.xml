@@ -20,6 +20,15 @@
         android:summary="Silence alarm after (minutes)"
         android:title="Silence Timeout" />
 
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/crescendo_entries"
+        android:entryValues="@array/crescendo_values"
+        android:icon="@drawable/ic_volume_down"
+        android:key="crescendoTime"
+        android:summary="Alarm volume will increase slowly"
+        android:title="Gradually increase volume" />
+
     <SwitchPreferenceCompat
         android:defaultValue="true"
         android:icon="@drawable/ic_vibration"

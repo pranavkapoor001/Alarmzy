@@ -8,6 +8,8 @@ import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -24,6 +26,8 @@ public class AlarmService extends Service {
     private static final String TAG = "AlarmService";
     Vibrator v;
     private MediaPlayer player;
+    private Handler handler;
+    private Runnable crescendoRunnable;
 
 
     public AlarmService() {
@@ -95,10 +99,75 @@ public class AlarmService extends Service {
         player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-                player.start();
+                startPlayerOnPrepared();
             }
         });
         vibrateAlarm();
+    }
+
+    public void startPlayerOnPrepared() {
+        // Max volume of MediaPlayer
+        final float MAX_VOLUME = 1.0f;
+        final String KEY_CRESCENDO_TIME = "crescendoTime";
+
+        // Get crescendo time
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String crescendoTimeStr = sharedPref.getString(KEY_CRESCENDO_TIME, "0");
+
+        /* Set default value to 0
+         * Add null check to avoid warning
+         * and npe later
+         */
+        float crescendoTime = 0;
+        if (crescendoTimeStr != null)
+            crescendoTime = Integer.parseInt(crescendoTimeStr);
+
+
+        /* Gradually increasing alarm volume is off
+         * Simply start the player and return
+         */
+        if (crescendoTime == 0) {
+            player.start();
+            Log.i(TAG, "startPlayerOnPrepared: Not Gradual");
+            return;
+        }
+
+        // Gradually increasing alarm vol is enabled
+        Log.i(TAG, "startPlayerOnPrepared: Gradual");
+
+        // Initially mute the alarm
+        player.setVolume(0, 0);
+
+        // Create new handler background thread
+        HandlerThread handlerThread = new HandlerThread("HandlerThread");
+        handlerThread.start();
+        handler = new Handler(handlerThread.getLooper());
+
+        // Increase volume by this every second
+        final float incrementPerSecond = 1 / crescendoTime;
+
+        // Increase volume step every
+        crescendoRunnable = new Runnable() {
+            // Start with 0 volume
+            float currentVol = 0.0f;
+
+            @Override
+            public void run() {
+
+                /* Increase volume per second by incrementPerSecond value
+                 * until we reach max value
+                 */
+                if (currentVol < MAX_VOLUME) {
+                    currentVol = currentVol + incrementPerSecond;
+                    player.setVolume(currentVol, currentVol);
+                    handler.postDelayed(this, 1000); // 1 Second
+                }
+            }
+        };
+
+        // Post runnable for the first time and start the player
+        handler.post(crescendoRunnable);
+        player.start();
     }
 
     public void vibrateAlarm() {
@@ -127,6 +196,8 @@ public class AlarmService extends Service {
             // Stop vibration
             v.cancel();
         }
+        if (handler != null && crescendoRunnable != null)
+            handler.removeCallbacks(crescendoRunnable);
     }
 
     // Return null here as bound service is not used
