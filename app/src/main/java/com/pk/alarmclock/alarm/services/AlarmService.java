@@ -22,7 +22,6 @@ import com.pk.alarmclock.alarm.helper.NotificationHelper;
 
 public class AlarmService extends Service {
     private static final String TAG = "AlarmService";
-    final String KEY_VIBRATE = "vibrateEnabled";
     Vibrator v;
     private MediaPlayer player;
 
@@ -103,6 +102,8 @@ public class AlarmService extends Service {
     }
 
     public void vibrateAlarm() {
+        final String KEY_VIBRATE = "vibrateEnabled";
+
         // Check if vibration is enabled
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean vibrationEnabled = sharedPref.getBoolean(KEY_VIBRATE, true);

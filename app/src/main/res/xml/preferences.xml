@@ -5,6 +5,7 @@
     <ListPreference
         android:entries="@array/snooze_length_entries"
         android:entryValues="@array/snooze_length_values"
+        android:icon="@drawable/ic_snooze"
         android:key="snoozeLength"
         android:summary="Select timeout for snooze"
         android:title="Snooze Time"
@@ -14,12 +15,14 @@
         android:defaultValue="0"
         android:entries="@array/silence_timeout_entries"
         android:entryValues="@array/silence_timeout_values"
+        android:icon="@drawable/ic_silence"
         android:key="silenceTimeout"
         android:summary="Silence alarm after (minutes)"
         android:title="Silence Timeout" />
 
     <SwitchPreferenceCompat
         android:defaultValue="true"
+        android:icon="@drawable/ic_vibration"
         android:key="vibrateEnabled"
         android:summary="Vibrate with alarm"
         android:title="Enable vibration" />
