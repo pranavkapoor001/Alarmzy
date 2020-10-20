@@ -1,4 +1,4 @@
-package com.pk.alarmclock;
+package com.pk.alarmclock.alarm.helper;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -13,9 +13,11 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
 
-import com.pk.alarmclock.alarm.AlarmBroadcastReceiver;
+import com.pk.alarmclock.BuildConfig;
+import com.pk.alarmclock.R;
 import com.pk.alarmclock.alarm.AlarmTriggerActivity;
-import com.pk.alarmclock.alarm.MyApplication;
+import com.pk.alarmclock.misc.AlarmBroadcastReceiver;
+import com.pk.alarmclock.misc.MyApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;

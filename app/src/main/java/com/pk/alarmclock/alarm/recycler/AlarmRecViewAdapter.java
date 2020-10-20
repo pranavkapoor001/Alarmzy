@@ -1,4 +1,4 @@
-package com.pk.alarmclock.alarm;
+package com.pk.alarmclock.alarm.recycler;
 
 import android.view.LayoutInflater;
 import android.view.View;

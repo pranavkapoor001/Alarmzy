@@ -88,7 +88,7 @@
                 style="@style/RoundCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="M"
+                android:text="@string/mon"
                 app:useMaterialThemeColors="true" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
@@ -96,7 +96,7 @@
                 style="@style/RoundCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="T"
+                android:text="@string/tue"
                 app:useMaterialThemeColors="true" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
@@ -104,7 +104,7 @@
                 style="@style/RoundCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="W"
+                android:text="@string/wed"
                 app:useMaterialThemeColors="true" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
@@ -112,7 +112,7 @@
                 style="@style/RoundCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="T"
+                android:text="@string/thu"
                 app:useMaterialThemeColors="true" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
@@ -120,7 +120,7 @@
                 style="@style/RoundCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="F"
+                android:text="@string/fri"
                 app:useMaterialThemeColors="true" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
@@ -128,7 +128,7 @@
                 style="@style/RoundCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="S"
+                android:text="@string/sat"
                 app:useMaterialThemeColors="true" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
@@ -136,7 +136,7 @@
                 style="@style/RoundCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="S"
+                android:text="@string/sun"
                 app:useMaterialThemeColors="true" />
         </LinearLayout>
 
@@ -148,7 +148,6 @@
             android:layout_marginTop="@dimen/_80sdp"
             android:focusable="false"
             android:fontFamily="sans-serif-thin"
-            android:text="Alarm"
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:textSize="@dimen/_12sdp"
             android:visibility="gone"

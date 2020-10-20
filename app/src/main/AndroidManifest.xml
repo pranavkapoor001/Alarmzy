@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name=".alarm.MyApplication"
+        android:name=".misc.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -21,7 +21,7 @@
             android:parentActivityName=".MainActivity" />
 
         <receiver
-            android:name=".alarm.AlarmBroadcastReceiver"
+            android:name=".misc.AlarmBroadcastReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -37,10 +37,10 @@
             android:turnScreenOn="true" />
 
         <service
-            android:name=".alarm.AlarmService"
+            android:name=".alarm.services.AlarmService"
             android:enabled="true" />
         <service
-            android:name=".alarm.ReSchedAlarmService"
+            android:name=".alarm.services.ReSchedAlarmService"
             android:enabled="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 

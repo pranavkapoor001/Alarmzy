@@ -1,4 +1,4 @@
-package com.pk.alarmclock.alarm;
+package com.pk.alarmclock.alarm.helper;
 
 import android.app.AlarmManager;
 import android.app.Application;
@@ -10,10 +10,12 @@ import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
-import com.pk.alarmclock.NotificationHelper;
 import com.pk.alarmclock.R;
 import com.pk.alarmclock.alarm.db.AlarmEntity;
 import com.pk.alarmclock.alarm.db.AlarmRepository;
+import com.pk.alarmclock.alarm.services.AlarmService;
+import com.pk.alarmclock.misc.DaysOfWeek;
+import com.pk.alarmclock.misc.MyApplication;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -22,13 +24,13 @@ import java.util.Random;
 public class AlarmHelper {
 
     private static final String TAG = "AlarmHelper";
+    // alarmId for alarm disabled by toggle
+    public int oldAlarmId;
     Context context;
     Application app;
     AlarmRepository ar;
     // Indicates that alarm is freshly created. Not enabled again from toggle
     boolean isNew = true;
-    // alarmId for alarm disabled by toggle
-    int oldAlarmId;
 
     // Cancels alarm: Removes from db if delete is true
     public void cancelAlarm(AlarmEntity alarmEntity, boolean delete,

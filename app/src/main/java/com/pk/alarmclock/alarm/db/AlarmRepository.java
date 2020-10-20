@@ -5,9 +5,9 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
-import com.pk.alarmclock.alarm.AlarmHelper;
-import com.pk.alarmclock.alarm.DaysOfWeek;
-import com.pk.alarmclock.alarm.MyApplication;
+import com.pk.alarmclock.alarm.helper.AlarmHelper;
+import com.pk.alarmclock.misc.DaysOfWeek;
+import com.pk.alarmclock.misc.MyApplication;
 
 import java.util.List;
 import java.util.concurrent.Executors;

@@ -7,6 +7,13 @@
     <string name="snooze">Snooze</string>
     <string name="snoozed_alarm">Snoozed Alarm</string>
     <string name="settings">Settings</string>
+    <string name="mon">M</string>
+    <string name="tue">T</string>
+    <string name="wed">W</string>
+    <string name="thu">T</string>
+    <string name="fri">F</string>
+    <string name="sat">S</string>
+    <string name="sun">S</string>
 
     <string-array name="snooze_length_entries">
         <item>1 Minute</item>

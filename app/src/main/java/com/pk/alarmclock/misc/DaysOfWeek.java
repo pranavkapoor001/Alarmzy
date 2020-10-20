@@ -1,4 +1,4 @@
-package com.pk.alarmclock.alarm;
+package com.pk.alarmclock.misc;
 
 public class DaysOfWeek {
 

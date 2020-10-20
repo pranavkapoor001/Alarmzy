@@ -1,4 +1,4 @@
-package com.pk.alarmclock.alarm;
+package com.pk.alarmclock.alarm.services;
 
 import android.app.Service;
 import android.content.Context;
@@ -16,7 +16,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
-import com.pk.alarmclock.NotificationHelper;
+import com.pk.alarmclock.alarm.helper.NotificationHelper;
 
 // Note: Define service in AndroidManifest.xml
 
