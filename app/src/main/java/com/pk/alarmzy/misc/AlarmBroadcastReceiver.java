@@ -1,4 +1,4 @@
-package com.pk.alarmclock.misc;
+package com.pk.alarmzy.misc;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
@@ -8,9 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.pk.alarmclock.BuildConfig;
-import com.pk.alarmclock.alarm.services.AlarmService;
-import com.pk.alarmclock.alarm.services.ReSchedAlarmService;
+import com.pk.alarmzy.BuildConfig;
+import com.pk.alarmzy.alarm.services.AlarmService;
+import com.pk.alarmzy.alarm.services.ReSchedAlarmService;
 
 import java.util.Objects;
 

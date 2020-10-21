@@ -1,13 +1,13 @@
-package com.pk.alarmclock.alarm.db;
+package com.pk.alarmzy.alarm.db;
 
 import android.app.Application;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
-import com.pk.alarmclock.alarm.helper.AlarmHelper;
-import com.pk.alarmclock.misc.DaysOfWeek;
-import com.pk.alarmclock.misc.MyApplication;
+import com.pk.alarmzy.alarm.helper.AlarmHelper;
+import com.pk.alarmzy.misc.DaysOfWeek;
+import com.pk.alarmzy.misc.MyApplication;
 
 import java.util.List;
 import java.util.concurrent.Executors;

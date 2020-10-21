@@ -1,4 +1,4 @@
-package com.pk.alarmclock.alarm.recycler;
+package com.pk.alarmzy.alarm.recycler;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.pk.alarmclock.R;
-import com.pk.alarmclock.alarm.db.AlarmEntity;
+import com.pk.alarmzy.R;
+import com.pk.alarmzy.alarm.db.AlarmEntity;
 
 import java.util.ArrayList;
 import java.util.List;

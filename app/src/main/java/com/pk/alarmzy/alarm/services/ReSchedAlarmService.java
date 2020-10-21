@@ -1,4 +1,4 @@
-package com.pk.alarmclock.alarm.services;
+package com.pk.alarmzy.alarm.services;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,10 +7,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 
-import com.pk.alarmclock.alarm.db.AlarmEntity;
-import com.pk.alarmclock.alarm.db.AlarmRepository;
-import com.pk.alarmclock.alarm.helper.AlarmHelper;
-import com.pk.alarmclock.misc.MyApplication;
+import com.pk.alarmzy.alarm.db.AlarmEntity;
+import com.pk.alarmzy.alarm.db.AlarmRepository;
+import com.pk.alarmzy.alarm.helper.AlarmHelper;
+import com.pk.alarmzy.misc.MyApplication;
 
 import java.util.List;
 

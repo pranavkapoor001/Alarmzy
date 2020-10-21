@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.pk.alarmclock">
+    package="com.pk.alarmzy">
 
     <uses-permission android:name="android.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:name=".misc.MyApplication"
+        android:name="com.pk.alarmzy.misc.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,11 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents">
         <activity
-            android:name=".settings.SettingsActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name="com.pk.alarmzy.settings.SettingsActivity"
+            android:parentActivityName="com.pk.alarmzy.MainActivity" />
 
         <receiver
-            android:name=".misc.AlarmBroadcastReceiver"
+            android:name="com.pk.alarmzy.misc.AlarmBroadcastReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -30,21 +30,21 @@
         </receiver>
 
         <activity
-            android:name=".alarm.AlarmTriggerActivity"
+            android:name="com.pk.alarmzy.alarm.AlarmTriggerActivity"
             android:excludeFromRecents="true"
             android:showOnLockScreen="true"
             android:showWhenLocked="true"
             android:turnScreenOn="true" />
 
         <service
-            android:name=".alarm.services.AlarmService"
+            android:name="com.pk.alarmzy.alarm.services.AlarmService"
             android:enabled="true" />
         <service
-            android:name=".alarm.services.ReSchedAlarmService"
+            android:name="com.pk.alarmzy.alarm.services.ReSchedAlarmService"
             android:enabled="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name="com.pk.alarmzy.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

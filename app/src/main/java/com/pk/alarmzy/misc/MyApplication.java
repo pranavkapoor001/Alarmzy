@@ -1,4 +1,4 @@
-package com.pk.alarmclock.misc;
+package com.pk.alarmzy.misc;
 
 import android.app.Application;
 

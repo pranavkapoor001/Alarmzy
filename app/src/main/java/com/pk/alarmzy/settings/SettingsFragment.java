@@ -1,10 +1,10 @@
-package com.pk.alarmclock.settings;
+package com.pk.alarmzy.settings;
 
 import android.os.Bundle;
 
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.pk.alarmclock.R;
+import com.pk.alarmzy.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 

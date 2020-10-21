@@ -1,4 +1,4 @@
-package com.pk.alarmclock.settings;
+package com.pk.alarmzy.settings;
 
 import android.os.Bundle;
 

@@ -1,4 +1,4 @@
-package com.pk.alarmclock.alarm.helper;
+package com.pk.alarmzy.alarm.helper;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -13,11 +13,11 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
 
-import com.pk.alarmclock.BuildConfig;
-import com.pk.alarmclock.R;
-import com.pk.alarmclock.alarm.AlarmTriggerActivity;
-import com.pk.alarmclock.misc.AlarmBroadcastReceiver;
-import com.pk.alarmclock.misc.MyApplication;
+import com.pk.alarmzy.BuildConfig;
+import com.pk.alarmzy.R;
+import com.pk.alarmzy.alarm.AlarmTriggerActivity;
+import com.pk.alarmzy.misc.AlarmBroadcastReceiver;
+import com.pk.alarmzy.misc.MyApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -39,12 +39,12 @@ public class NotificationHelper {
         mNotifyManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationChannel notificationChannel = new NotificationChannel(
-                PRIMARY_CHANNEL_ID, "Alarm Clock1", NotificationManager.IMPORTANCE_HIGH);
+                PRIMARY_CHANNEL_ID, "Alarmzy", NotificationManager.IMPORTANCE_HIGH);
 
         notificationChannel.enableLights(true);
         notificationChannel.setLightColor(Color.GREEN);
         notificationChannel.enableVibration(true);
-        notificationChannel.setDescription("Notifications From Alarm1");
+        notificationChannel.setDescription("Notifications From Alarmzy");
         mNotifyManager.createNotificationChannel(notificationChannel);
 
         Log.i(TAG, "createNotificationChannel: Channel Created");

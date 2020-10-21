@@ -1,4 +1,4 @@
-package com.pk.alarmclock.alarm.recycler;
+package com.pk.alarmzy.alarm.recycler;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,12 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.snackbar.Snackbar;
-import com.pk.alarmclock.R;
-import com.pk.alarmclock.alarm.db.AlarmEntity;
-import com.pk.alarmclock.alarm.db.AlarmRepository;
-import com.pk.alarmclock.alarm.helper.AlarmHelper;
-import com.pk.alarmclock.misc.DaysOfWeek;
-import com.pk.alarmclock.misc.MyApplication;
+import com.pk.alarmzy.R;
+import com.pk.alarmzy.alarm.db.AlarmEntity;
+import com.pk.alarmzy.alarm.db.AlarmRepository;
+import com.pk.alarmzy.alarm.helper.AlarmHelper;
+import com.pk.alarmzy.misc.DaysOfWeek;
+import com.pk.alarmzy.misc.MyApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;

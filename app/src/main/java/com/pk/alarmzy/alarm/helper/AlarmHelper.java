@@ -1,4 +1,4 @@
-package com.pk.alarmclock.alarm.helper;
+package com.pk.alarmzy.alarm.helper;
 
 import android.app.AlarmManager;
 import android.app.Application;
@@ -10,12 +10,12 @@ import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
-import com.pk.alarmclock.R;
-import com.pk.alarmclock.alarm.db.AlarmEntity;
-import com.pk.alarmclock.alarm.db.AlarmRepository;
-import com.pk.alarmclock.alarm.services.AlarmService;
-import com.pk.alarmclock.misc.DaysOfWeek;
-import com.pk.alarmclock.misc.MyApplication;
+import com.pk.alarmzy.R;
+import com.pk.alarmzy.alarm.db.AlarmEntity;
+import com.pk.alarmzy.alarm.db.AlarmRepository;
+import com.pk.alarmzy.alarm.services.AlarmService;
+import com.pk.alarmzy.misc.DaysOfWeek;
+import com.pk.alarmzy.misc.MyApplication;
 
 import java.util.Arrays;
 import java.util.Calendar;

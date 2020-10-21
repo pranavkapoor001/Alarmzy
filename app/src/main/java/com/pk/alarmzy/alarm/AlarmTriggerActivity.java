@@ -1,4 +1,4 @@
-package com.pk.alarmclock.alarm;
+package com.pk.alarmzy.alarm;
 
 import android.app.Application;
 import android.app.NotificationManager;
@@ -15,14 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.ncorti.slidetoact.SlideToActView;
-import com.pk.alarmclock.R;
-import com.pk.alarmclock.alarm.db.AlarmEntity;
-import com.pk.alarmclock.alarm.db.AlarmRepository;
-import com.pk.alarmclock.alarm.helper.AlarmHelper;
-import com.pk.alarmclock.alarm.helper.NotificationHelper;
-import com.pk.alarmclock.alarm.services.AlarmService;
-import com.pk.alarmclock.misc.DaysOfWeek;
-import com.pk.alarmclock.misc.MyApplication;
+import com.pk.alarmzy.R;
+import com.pk.alarmzy.alarm.db.AlarmEntity;
+import com.pk.alarmzy.alarm.db.AlarmRepository;
+import com.pk.alarmzy.alarm.helper.AlarmHelper;
+import com.pk.alarmzy.alarm.helper.NotificationHelper;
+import com.pk.alarmzy.alarm.services.AlarmService;
+import com.pk.alarmzy.misc.DaysOfWeek;
+import com.pk.alarmzy.misc.MyApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

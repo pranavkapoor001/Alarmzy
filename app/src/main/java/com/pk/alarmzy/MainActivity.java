@@ -1,4 +1,4 @@
-package com.pk.alarmclock;
+package com.pk.alarmzy;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -21,12 +21,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.pk.alarmclock.alarm.db.AlarmEntity;
-import com.pk.alarmclock.alarm.db.AlarmViewModel;
-import com.pk.alarmclock.alarm.helper.AlarmHelper;
-import com.pk.alarmclock.alarm.helper.NotificationHelper;
-import com.pk.alarmclock.alarm.recycler.AlarmRecViewAdapter;
-import com.pk.alarmclock.settings.SettingsActivity;
+import com.pk.alarmzy.alarm.db.AlarmEntity;
+import com.pk.alarmzy.alarm.db.AlarmViewModel;
+import com.pk.alarmzy.alarm.helper.AlarmHelper;
+import com.pk.alarmzy.alarm.helper.NotificationHelper;
+import com.pk.alarmzy.alarm.recycler.AlarmRecViewAdapter;
+import com.pk.alarmzy.settings.SettingsActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

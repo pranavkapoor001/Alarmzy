@@ -1,4 +1,4 @@
-package com.pk.alarmclock.alarm.db;
+package com.pk.alarmzy.alarm.db;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
