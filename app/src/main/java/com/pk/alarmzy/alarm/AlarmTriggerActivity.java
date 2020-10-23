@@ -34,7 +34,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
     private SlideToActView btnDismissAlarm, btnSnoozeAlarm;
     private TextView tvAlarmTime, tvAlarmTitle;
     private Handler handler;
-    private Runnable r;
+    private Runnable silenceRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,7 +178,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         handler = new Handler(getMainLooper());
         // Create temp final var for inner class
         final int finalSilenceTimeoutInt = silenceTimeoutInt;
-        r = new Runnable() {
+        silenceRunnable = new Runnable() {
             @Override
             public void run() {
                 // Deliver notification using id
@@ -188,7 +188,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                 stopAlarmService();
             }
         };
-        handler.postDelayed(r, silenceTimeoutInt * 60000); // x Minutes * millis
+        handler.postDelayed(silenceRunnable, silenceTimeoutInt * 60000); // x Minutes * millis
     }
 
     // Display alarmTime and alarmTitle
@@ -225,7 +225,8 @@ public class AlarmTriggerActivity extends AppCompatActivity {
          * and alarm has been dismissed by user
          * no need to post work now
          */
-        handler.removeCallbacks(r);
+        if (handler != null && silenceRunnable != null)
+            handler.removeCallbacks(silenceRunnable);
         finish();
     }
 
