@@ -10,6 +10,7 @@ import androidx.core.app.JobIntentService;
 import com.pk.alarmzy.alarm.db.AlarmEntity;
 import com.pk.alarmzy.alarm.db.AlarmRepository;
 import com.pk.alarmzy.alarm.helper.AlarmHelper;
+import com.pk.alarmzy.misc.DaysOfWeek;
 import com.pk.alarmzy.misc.MyApplication;
 
 import java.util.List;
@@ -40,6 +41,32 @@ public class ReSchedAlarmService extends JobIntentService {
         for (int i = 0; i < alarms.size(); i++) {
             ae = alarms.get(i);
             if (ae.getAlarmEnabled()) {
+
+                /* Parent alarm time has passed and no child alarms are enabled
+                 * Cancel this alarm toggle and skip to next iteration
+                 */
+                if (ae.getAlarmTime() < System.currentTimeMillis() &&
+                        !ae.getDaysOfRepeatArr()[DaysOfWeek.IsRECURRING]) {
+
+                    Log.e(TAG, "onHandleWork: ParentTime passed, no child alarms");
+                    ah.cancelAlarm(ae, false, true, -1);
+                    continue;
+                }
+
+                /* Parent alarm time has passed but child alarms are enabled
+                 * Skip setting parent alarm
+                 * But Schedule child alarms then skip to next iteration
+                 */
+                else if (ae.getAlarmTime() < System.currentTimeMillis()) {
+
+                    Log.e(TAG, "onHandleWork: ParentTime passed, but child alarms enabled");
+                    ar.reEnableAlarmChild(ae.getAlarmId());
+                    continue;
+                }
+
+                // Parent alarm time has not passed
+                // Goto Enable both parent and child alarms
+
                 //Set old alarmId
                 ah.oldAlarmId = ae.getAlarmId();
                 ah.reEnableAlarm(ae);
