@@ -231,6 +231,9 @@ public class AlarmHelper {
         cal.setTimeInMillis(alarmEntity.getAlarmTime());
 
         /* If day of repeat is same as day of parent alarm
+         * OR:
+         * If day of repeat is same as today
+         *
          * Increment it to next week
          *
          * Get day of week of current parent alarm
@@ -239,7 +242,8 @@ public class AlarmHelper {
         parentTime.setTimeInMillis(alarmEntity.getAlarmTime());
         int parentAlarmDay = parentTime.get(Calendar.DAY_OF_WEEK);
 
-        if (dayOfRepeat == parentAlarmDay)
+        if (dayOfRepeat == parentAlarmDay ||
+                dayOfRepeat == Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
             cal.add(Calendar.WEEK_OF_MONTH, 1);
 
         // Set recurring alarms day to dayOfRepeat

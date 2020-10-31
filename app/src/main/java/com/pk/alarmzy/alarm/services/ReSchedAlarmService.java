@@ -10,6 +10,7 @@ import androidx.core.app.JobIntentService;
 import com.pk.alarmzy.alarm.db.AlarmEntity;
 import com.pk.alarmzy.alarm.db.AlarmRepository;
 import com.pk.alarmzy.alarm.helper.AlarmHelper;
+import com.pk.alarmzy.alarm.helper.NotificationHelper;
 import com.pk.alarmzy.misc.DaysOfWeek;
 import com.pk.alarmzy.misc.MyApplication;
 
@@ -36,6 +37,8 @@ public class ReSchedAlarmService extends JobIntentService {
         AlarmRepository ar = new AlarmRepository(MyApplication.getContext());
         alarms = ar.getAllAlarmsReSched();
 
+        NotificationHelper nh;
+
         // Iterate through all alarms and reEnable where getAlarmEnabled() returns true
         AlarmEntity ae;
         for (int i = 0; i < alarms.size(); i++) {
@@ -48,6 +51,10 @@ public class ReSchedAlarmService extends JobIntentService {
                 if (ae.getAlarmTime() < System.currentTimeMillis() &&
                         !ae.getDaysOfRepeatArr()[DaysOfWeek.IsRECURRING]) {
 
+                    // Deliver missed alarm notification
+                    nh = new NotificationHelper(getApplicationContext(), ae.getAlarmId());
+                    nh.deliverMissedNotification(ae.getAlarmTime());
+
                     Log.e(TAG, "onHandleWork: ParentTime passed, no child alarms");
                     ah.cancelAlarm(ae, false, true, -1);
                     continue;
@@ -58,6 +65,10 @@ public class ReSchedAlarmService extends JobIntentService {
                  * But Schedule child alarms then skip to next iteration
                  */
                 else if (ae.getAlarmTime() < System.currentTimeMillis()) {
+
+                    // Deliver missed alarm notification
+                    nh = new NotificationHelper(getApplicationContext(), ae.getAlarmId());
+                    nh.deliverMissedNotification(ae.getAlarmTime());
 
                     Log.e(TAG, "onHandleWork: ParentTime passed, but child alarms enabled");
                     ar.reEnableAlarmChild(ae.getAlarmId());

@@ -35,6 +35,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
     private TextView tvAlarmTime, tvAlarmTitle;
     private Handler handler;
     private Runnable silenceRunnable;
+    private AlarmEntity alarmEntity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +67,17 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         MyApplication.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                final AlarmEntity currentEntity = ar.getAlarm(finalAlarmId);
+                alarmEntity = ar.getAlarm(finalAlarmId);
                 /* If alarmId is not matched in db and daysOfRepeat is null
                  * Then it is a child alarm
                  */
                 try {
-                    Boolean[] daysOfRepeat = currentEntity.getDaysOfRepeatArr();
+                    Boolean[] daysOfRepeat = alarmEntity.getDaysOfRepeatArr();
                     // Disable toggle if alarm is not recurring type
                     if (!daysOfRepeat[DaysOfWeek.IsRECURRING])
                         ar.updateAlarmStatus(finalAlarmId, false);
 
-                    displayInfo(currentEntity);
+                    displayInfo(alarmEntity);
 
                 } catch (NullPointerException e) {
                     Log.e(TAG, "run: Array is null, This is a child alarm");
@@ -176,14 +177,12 @@ public class AlarmTriggerActivity extends AppCompatActivity {
          * Post missed alarm notification
          */
         handler = new Handler(getMainLooper());
-        // Create temp final var for inner class
-        final int finalSilenceTimeoutInt = silenceTimeoutInt;
         silenceRunnable = new Runnable() {
             @Override
             public void run() {
                 // Deliver notification using id
                 NotificationHelper nh = new NotificationHelper(getApplicationContext(), alarmId);
-                nh.deliverMissedNotification(finalSilenceTimeoutInt);
+                nh.deliverMissedNotification(alarmEntity.getAlarmTime());
 
                 stopAlarmService();
             }
