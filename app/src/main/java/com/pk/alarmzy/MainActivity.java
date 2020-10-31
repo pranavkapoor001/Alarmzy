@@ -67,9 +67,9 @@ public class MainActivity extends AppCompatActivity {
         alarmViewModel.getAllAlarms().observe(this, new Observer<List<AlarmEntity>>() {
             @Override
             public void onChanged(List<AlarmEntity> alarmEntities) {
-                mAdapter.setAlarms(alarmEntities);
-                mAdapter.notifyDataSetChanged();
-                if (mAdapter.getItemCount() == 0) {
+                mAdapter.submitList(alarmEntities);
+
+                if (alarmEntities.size() == 0) {
                     noAlarmsImage.setVisibility(View.VISIBLE);
                     noAlarmsText.setVisibility(View.VISIBLE);
                 } else {

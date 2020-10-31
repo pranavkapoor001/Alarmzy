@@ -90,7 +90,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
         formattedTime = sdf.format(alarmTimeInMillis);
         Boolean[] daysOfRepeatArr = currentItem.getDaysOfRepeatArr();
         Log.i(TAG, "Array: " + Arrays.toString(daysOfRepeatArr));
-        // Tick checkbox if child alarm for sunday is enabled
+        // Tick checkbox if child alarm is enabled
         if (daysOfRepeatArr[DaysOfWeek.IsRECURRING]) {
             ivRepeatIcon.setVisibility(View.VISIBLE);
             for (int i = 1; i < daysOfRepeatArr.length; i++) {
