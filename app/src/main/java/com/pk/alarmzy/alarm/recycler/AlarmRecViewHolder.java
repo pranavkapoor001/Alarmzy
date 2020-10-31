@@ -37,7 +37,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
     EditText etAlarmTitle;
     SwitchCompat switchAlarmEnabled;
     ImageButton ibAlarmDelete, ibShowRepeat, ibHideRepeat;
-    AlarmEntity currentItem;
+    AlarmEntity currentEntity;
     String formattedTime;
     long alarmTimeInMillis;
     AlarmHelper ah;
@@ -81,14 +81,14 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
     }
 
     public void bindTo(AlarmEntity currentItem) {
-        this.currentItem = currentItem;
+        this.currentEntity = currentItem;
 
         // Get time from milliSeconds to format: 08:30 PM
-        alarmTimeInMillis = currentItem.getAlarmTime();
+        alarmTimeInMillis = currentEntity.getAlarmTime();
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
                 Locale.getDefault());
         formattedTime = sdf.format(alarmTimeInMillis);
-        Boolean[] daysOfRepeatArr = currentItem.getDaysOfRepeatArr();
+        Boolean[] daysOfRepeatArr = currentEntity.getDaysOfRepeatArr();
         Log.i(TAG, "Array: " + Arrays.toString(daysOfRepeatArr));
         // Tick checkbox if child alarm is enabled
         if (daysOfRepeatArr[DaysOfWeek.IsRECURRING]) {
@@ -135,17 +135,15 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
         }
 
         tvAlarmTime.setText(formattedTime);
-        switchAlarmEnabled.setChecked(currentItem.getAlarmEnabled());
-        etAlarmTitle.setText(currentItem.getAlarmTitle());
+        switchAlarmEnabled.setChecked(currentEntity.getAlarmEnabled());
+        etAlarmTitle.setText(currentEntity.getAlarmTitle());
         Log.e(TAG, "bindTo Called");
     }
 
     @Override
     public void onClick(View v) {
         ah = new AlarmHelper();
-        AlarmEntity currentEntity = new AlarmEntity(currentItem.getAlarmTime(),
-                currentItem.getAlarmId(), currentItem.getAlarmEnabled(),
-                currentItem.getDaysOfRepeatArr(), currentItem.getAlarmTitle());
+
         switch (v.getId()) {
             case R.id.item_alarm_enabled:
                 if (!switchAlarmEnabled.isChecked()) {
@@ -153,7 +151,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
                     Snackbar.make(v, "Alarm for " + formattedTime + " disabled", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
-                    ah.oldAlarmId = currentItem.getAlarmId();
+                    ah.oldAlarmId = currentEntity.getAlarmId();
                     ah.reEnableAlarm(currentEntity);
                     Snackbar.make(v, "Alarm Set for " + formattedTime, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
@@ -249,7 +247,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
 
                 if (!TextUtils.isEmpty(titleInput.getText())) {
                     etAlarmTitle.setText(titleInput.getText().toString());
-                    ar.setAlarmTitle(titleInput.getText().toString(), currentItem.getAlarmId());
+                    ar.setAlarmTitle(titleInput.getText().toString(), currentEntity.getAlarmId());
                 }
             }
         });
