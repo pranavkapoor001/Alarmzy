@@ -39,10 +39,7 @@
 
         <activity
             android:name="com.pk.alarmzy.alarm.AlarmTriggerActivity"
-            android:excludeFromRecents="true"
-            android:showOnLockScreen="true"
-            android:showWhenLocked="true"
-            android:turnScreenOn="true" />
+            android:excludeFromRecents="true" />
 
         <service
             android:name="com.pk.alarmzy.alarm.services.AlarmService"

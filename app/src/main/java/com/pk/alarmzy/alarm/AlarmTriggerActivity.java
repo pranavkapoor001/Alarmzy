@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,6 +44,10 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_trigger);
 
+        // Wakeup screen
+        turnOnScreen();
+
+        // Find views
         tvAlarmTime = findViewById(R.id.trigger_alarm_time);
         tvAlarmTitle = findViewById(R.id.trigger_alarm_title);
 
@@ -233,5 +239,14 @@ public class AlarmTriggerActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler = null;
+    }
+
+    private void turnOnScreen() {
+        final Window win = getWindow();
+        win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+                WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
     }
 }
