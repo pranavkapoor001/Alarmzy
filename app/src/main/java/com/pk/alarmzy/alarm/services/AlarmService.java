@@ -8,6 +8,7 @@ import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -182,8 +183,14 @@ public class AlarmService extends Service {
         if (vibrationEnabled) {
             // Start vibration with pattern
             long[] vibratePattern = new long[]{0, 500, 1000};
-            VibrationEffect effect = VibrationEffect.createWaveform(vibratePattern, 0);
-            v.vibrate(effect);
+            VibrationEffect effect;
+
+            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                effect = VibrationEffect.createWaveform(vibratePattern, 0);
+                v.vibrate(effect);
+            } else {
+                v.vibrate(vibratePattern, 0);
+            }
         }
     }
 

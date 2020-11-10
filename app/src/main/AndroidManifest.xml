@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.pk.alarmzy">
 
     <uses-permission android:name="android.permission.SET_ALARM" />
@@ -8,8 +9,12 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!-- Required to run service from background Pre O -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <uses-sdk android:minSdkVersion="21" />
+    <uses-sdk
+        android:minSdkVersion="21"
+        tools:ignore="GradleOverrides" />
 
     <application
         android:name="com.pk.alarmzy.misc.MyApplication"

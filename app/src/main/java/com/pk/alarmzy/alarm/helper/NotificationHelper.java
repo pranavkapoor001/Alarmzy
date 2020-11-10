@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
@@ -37,6 +38,11 @@ public class NotificationHelper {
 
     public void createNotificationChannel() {
         mNotifyManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+        // Pre O does not support / need notification channel
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+            return;
 
         NotificationChannel notificationChannel = new NotificationChannel(
                 PRIMARY_CHANNEL_ID, "Alarmzy", NotificationManager.IMPORTANCE_HIGH);
@@ -71,12 +77,16 @@ public class NotificationHelper {
                 .setSmallIcon(R.drawable.ic_alarm)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_ALARM)
-                /* Since A10 activity cannot be started from service(Including foreground service)
-                 * Use a High priority notification with FullScreenPendingIntent()
-                 * Also requires USE_FULL_SCREEN_INTENT permission in manifest
-                 */
-                .setFullScreenIntent(fullScreenPendingIntent, true);
+                .setCategory(NotificationCompat.CATEGORY_ALARM);
+        /* Since on A10 activity cannot be started from service(Including foreground service)
+         * Use a High priority notification with FullScreenPendingIntent()
+         * Also requires USE_FULL_SCREEN_INTENT permission in manifest
+         */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            builder.setFullScreenIntent(fullScreenPendingIntent, true);
+        else
+            // Set on notification click intent for pre oreo
+            builder.setContentIntent(fullScreenPendingIntent);
 
         // Return a Notification object to be used by startForeground()
         return builder.build();

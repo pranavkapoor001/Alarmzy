@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.preference.PreferenceManager;
@@ -312,8 +313,12 @@ public class AlarmHelper {
         // Not required in all cases, but add to maintain simplicity
         intent.putExtra("alarmIdKey", alarmId);
 
-        return PendingIntent.getForegroundService(context, alarmId, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return PendingIntent.getForegroundService(context, alarmId, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+        } else
+            return PendingIntent.getService(context, alarmId, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
 
     }
 }
