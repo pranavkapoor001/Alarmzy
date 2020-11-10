@@ -35,34 +35,70 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "PK:MainActivity";
+    // UI Components
+    private ImageView noAlarmsImage;
+    private TextView noAlarmsText;
 
-    RecyclerView mRecyclerView;
-    RecyclerView.LayoutManager mLayoutManager;
-    AlarmRecViewAdapter mAdapter;
-    AlarmHelper alarmHelper;
-    ImageView noAlarmsImage;
-    TextView noAlarmsText;
+    // vars
+    private RecyclerView mRecyclerView;
+    private AlarmRecViewAdapter mAdapter;
+    private AlarmHelper alarmHelper;
+
     // Store selected hour, minute by TimePicker
     private int mHour, mMinute;
+
+
+    //----------------------------- Lifecycle methods --------------------------------------------//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Find views
         noAlarmsImage = findViewById(R.id.image_when_empty);
         noAlarmsText = findViewById(R.id.text_when_empty);
         mRecyclerView = findViewById(R.id.item_alarm_recyclerView);
         alarmHelper = new AlarmHelper();
 
-        mLayoutManager = new LinearLayoutManager(this);
+        // Initialize Recycler view and view model
+        initRecyclerView();
+        initViewModel();
+
+        // Add on click listener to Fab
+        FloatingActionButton fab = findViewById(R.id.fab_btn);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickTime();
+            }
+        });
+
+        // Create Notification Channel using NotificationHelper
+        // (Pass -1 for alarmId, only creating Notification channel here)
+        NotificationHelper notificationHelper = new NotificationHelper(MainActivity.this, -1);
+        notificationHelper.createNotificationChannel();
+
+        // Setup recycler view item touch helper
+        itemTouchHelper();
+
+        // Set default values on first launch
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    }
+
+
+    //----------------------------- Initialize methods -------------------------------------------//
+
+    private void initRecyclerView() {
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new AlarmRecViewAdapter();
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+    }
 
+    private void initViewModel() {
         final AlarmViewModel alarmViewModel = new ViewModelProvider(this).get(AlarmViewModel.class);
         alarmViewModel.getAllAlarms().observe(this, new Observer<List<AlarmEntity>>() {
             @Override
@@ -78,18 +114,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-        FloatingActionButton fab = findViewById(R.id.fab_btn);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pickTime();
-            }
-        });
 
-        // Create Notification Channel using NotificationHelper (Pass -1 for alarmId, only creating notichannel here)
-        NotificationHelper notificationHelper = new NotificationHelper(MainActivity.this, -1);
-        notificationHelper.createNotificationChannel();
+    //------------------------------- Misc methods -----------------------------------------------//
+
+    private void itemTouchHelper() {
 
         // Helper method for Drag to del room item
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
@@ -110,9 +140,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         helper.attachToRecyclerView(mRecyclerView);
-
-        // Set default values on first launch
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
     // Show dialog and set Time: Store selected time in Calendar object
@@ -141,6 +168,9 @@ public class MainActivity extends AppCompatActivity {
                 timeSetListener, mHour, mMinute, false);
         timePickerDialog.show();
     }
+
+
+    //----------------------------- MenuOptions methods ------------------------------------------//
 
     // Inflate menu layout
     @Override

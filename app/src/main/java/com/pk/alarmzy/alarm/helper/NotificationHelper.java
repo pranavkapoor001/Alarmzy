@@ -25,16 +25,19 @@ import java.util.Locale;
 
 public class NotificationHelper {
 
-    static final String PRIMARY_CHANNEL_ID = "primary_channel_id";
+    private static final String PRIMARY_CHANNEL_ID = "primary_channel_id";
     private static final String TAG = "NotificationHelper";
     public int mAlarmId;
-    NotificationManager mNotifyManager;
-    Context mContext;
+    private NotificationManager mNotifyManager;
+    private Context mContext;
 
     public NotificationHelper(Context context, int alarmId) {
         this.mContext = context;
         this.mAlarmId = alarmId;
     }
+
+
+    //----------------------------- Notification Channel -----------------------------------------//
 
     public void createNotificationChannel() {
         mNotifyManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -55,6 +58,9 @@ public class NotificationHelper {
 
         Log.i(TAG, "createNotificationChannel: Channel Created");
     }
+
+
+    //----------------------------- Deliver Notification -----------------------------------------//
 
     public Notification deliverNotification() {
 

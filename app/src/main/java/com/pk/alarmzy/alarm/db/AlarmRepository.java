@@ -26,6 +26,9 @@ public class AlarmRepository {
         allAlarms = alarmDao.getAllAlarms();
     }
 
+
+    //------------------------------- Getter methods ---------------------------------------------//
+
     public LiveData<List<AlarmEntity>> getAllAlarms() {
         return allAlarms;
     }
@@ -37,6 +40,9 @@ public class AlarmRepository {
     public List<AlarmEntity> getAllAlarmsReSched() {
         return alarmDao.getAllAlarmsReSched();
     }
+
+
+    //------------------------------- DB Operations ----------------------------------------------//
 
     public void insert(final AlarmEntity alarmEntity) {
         MyApplication.databaseWriteExecutor.execute(new Runnable() {

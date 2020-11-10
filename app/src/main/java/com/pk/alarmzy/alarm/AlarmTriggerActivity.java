@@ -33,11 +33,13 @@ import java.util.Locale;
 public class AlarmTriggerActivity extends AppCompatActivity {
 
     private static final String TAG = "AlarmTriggerActivity";
-    private SlideToActView btnDismissAlarm, btnSnoozeAlarm;
     private TextView tvAlarmTime, tvAlarmTitle;
     private Handler handler;
     private Runnable silenceRunnable;
     private AlarmEntity alarmEntity;
+
+
+    //----------------------------- Lifecycle methods --------------------------------------------//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,8 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         // Find views
         tvAlarmTime = findViewById(R.id.trigger_alarm_time);
         tvAlarmTitle = findViewById(R.id.trigger_alarm_title);
+        SlideToActView btnDismissAlarm = findViewById(R.id.btn_dismiss_alarm);
+        SlideToActView btnSnoozeAlarm = findViewById(R.id.btn_snooze_alarm);
 
         Intent intent = getIntent();
 
@@ -62,9 +66,49 @@ public class AlarmTriggerActivity extends AppCompatActivity {
 
         Log.i(TAG, "onCreate: Got alarmIdKey: " + alarmId);
 
-        btnDismissAlarm = findViewById(R.id.btn_dismiss_alarm);
-        btnSnoozeAlarm = findViewById(R.id.btn_snooze_alarm);
+        // Get alarm type and build data for UI
+        buildDisplayInfo(alarmId);
 
+        // SlideToActView Listeners
+
+        // Dismiss Alarm
+        btnDismissAlarm.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
+            @Override
+            public void onSlideComplete(@NonNull SlideToActView slideToActView) {
+                // Stop service and finish this activity
+                stopAlarmService();
+            }
+        });
+
+        // Snooze Alarm
+        btnSnoozeAlarm.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
+            @Override
+            public void onSlideComplete(@NonNull SlideToActView slideToActView) {
+                // Create new snooze alarm
+                AlarmHelper ah = new AlarmHelper();
+                ah.snoozeAlarm();
+
+                stopAlarmService();
+            }
+        });
+
+        // Check silenceTimeout
+        silenceTimeout(alarmId);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler = null;
+    }
+
+
+    //----------------------------- Build UI Data ------------------------------------------------//
+
+    /* This method gets the alarm Type (Parent, child, snooze)
+     * and calls displayInfo() with alarmEntity object
+     */
+    private void buildDisplayInfo(int alarmId) {
         Application app = AlarmTriggerActivity.this.getApplication();
         final AlarmRepository ar = new AlarmRepository(app);
 
@@ -129,31 +173,38 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                 }
             }
         });
-
-        // Dismiss Alarm
-        btnDismissAlarm.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
-            @Override
-            public void onSlideComplete(@NonNull SlideToActView slideToActView) {
-                // Stop service and finish this activity
-                stopAlarmService();
-            }
-        });
-
-        // Snooze Alarm
-        btnSnoozeAlarm.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
-            @Override
-            public void onSlideComplete(@NonNull SlideToActView slideToActView) {
-                // Create new snooze alarm
-                AlarmHelper ah = new AlarmHelper();
-                ah.snoozeAlarm();
-
-                stopAlarmService();
-            }
-        });
-
-        // Check silenceTimeout
-        silenceTimeout(alarmId);
     }
+
+
+    //----------------------------- Set UI Data ------------------------------------------------//
+
+    // Display alarmTime and alarmTitle
+    public void displayInfo(final AlarmEntity alarmEntity) {
+        // Fetch from db (running on bg thread)
+        final long alarmTimeInMillis = alarmEntity.getAlarmTime();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Get alarm time
+                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
+                        Locale.getDefault());
+                String formattedTime = sdf.format(alarmTimeInMillis);
+                tvAlarmTime.setText(formattedTime);
+
+                /* Get alarm title
+                 * If alarmTitle is "Alarm Title" (User didn't set any custom title)
+                 * then show title as "Alarm"
+                 */
+                if (alarmEntity.getAlarmTitle().trim().equals(getString(R.string.alarm_title)))
+                    tvAlarmTitle.setText(R.string.alarm);
+                else
+                    tvAlarmTitle.setText(alarmEntity.getAlarmTitle());
+            }
+        });
+    }
+
+
+    //------------------------------- Get Silence Timeout ----------------------------------------//
 
     /* Check if silence timeout is greater than 0
      * and deliver missed alarm notification if timeout is exceeded
@@ -196,30 +247,8 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         handler.postDelayed(silenceRunnable, silenceTimeoutInt * 60000); // x Minutes * millis
     }
 
-    // Display alarmTime and alarmTitle
-    public void displayInfo(final AlarmEntity alarmEntity) {
-        // Fetch from db (running on bg thread)
-        final long alarmTimeInMillis = alarmEntity.getAlarmTime();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // Get alarm time
-                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
-                        Locale.getDefault());
-                String formattedTime = sdf.format(alarmTimeInMillis);
-                tvAlarmTime.setText(formattedTime);
 
-                /* Get alarm title
-                 * If alarmTitle is "Alarm Title" (User didn't set any custom title)
-                 * then show title as "Alarm"
-                 */
-                if (alarmEntity.getAlarmTitle().trim().equals(getString(R.string.alarm_title)))
-                    tvAlarmTitle.setText(R.string.alarm);
-                else
-                    tvAlarmTitle.setText(alarmEntity.getAlarmTitle());
-            }
-        });
-    }
+    //--------------------------------- Misc Methods ---------------------------------------------//
 
     // Stop service and finish activity
     public void stopAlarmService() {
@@ -233,12 +262,6 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         if (handler != null && silenceRunnable != null)
             handler.removeCallbacks(silenceRunnable);
         finish();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        handler = null;
     }
 
     private void turnOnScreen() {

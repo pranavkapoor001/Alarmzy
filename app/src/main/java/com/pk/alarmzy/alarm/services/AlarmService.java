@@ -25,14 +25,13 @@ import com.pk.alarmzy.alarm.helper.NotificationHelper;
 
 public class AlarmService extends Service {
     private static final String TAG = "AlarmService";
-    Vibrator v;
+    private Vibrator v;
     private MediaPlayer player;
     private Handler handler;
     private Runnable crescendoRunnable;
 
 
-    public AlarmService() {
-    }
+    //----------------------------- Lifecycle methods --------------------------------------------//
 
     @Override
     public void onCreate() {
@@ -63,6 +62,30 @@ public class AlarmService extends Service {
         playAlarm();
         return super.onStartCommand(intent, flags, startId);
     }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (player != null) {
+            player.release();
+            player = null;
+            // Stop vibration
+            v.cancel();
+        }
+        if (handler != null && crescendoRunnable != null)
+            handler.removeCallbacks(crescendoRunnable);
+    }
+
+    // Return null here as bound service is not used
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+
+    //----------------------------- AlarmPlay methods --------------------------------------------//
 
     public void playAlarm() {
 
@@ -192,25 +215,5 @@ public class AlarmService extends Service {
                 v.vibrate(vibratePattern, 0);
             }
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (player != null) {
-            player.release();
-            player = null;
-            // Stop vibration
-            v.cancel();
-        }
-        if (handler != null && crescendoRunnable != null)
-            handler.removeCallbacks(crescendoRunnable);
-    }
-
-    // Return null here as bound service is not used
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
     }
 }

@@ -20,7 +20,6 @@ public class ReSchedAlarmService extends JobIntentService {
 
     public static final int JOB_ID = 1;
     private static final String TAG = "ReSchedAlarmService";
-    List<AlarmEntity> alarms;
 
     public static void enqueueWork(Context context, Intent jobServiceIntent) {
         enqueueWork(context, ReSchedAlarmService.class, JOB_ID, jobServiceIntent);
@@ -35,7 +34,7 @@ public class ReSchedAlarmService extends JobIntentService {
 
         // Fetch all alarms in a List using Repo(then Dao)
         AlarmRepository ar = new AlarmRepository(MyApplication.getContext());
-        alarms = ar.getAllAlarmsReSched();
+        List<AlarmEntity> alarms = ar.getAllAlarmsReSched();
 
         NotificationHelper nh;
 

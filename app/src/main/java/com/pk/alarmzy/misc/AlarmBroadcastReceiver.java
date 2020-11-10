@@ -17,8 +17,8 @@ import java.util.Objects;
 
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
+    public static final String ACTION_DISMISS = BuildConfig.APPLICATION_ID + ".ACTION_DISMISS";
     private static final String TAG = "AlarmBroadcastReceiver";
-    String ACTION_DISMISS = BuildConfig.APPLICATION_ID + ".ACTION_DISMISS";
 
     @Override
     public void onReceive(Context context, Intent intent) {

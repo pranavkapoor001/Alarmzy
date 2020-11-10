@@ -32,25 +32,32 @@ import java.util.Arrays;
 import java.util.Locale;
 
 public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private static String TAG = "PK:AlarmRecViewAdapter";
-    TextView tvAlarmTime;
-    EditText etAlarmTitle;
-    SwitchCompat switchAlarmEnabled;
-    ImageButton ibAlarmDelete, ibShowRepeat, ibHideRepeat;
-    AlarmEntity currentEntity;
-    String formattedTime;
-    long alarmTimeInMillis;
-    AlarmHelper ah;
-    MaterialCheckBox cbMon, cbTue, cbWed, cbThu, cbFri, cbSat, cbSun;
-    LinearLayout repeatDaysLayout;
-    ImageView ivRepeatIcon;
+
+    // vars
+    private static final String TAG = "PK:AlarmRecViewAdapter";
+    private AlarmHelper ah;
+    private AlarmEntity currentEntity;
+    private String formattedTime;
+
+    // UI Components
+    private TextView tvAlarmTime;
+    private EditText etAlarmTitle;
+    private ImageView ivRepeatIcon;
+    private LinearLayout repeatDaysLayout;
+    private SwitchCompat switchAlarmEnabled;
+    private ImageButton ibShowRepeat;
+    private ImageButton ibHideRepeat;
+    private MaterialCheckBox cbMon, cbTue, cbWed, cbThu, cbFri, cbSat, cbSun;
+
 
     public AlarmRecViewHolder(@NonNull View itemView) {
         super(itemView);
+
+        // Find views
         tvAlarmTime = itemView.findViewById(R.id.item_alarm_time);
         etAlarmTitle = itemView.findViewById(R.id.item_alarm_title);
         switchAlarmEnabled = itemView.findViewById(R.id.item_alarm_enabled);
-        ibAlarmDelete = itemView.findViewById(R.id.item_alarm_delete);
+        ImageButton ibAlarmDelete = itemView.findViewById(R.id.item_alarm_delete);
         ibShowRepeat = itemView.findViewById(R.id.item_alarm_show_repeat);
         ibHideRepeat = itemView.findViewById(R.id.item_alarm_hide_repeat);
         ivRepeatIcon = itemView.findViewById(R.id.item_repeat_icon);
@@ -78,13 +85,14 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
         etAlarmTitle.setOnClickListener(this);
 
         repeatDaysLayout.setVisibility(View.GONE);
+        ah = new AlarmHelper();
     }
 
     public void bindTo(AlarmEntity currentItem) {
         this.currentEntity = currentItem;
 
         // Get time from milliSeconds to format: 08:30 PM
-        alarmTimeInMillis = currentEntity.getAlarmTime();
+        long alarmTimeInMillis = currentEntity.getAlarmTime();
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
                 Locale.getDefault());
         formattedTime = sdf.format(alarmTimeInMillis);
@@ -142,7 +150,6 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
 
     @Override
     public void onClick(View v) {
-        ah = new AlarmHelper();
 
         switch (v.getId()) {
             case R.id.item_alarm_enabled:

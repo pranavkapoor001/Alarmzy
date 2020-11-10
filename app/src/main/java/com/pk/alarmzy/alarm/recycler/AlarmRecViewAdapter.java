@@ -14,6 +14,9 @@ import com.pk.alarmzy.alarm.db.AlarmEntity;
 
 public class AlarmRecViewAdapter extends ListAdapter<AlarmEntity, AlarmRecViewHolder> {
 
+
+    //----------------------------- DiffUtil Methods --------------------------------------------//
+
     private static final DiffUtil.ItemCallback<AlarmEntity> DIFF_CALLBACK = new DiffUtil.ItemCallback<AlarmEntity>() {
         @Override
         public boolean areItemsTheSame(@NonNull AlarmEntity oldItem, @NonNull AlarmEntity newItem) {
@@ -35,19 +38,12 @@ public class AlarmRecViewAdapter extends ListAdapter<AlarmEntity, AlarmRecViewHo
             return oldItem.getAlarmEnabled() == newItem.getAlarmEnabled();
         }
     };
-    private static String TAG = "PK:AlarmRecViewAdapter";
+
+
+    //----------------------------- Lifecycle Methods --------------------------------------------//
 
     public AlarmRecViewAdapter() {
         super(DIFF_CALLBACK);
-    }
-
-    // Gets current position for ItemTouchHelper (Drag to del)
-    public AlarmEntity getAlarmRecView(int position) {
-        // Return alarmId for selected alarm
-        final AlarmEntity currentItem = getItem(position);
-        return new AlarmEntity(currentItem.getAlarmTime(),
-                currentItem.getAlarmId(), currentItem.getAlarmEnabled(),
-                currentItem.getDaysOfRepeatArr(), currentItem.getAlarmTitle());
     }
 
     @NonNull
@@ -65,4 +61,17 @@ public class AlarmRecViewAdapter extends ListAdapter<AlarmEntity, AlarmRecViewHo
         final AlarmEntity currentItem = getItem(position);
         holder.bindTo(currentItem);
     }
+
+
+    //----------------------------- Misc Methods --------------------------------------------//
+
+    // Gets current position for ItemTouchHelper (Drag to del)
+    public AlarmEntity getAlarmRecView(int position) {
+        // Return alarmId for selected alarm
+        final AlarmEntity currentItem = getItem(position);
+        return new AlarmEntity(currentItem.getAlarmTime(),
+                currentItem.getAlarmId(), currentItem.getAlarmEnabled(),
+                currentItem.getDaysOfRepeatArr(), currentItem.getAlarmTitle());
+    }
+
 }

@@ -25,13 +25,16 @@ import java.util.Random;
 public class AlarmHelper {
 
     private static final String TAG = "AlarmHelper";
-    // alarmId for alarm disabled by toggle
+    // alarmId for alarm disabled by toggle(Set from outside this class)
     public int oldAlarmId;
-    Context context;
-    Application app;
-    AlarmRepository ar;
+    private Context context;
+    private Application app;
+    private AlarmRepository ar;
     // Indicates that alarm is freshly created. Not enabled again from toggle
-    boolean isNew = true;
+    private boolean isNew = true;
+
+
+    //------------------------------- Canceling Alarm --------------------------------------------//
 
     // Cancels alarm: Removes from db if delete is true
     public void cancelAlarm(AlarmEntity alarmEntity, boolean delete,
@@ -123,6 +126,9 @@ public class AlarmHelper {
         }
     }
 
+
+    //------------------------------- Creating Alarm ---------------------------------------------//
+
     // Create new alarm with Calendar data
     public void createAlarm(Calendar c) {
 
@@ -171,23 +177,6 @@ public class AlarmHelper {
             ar.insert(alarm);
         }
     }
-
-    /* Create alarm when Toggle is enabled
-     * REQUIRED: Set old alarmId using AlarmHelpers obj
-     */
-    public void reEnableAlarm(AlarmEntity alarmEntity) {
-        if (oldAlarmId == 0)
-            Log.e(TAG, "reEnableAlarm: oldAlarmId NOT SET !");
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(alarmEntity.getAlarmTime());
-        isNew = false;
-        /* Schedule parentAlarm
-         * Using parentAlarmsTime Cal, Schedule its child alarms
-         */
-        createAlarm(cal);
-    }
-
 
     public void repeatingAlarm(AlarmEntity alarmEntity, int dayOfRepeat) {
         context = MyApplication.getContext();
@@ -271,6 +260,28 @@ public class AlarmHelper {
         ar.update(alarmEntity);
     }
 
+
+    //------------------------------- ReEnable Alarm ---------------------------------------------//
+
+    /* Create alarm when Toggle is enabled
+     * REQUIRED: Set old alarmId using AlarmHelpers obj
+     */
+    public void reEnableAlarm(AlarmEntity alarmEntity) {
+        if (oldAlarmId == 0)
+            Log.e(TAG, "reEnableAlarm: oldAlarmId NOT SET !");
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(alarmEntity.getAlarmTime());
+        isNew = false;
+        /* Schedule parentAlarm
+         * Using parentAlarmsTime Cal, Schedule its child alarms
+         */
+        createAlarm(cal);
+    }
+
+
+    //------------------------------- Snooze Alarm -----------------------------------------------//
+
     public void snoozeAlarm() {
         final String KEY_SNOOZE_LENGTH = "snoozeLength";
 
@@ -306,6 +317,10 @@ public class AlarmHelper {
         NotificationHelper notificationHelper = new NotificationHelper(context, alarmId);
         notificationHelper.deliverPersistentNotification();
     }
+
+
+    //------------------------------- Misc Methods -----------------------------------------------//
+
 
     /* This method build a pending intent using
      * Alarm id received as parameter (Unique)
