@@ -36,4 +36,14 @@
         android:summary="Vibrate with alarm"
         android:title="Enable vibration" />
 
+    <Preference
+        android:icon="@drawable/ic_star"
+        android:key="rate"
+        android:summary="Leave a rating on Google Play"
+        android:title="Rate Alarmzy">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://play.google.com/store/apps/details?id=com.pk.alarmzy" />
+    </Preference>
+
 </PreferenceScreen>
