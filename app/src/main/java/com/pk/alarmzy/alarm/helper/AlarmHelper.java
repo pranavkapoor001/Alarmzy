@@ -135,8 +135,16 @@ public class AlarmHelper {
         Log.i(TAG, "createAlarm: Putting alarmIdKey: " + alarmId);
 
         // increment to next day if alarm time has passed
-        if (c.before(Calendar.getInstance()))
+        if (c.before(Calendar.getInstance())) {
+
+            /* This can be an old alarm
+             * Adding one day could still mean it's less than today
+             *
+             * So Set today's date then add one day
+             */
+            c.set(Calendar.DATE, Calendar.getInstance().get(Calendar.DATE));
             c.add(Calendar.DATE, 1);
+        }
 
         AlarmManager.AlarmClockInfo alarmClockInfo =
                 new AlarmManager.AlarmClockInfo(c.getTimeInMillis(), null);
