@@ -42,7 +42,6 @@ public class AlarmHelper {
 
         // Cancel the registered alarm
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmService.class);
 
         Boolean[] daysOfRepeatArr = alarmEntity.getDaysOfRepeatArr();
 
@@ -57,8 +56,7 @@ public class AlarmHelper {
 
             int parentAlarmId = alarmEntity.getAlarmId();
             // Finally cancel parent alarm
-            PendingIntent pendingIntent = PendingIntent.getForegroundService(context, parentAlarmId, intent, 0);
-            alarmManager.cancel(pendingIntent);
+            alarmManager.cancel(getPendingIntent(parentAlarmId));
 
             // Set Alarm toggle to false
             ar.updateAlarmStatus(parentAlarmId, false);
@@ -78,9 +76,7 @@ public class AlarmHelper {
                         // This child alarm is enabled
                         Log.i(TAG, "cancelAlarm: Child Alarm was Enabled" + i);
                         childAlarmId = parentAlarmId + i;
-                        pendingIntent = PendingIntent.getForegroundService(context,
-                                childAlarmId, intent, 0);
-                        alarmManager.cancel(pendingIntent);
+                        alarmManager.cancel(getPendingIntent(childAlarmId));
                         // daysOfRepeatArr[i] = false;
                     }
                 }
@@ -89,8 +85,7 @@ public class AlarmHelper {
         } else {
             // Get child alarmId to be cancelled
             int childAlarmId = alarmEntity.getAlarmId() + dayOfRepeat;
-            PendingIntent pendingIntent = PendingIntent.getForegroundService(context, childAlarmId, intent, 0);
-            alarmManager.cancel(pendingIntent);
+            alarmManager.cancel(getPendingIntent(childAlarmId));
 
             Log.i(TAG, "cancelAlarm: Cancelled child AlarmID: " + childAlarmId);
             // child alarm is disabled: reflect in toggle here
@@ -135,12 +130,8 @@ public class AlarmHelper {
         ar = new AlarmRepository(app);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmService.class);
         int alarmId = new Random().nextInt(Integer.MAX_VALUE);
-        intent.putExtra("alarmIdKey", alarmId);
         Log.i(TAG, "createAlarm: Putting alarmIdKey: " + alarmId);
-        PendingIntent pendingIntent = PendingIntent.getForegroundService(context,
-                alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // increment to next day if alarm time has passed
         if (c.before(Calendar.getInstance()))
@@ -149,7 +140,7 @@ public class AlarmHelper {
         AlarmManager.AlarmClockInfo alarmClockInfo =
                 new AlarmManager.AlarmClockInfo(c.getTimeInMillis(), null);
 
-        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+        alarmManager.setAlarmClock(alarmClockInfo, getPendingIntent(alarmId));
 
         // Get alarmTime in milliSeconds
         long alarmTime = c.getTimeInMillis();
@@ -220,11 +211,7 @@ public class AlarmHelper {
         int childAlarmId = parentAlarmId + dayOfRepeat;
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmService.class);
-        intent.putExtra("alarmIdKey", childAlarmId);
         Log.i(TAG, "repeatingAlarm: Putting childAlarmIdKey: " + childAlarmId);
-        PendingIntent pendingIntent = PendingIntent.getForegroundService(context,
-                childAlarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Calendar cal = Calendar.getInstance();
         // childAlarm Time is same as parent
@@ -263,7 +250,7 @@ public class AlarmHelper {
         // Set alarm
         AlarmManager.AlarmClockInfo alarmClockInfo =
                 new AlarmManager.AlarmClockInfo(cal.getTimeInMillis(), null);
-        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+        alarmManager.setAlarmClock(alarmClockInfo, getPendingIntent(childAlarmId));
 
         /* this will update only daysOfRepeatArr
          * all other values will be same
@@ -283,12 +270,8 @@ public class AlarmHelper {
         ar = new AlarmRepository(app);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmService.class);
         int alarmId = new Random().nextInt(Integer.MAX_VALUE);
-        intent.putExtra("alarmIdKey", alarmId);
         Log.i("AlarmHelper", "Putting alarmIdKey: " + alarmId);
-        PendingIntent pendingIntent = PendingIntent.getForegroundService(context,
-                alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Get Snooze Length
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -310,8 +293,27 @@ public class AlarmHelper {
         AlarmManager.AlarmClockInfo alarmClockInfo =
                 new AlarmManager.AlarmClockInfo(c.getTimeInMillis(), null);
 
-        alarmManager.setAlarmClock(alarmClockInfo, pendingIntent);
+        alarmManager.setAlarmClock(alarmClockInfo, getPendingIntent(alarmId));
         NotificationHelper notificationHelper = new NotificationHelper(context, alarmId);
         notificationHelper.deliverPersistentNotification();
+    }
+
+    /* This method build a pending intent using
+     * Alarm id received as parameter (Unique)
+     * context, Intent to AlarmService.class, FLAG_UPDATE_CURRENT (Common for all cases)
+     */
+
+    private PendingIntent getPendingIntent(int alarmId) {
+
+        context = MyApplication.getContext();
+
+        Intent intent = new Intent(context, AlarmService.class);
+
+        // Not required in all cases, but add to maintain simplicity
+        intent.putExtra("alarmIdKey", alarmId);
+
+        return PendingIntent.getForegroundService(context, alarmId, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
     }
 }
