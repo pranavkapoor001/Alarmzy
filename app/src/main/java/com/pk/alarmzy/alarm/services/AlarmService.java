@@ -19,6 +19,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
+import com.pk.alarmzy.alarm.AlarmTriggerActivity;
 import com.pk.alarmzy.alarm.helper.NotificationHelper;
 
 // Note: Define service in AndroidManifest.xml
@@ -58,6 +59,17 @@ public class AlarmService extends Service {
 
         // deliver notification with alarmId to disable toggle when alarm is dismissed
         startForeground(1, new NotificationHelper(this, alarmId).deliverNotification());
+
+        /* Start activity to dismiss / snooze alarm for API < 29(Q)
+         * For API >= 29 full-screen pending intent defined in notification will launched
+         */
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            Intent alarmActivityIntent = new Intent(this, AlarmTriggerActivity.class);
+            alarmActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                    Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            alarmActivityIntent.putExtra("alarmIdKey", alarmId);
+            startActivity(alarmActivityIntent);
+        }
 
         playAlarm();
         return super.onStartCommand(intent, flags, startId);

@@ -87,6 +87,8 @@ public class NotificationHelper {
         /* Since on A10 activity cannot be started from service(Including foreground service)
          * Use a High priority notification with FullScreenPendingIntent()
          * Also requires USE_FULL_SCREEN_INTENT permission in manifest
+         *
+         * This full-screen intent will be launched immediately if device's screen is off
          */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             builder.setFullScreenIntent(fullScreenPendingIntent, true);
