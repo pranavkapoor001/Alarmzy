@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -43,7 +44,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
     private TextView tvAlarmTime;
     private EditText etAlarmTitle;
     private ImageView ivRepeatIcon;
-    private LinearLayout repeatDaysLayout;
+    private ConstraintLayout repeatDaysLayout;
     private SwitchCompat switchAlarmEnabled;
     private ImageButton ibShowRepeat;
     private ImageButton ibHideRepeat;
@@ -132,7 +133,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
                 }
             }
         } else {
-            ivRepeatIcon.setVisibility(View.GONE);
+            ivRepeatIcon.setVisibility(View.INVISIBLE);
             cbSun.setChecked(false);
             cbMon.setChecked(false);
             cbTue.setChecked(false);
@@ -172,15 +173,15 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
                 break;
             case R.id.item_alarm_show_repeat:
                 repeatDaysLayout.setVisibility(View.VISIBLE);
-                ibShowRepeat.setVisibility(View.GONE);
+                ibShowRepeat.setVisibility(View.INVISIBLE);
                 ibHideRepeat.setVisibility(View.VISIBLE);
                 etAlarmTitle.setVisibility(View.VISIBLE);
                 break;
             case R.id.item_alarm_hide_repeat:
                 repeatDaysLayout.setVisibility(View.GONE);
                 ibShowRepeat.setVisibility(View.VISIBLE);
-                ibHideRepeat.setVisibility(View.GONE);
-                etAlarmTitle.setVisibility(View.GONE);
+                ibHideRepeat.setVisibility(View.INVISIBLE);
+                etAlarmTitle.setVisibility(View.INVISIBLE);
                 break;
             case R.id.cb_sunday:
                 if (cbSun.isChecked())
