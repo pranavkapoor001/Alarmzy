@@ -37,9 +37,13 @@
             </intent-filter>
         </receiver>
 
+        <!-- Set flags to ensure that AlarmTrigger activity is shown on lock screen -->
         <activity
             android:name="com.pk.alarmzy.alarm.AlarmTriggerActivity"
-            android:excludeFromRecents="true" />
+            android:excludeFromRecents="true"
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true" />
 
         <service
             android:name="com.pk.alarmzy.alarm.services.AlarmService"
