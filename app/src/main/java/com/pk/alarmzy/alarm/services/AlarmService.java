@@ -79,14 +79,17 @@ public class AlarmService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        // Stop crescendoRunnable
+        if (handler != null && crescendoRunnable != null)
+            handler.removeCallbacks(crescendoRunnable);
+
+        // Release player
         if (player != null) {
             player.release();
             player = null;
             // Stop vibration
             v.cancel();
         }
-        if (handler != null && crescendoRunnable != null)
-            handler.removeCallbacks(crescendoRunnable);
     }
 
     // Return null here as bound service is not used
