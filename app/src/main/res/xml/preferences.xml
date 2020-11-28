@@ -29,6 +29,12 @@
         android:summary="Alarm volume will increase slowly"
         android:title="Gradually increase volume" />
 
+    <Preference
+        android:icon="@drawable/ic_volume_up"
+        android:key="ringtone"
+        android:summary="Select the default alarm ring sound"
+        android:title="Choose ringtone" />
+
     <SwitchPreferenceCompat
         android:defaultValue="true"
         android:icon="@drawable/ic_vibration"

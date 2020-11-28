@@ -30,6 +30,7 @@ public class AlarmService extends Service {
     private MediaPlayer player;
     private Handler handler;
     private Runnable crescendoRunnable;
+    private SharedPreferences sharedPref;
 
 
     //----------------------------- Lifecycle methods --------------------------------------------//
@@ -71,6 +72,9 @@ public class AlarmService extends Service {
             startActivity(alarmActivityIntent);
         }
 
+        // Get Settings shared preferences
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
         playAlarm();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -107,13 +111,15 @@ public class AlarmService extends Service {
         Log.e(TAG, "AlarmDeliver Called");
 
         // Get the default alarm sound
-        Uri alarmSound = RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_ALARM);
+        Uri alarmDefaultSound = RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_ALARM);
+        // Get user selected alarm ringtone
+        Uri alarmUserSelectedSound = Uri.parse(sharedPref.getString("ringtone", alarmDefaultSound.toString()));
         // init media player
         player = new MediaPlayer();
 
         // setDataSource() and prepare() can throw an Exception
         try {
-            player.setDataSource(this, alarmSound);
+            player.setDataSource(this, alarmUserSelectedSound);
 
             /* Set audio characteristics
              * Here we need to play the sound on alarm channel
@@ -150,7 +156,6 @@ public class AlarmService extends Service {
         final String KEY_CRESCENDO_TIME = "crescendoTime";
 
         // Get crescendo time
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String crescendoTimeStr = sharedPref.getString(KEY_CRESCENDO_TIME, "0");
 
         /* Set default value to 0
@@ -213,7 +218,6 @@ public class AlarmService extends Service {
         final String KEY_VIBRATE = "vibrateEnabled";
 
         // Check if vibration is enabled
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean vibrationEnabled = sharedPref.getBoolean(KEY_VIBRATE, true);
 
         // Get vibrator service
