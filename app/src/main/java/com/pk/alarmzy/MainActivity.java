@@ -3,6 +3,7 @@ package com.pk.alarmzy;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -164,8 +165,12 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         };
+        Calendar currentTime = Calendar.getInstance();
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                timeSetListener, mHour, mMinute, false);
+                timeSetListener,
+                currentTime.get(Calendar.HOUR_OF_DAY),
+                currentTime.get(Calendar.MINUTE),
+                DateFormat.is24HourFormat(this));
         timePickerDialog.show();
     }
 
