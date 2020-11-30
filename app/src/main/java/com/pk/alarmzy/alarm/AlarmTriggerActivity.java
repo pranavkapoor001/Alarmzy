@@ -158,14 +158,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                     } catch (NullPointerException e1) {
                         Log.e(TAG, "run: This is a snoozed alarm");
 
-                        // Simply show current time and "Snoozed Alarm"
-
-                        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
-                                Locale.getDefault());
-                        String formattedTime = sdf.format(System.currentTimeMillis());
-                        tvAlarmTime.setText(formattedTime);
-
-                        tvAlarmTitle.setText(R.string.snoozed_alarm);
+                        displaySnoozedInfo();
 
                         // Cancel notification
                         NotificationManager mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -200,6 +193,23 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                     tvAlarmTitle.setText(R.string.alarm);
                 else
                     tvAlarmTitle.setText(alarmEntity.getAlarmTitle());
+            }
+        });
+    }
+
+    // Display alarm title and time of snoozed alarm
+    private void displaySnoozedInfo() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Simply show current time and "Snoozed Alarm" as title
+
+                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
+                        Locale.getDefault());
+                String formattedTime = sdf.format(System.currentTimeMillis());
+                tvAlarmTime.setText(formattedTime);
+
+                tvAlarmTitle.setText(R.string.snoozed_alarm);
             }
         });
     }

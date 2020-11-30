@@ -52,7 +52,7 @@ public class AlarmService extends Service {
          * Check if key exists then fetch value
          */
         int alarmId = -1;
-        if (intent.hasExtra("alarmIdKey"))
+        if (intent != null && intent.hasExtra("alarmIdKey"))
             alarmId = intent.getIntExtra("alarmIdKey", -1);
 
         Log.i(TAG, "Got alarmIdKey: " + alarmId);

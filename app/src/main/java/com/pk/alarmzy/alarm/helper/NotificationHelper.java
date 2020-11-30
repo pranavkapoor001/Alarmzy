@@ -27,9 +27,9 @@ public class NotificationHelper {
 
     private static final String PRIMARY_CHANNEL_ID = "primary_channel_id";
     private static final String TAG = "NotificationHelper";
+    private final Context mContext;
     public int mAlarmId;
     private NotificationManager mNotifyManager;
-    private Context mContext;
 
     public NotificationHelper(Context context, int alarmId) {
         this.mContext = context;
@@ -138,7 +138,7 @@ public class NotificationHelper {
                 mContext, PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_alarm)
                 .setContentTitle("Alarm")
-                .setContentText("Snoozing... " + formattedTime)
+                .setContentText("Snoozing till " + formattedTime)
                 .setOngoing(true)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
