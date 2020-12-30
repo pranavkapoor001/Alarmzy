@@ -149,7 +149,12 @@ public class AlarmHelper {
              * So Set today's date then add one day
              */
             c.set(Calendar.DATE, Calendar.getInstance().get(Calendar.DATE));
-            c.add(Calendar.DATE, 1);
+
+            /* Current time is > next alarm time
+             * Shift it to tomorrow
+             */
+            if (System.currentTimeMillis() > c.getTimeInMillis())
+                c.add(Calendar.DATE, 1);
         }
 
         AlarmManager.AlarmClockInfo alarmClockInfo =
