@@ -198,6 +198,17 @@ public class AlarmService extends Service {
             @Override
             public void run() {
 
+                /* Return if media player is not initialized
+                 *
+                 * This may happen when service is being destroyed but
+                 * crescendoRunnable is still active.
+                 * set volume could throw an NPE
+                 */
+                if (player == null) {
+                    Log.i(TAG, "crescendoRunnable: Not playing, player uninitialized");
+                    return;
+                }
+
                 /* Increase volume per second by incrementPerSecond value
                  * until we reach max value
                  */
@@ -209,9 +220,9 @@ public class AlarmService extends Service {
             }
         };
 
-        // Post runnable for the first time and start the player
-        handler.post(crescendoRunnable);
+        // Start player then post runnable for the first time to increment volume in steps
         player.start();
+        handler.post(crescendoRunnable);
     }
 
     public void vibrateAlarm() {
