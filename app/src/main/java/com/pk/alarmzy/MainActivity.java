@@ -27,12 +27,11 @@ import com.pk.alarmzy.alarm.db.AlarmViewModel;
 import com.pk.alarmzy.alarm.helper.AlarmHelper;
 import com.pk.alarmzy.alarm.helper.NotificationHelper;
 import com.pk.alarmzy.alarm.recycler.AlarmRecViewAdapter;
+import com.pk.alarmzy.misc.Utils;
 import com.pk.alarmzy.settings.SettingsActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -156,12 +155,10 @@ public class MainActivity extends AppCompatActivity {
                 mHour = hourOfDay;
                 mMinute = minute;
 
-                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa",
-                        Locale.getDefault());
-                final String formatted = sdf.format(c.getTime());
-
                 alarmHelper.createAlarm(c);
-                Snackbar.make(findViewById(android.R.id.content), "Alarm Set for " + formatted, Snackbar.LENGTH_LONG)
+
+                Snackbar.make(findViewById(android.R.id.content), "Alarm Set for "
+                        + Utils.getFormattedNextAlarmTime(c.getTimeInMillis()), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         };
