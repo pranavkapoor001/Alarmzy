@@ -112,8 +112,12 @@ public class AlarmService extends Service {
 
         // Get the default alarm sound
         Uri alarmDefaultSound = RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_ALARM);
+        Uri alarmUserSelectedSound = alarmDefaultSound;
+
         // Get user selected alarm ringtone
-        Uri alarmUserSelectedSound = Uri.parse(sharedPref.getString("ringtone", alarmDefaultSound.toString()));
+        if (sharedPref != null && sharedPref.contains("ringtone")) {
+            alarmUserSelectedSound = Uri.parse(sharedPref.getString("ringtone", alarmDefaultSound.toString()));
+        }
         // init media player
         player = new MediaPlayer();
 
