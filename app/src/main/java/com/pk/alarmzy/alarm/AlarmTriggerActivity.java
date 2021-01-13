@@ -34,6 +34,7 @@ import java.util.Locale;
 public class AlarmTriggerActivity extends AppCompatActivity {
 
     private static final String TAG = "AlarmTriggerActivity";
+    private boolean isSnoozed = false;
     private TextView tvAlarmTime, tvAlarmTitle;
     private Handler handler;
     private Runnable silenceRunnable;
@@ -159,6 +160,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                         Log.e(TAG, "run: This is a snoozed alarm");
 
                         displaySnoozedInfo();
+                        isSnoozed = true;
 
                         // Cancel notification
                         NotificationManager mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -250,7 +252,15 @@ public class AlarmTriggerActivity extends AppCompatActivity {
             public void run() {
                 // Deliver notification using id
                 NotificationHelper nh = new NotificationHelper(getApplicationContext(), alarmId);
-                nh.deliverMissedNotification(alarmEntity.getAlarmTime());
+
+                /* AlarmEntity is null for snoozed alarm
+                 * Get actual alarm time by: CurrentTime - silenceTimeout
+                 */
+                if (isSnoozed) {
+                    nh.deliverMissedNotification(
+                            System.currentTimeMillis() - (Long.parseLong(silenceTimeStr) * 60000));
+                } else
+                    nh.deliverMissedNotification(alarmEntity.getAlarmTime());
 
                 stopAlarmService();
             }
