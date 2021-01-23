@@ -24,7 +24,7 @@ import com.pk.alarmzy.alarm.db.AlarmRepository;
 import com.pk.alarmzy.alarm.helper.AlarmHelper;
 import com.pk.alarmzy.alarm.helper.NotificationHelper;
 import com.pk.alarmzy.alarm.services.AlarmService;
-import com.pk.alarmzy.misc.DaysOfWeek;
+import com.pk.alarmzy.misc.Constants;
 import com.pk.alarmzy.misc.MyApplication;
 
 import java.text.SimpleDateFormat;
@@ -126,7 +126,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                 try {
                     Boolean[] daysOfRepeat = alarmEntity.getDaysOfRepeatArr();
                     // Disable toggle if alarm is not recurring type
-                    if (!daysOfRepeat[DaysOfWeek.IsRECURRING])
+                    if (!daysOfRepeat[Constants.IsRECURRING])
                         ar.updateAlarmStatus(finalAlarmId, false);
 
                     displayInfo(alarmEntity);

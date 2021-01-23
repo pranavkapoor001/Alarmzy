@@ -25,7 +25,7 @@ import com.pk.alarmzy.R;
 import com.pk.alarmzy.alarm.db.AlarmEntity;
 import com.pk.alarmzy.alarm.db.AlarmRepository;
 import com.pk.alarmzy.alarm.helper.AlarmHelper;
-import com.pk.alarmzy.misc.DaysOfWeek;
+import com.pk.alarmzy.misc.Constants;
 import com.pk.alarmzy.misc.MyApplication;
 import com.pk.alarmzy.misc.Utils;
 
@@ -101,31 +101,31 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
         Boolean[] daysOfRepeatArr = currentEntity.getDaysOfRepeatArr();
         Log.i(TAG, "Array: " + Arrays.toString(daysOfRepeatArr));
         // Tick checkbox if child alarm is enabled
-        if (daysOfRepeatArr[DaysOfWeek.IsRECURRING]) {
+        if (daysOfRepeatArr[Constants.IsRECURRING]) {
             ivRepeatIcon.setVisibility(View.VISIBLE);
             for (int i = 1; i < daysOfRepeatArr.length; i++) {
                 // this should be checked
                 if (daysOfRepeatArr[i]) {
                     switch (i) {
-                        case DaysOfWeek.SUNDAY:
+                        case Constants.SUNDAY:
                             cbSun.setChecked(true);
                             break;
-                        case DaysOfWeek.MONDAY:
+                        case Constants.MONDAY:
                             cbMon.setChecked(true);
                             break;
-                        case DaysOfWeek.TUESDAY:
+                        case Constants.TUESDAY:
                             cbTue.setChecked(true);
                             break;
-                        case DaysOfWeek.WEDNESDAY:
+                        case Constants.WEDNESDAY:
                             cbWed.setChecked(true);
                             break;
-                        case DaysOfWeek.THURSDAY:
+                        case Constants.THURSDAY:
                             cbThu.setChecked(true);
                             break;
-                        case DaysOfWeek.FRIDAY:
+                        case Constants.FRIDAY:
                             cbFri.setChecked(true);
                             break;
-                        case DaysOfWeek.SATURDAY:
+                        case Constants.SATURDAY:
                             cbSat.setChecked(true);
                             break;
                         default:
@@ -188,45 +188,45 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
                 break;
             case R.id.cb_sunday:
                 if (cbSun.isChecked())
-                    ah.repeatingAlarm(currentEntity, DaysOfWeek.SUNDAY);
+                    ah.repeatingAlarm(currentEntity, Constants.SUNDAY);
                 else
-                    ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.SUNDAY);
+                    ah.cancelAlarm(currentEntity, false, false, Constants.SUNDAY);
                 break;
             case R.id.cb_monday:
                 if (cbMon.isChecked())
-                    ah.repeatingAlarm(currentEntity, DaysOfWeek.MONDAY);
+                    ah.repeatingAlarm(currentEntity, Constants.MONDAY);
                 else
-                    ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.MONDAY);
+                    ah.cancelAlarm(currentEntity, false, false, Constants.MONDAY);
                 break;
             case R.id.cb_tuesday:
                 if (cbTue.isChecked())
-                    ah.repeatingAlarm(currentEntity, DaysOfWeek.TUESDAY);
+                    ah.repeatingAlarm(currentEntity, Constants.TUESDAY);
                 else
-                    ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.TUESDAY);
+                    ah.cancelAlarm(currentEntity, false, false, Constants.TUESDAY);
                 break;
             case R.id.cb_wednesday:
                 if (cbWed.isChecked())
-                    ah.repeatingAlarm(currentEntity, DaysOfWeek.WEDNESDAY);
+                    ah.repeatingAlarm(currentEntity, Constants.WEDNESDAY);
                 else
-                    ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.WEDNESDAY);
+                    ah.cancelAlarm(currentEntity, false, false, Constants.WEDNESDAY);
                 break;
             case R.id.cb_thursday:
                 if (cbThu.isChecked())
-                    ah.repeatingAlarm(currentEntity, DaysOfWeek.THURSDAY);
+                    ah.repeatingAlarm(currentEntity, Constants.THURSDAY);
                 else
-                    ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.THURSDAY);
+                    ah.cancelAlarm(currentEntity, false, false, Constants.THURSDAY);
                 break;
             case R.id.cb_friday:
                 if (cbFri.isChecked())
-                    ah.repeatingAlarm(currentEntity, DaysOfWeek.FRIDAY);
+                    ah.repeatingAlarm(currentEntity, Constants.FRIDAY);
                 else
-                    ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.FRIDAY);
+                    ah.cancelAlarm(currentEntity, false, false, Constants.FRIDAY);
                 break;
             case R.id.cb_saturday:
                 if (cbSat.isChecked())
-                    ah.repeatingAlarm(currentEntity, DaysOfWeek.SATURDAY);
+                    ah.repeatingAlarm(currentEntity, Constants.SATURDAY);
                 else
-                    ah.cancelAlarm(currentEntity, false, false, DaysOfWeek.SATURDAY);
+                    ah.cancelAlarm(currentEntity, false, false, Constants.SATURDAY);
                 break;
             case R.id.item_alarm_title:
                 alarmTitleBuilder();

@@ -10,7 +10,7 @@ import androidx.core.app.JobIntentService;
 import com.pk.alarmzy.alarm.db.AlarmEntity;
 import com.pk.alarmzy.alarm.db.AlarmRepository;
 import com.pk.alarmzy.alarm.helper.AlarmHelper;
-import com.pk.alarmzy.misc.DaysOfWeek;
+import com.pk.alarmzy.misc.Constants;
 import com.pk.alarmzy.misc.MyApplication;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class ReSchedAlarmService extends JobIntentService {
                  * Cancel this alarm toggle and skip to next iteration
                  */
                 if (ae.getAlarmTime() < System.currentTimeMillis() &&
-                        !ae.getDaysOfRepeatArr()[DaysOfWeek.IsRECURRING]) {
+                        !ae.getDaysOfRepeatArr()[Constants.IsRECURRING]) {
 
                     Log.e(TAG, "onHandleWork: ParentTime passed, no child alarms");
                     ah.cancelAlarm(ae, false, true, -1);

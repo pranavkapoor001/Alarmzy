@@ -1,6 +1,6 @@
 package com.pk.alarmzy.misc;
 
-public class DaysOfWeek {
+public class Constants {
 
     /* int id for all days to use anywhere across package
      * Sunday is 1 since Calendar.SUNDAY = 1

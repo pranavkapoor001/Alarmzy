@@ -6,7 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import com.pk.alarmzy.alarm.helper.AlarmHelper;
-import com.pk.alarmzy.misc.DaysOfWeek;
+import com.pk.alarmzy.misc.Constants;
 import com.pk.alarmzy.misc.MyApplication;
 
 import java.util.List;
@@ -127,7 +127,7 @@ public class AlarmRepository {
                 AlarmHelper ah = new AlarmHelper();
 
                 Boolean[] daysOfRepeatArr = currentEntity.getDaysOfRepeatArr();
-                if (daysOfRepeatArr[DaysOfWeek.IsRECURRING]) {
+                if (daysOfRepeatArr[Constants.IsRECURRING]) {
                     for (int i = 1; i < daysOfRepeatArr.length; i++) {
                         if (daysOfRepeatArr[i]) {
                             // This child alarm toggle is enabled

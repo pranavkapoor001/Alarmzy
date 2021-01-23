@@ -15,7 +15,7 @@ import com.pk.alarmzy.R;
 import com.pk.alarmzy.alarm.db.AlarmEntity;
 import com.pk.alarmzy.alarm.db.AlarmRepository;
 import com.pk.alarmzy.alarm.services.AlarmService;
-import com.pk.alarmzy.misc.DaysOfWeek;
+import com.pk.alarmzy.misc.Constants;
 import com.pk.alarmzy.misc.MyApplication;
 
 import java.util.Arrays;
@@ -73,7 +73,7 @@ public class AlarmHelper {
 
 
             // Cancel child alarms
-            if (daysOfRepeatArr != null && daysOfRepeatArr[DaysOfWeek.IsRECURRING]) {
+            if (daysOfRepeatArr != null && daysOfRepeatArr[Constants.IsRECURRING]) {
                 int childAlarmId;
                 for (int i = 1; i < daysOfRepeatArr.length; i++) {
                     if (daysOfRepeatArr[i]) {
@@ -112,7 +112,7 @@ public class AlarmHelper {
 
             // Set recurring flag to false
             if (!flag)
-                daysOfRepeatArr[DaysOfWeek.IsRECURRING] = false;
+                daysOfRepeatArr[Constants.IsRECURRING] = false;
 
             /* Disable parent toggle if all child alarms are disabled
              * and parent alarm time has passed
@@ -120,7 +120,7 @@ public class AlarmHelper {
             if (!flag && alarmEntity.getAlarmTime() < System.currentTimeMillis()) {
                 Log.i(TAG, "cancelAlarm: No child alarms / ParentTime passed");
                 Log.i(TAG, "cancelAlarm: Going to disable parent toggle");
-                daysOfRepeatArr[DaysOfWeek.IsRECURRING] = false;
+                daysOfRepeatArr[Constants.IsRECURRING] = false;
                 ar.updateAlarmStatus(alarmEntity.getAlarmId(), false);
             }
         }
@@ -190,7 +190,7 @@ public class AlarmHelper {
 
         // Update to show repeating Alarm on this day is enabled
         Boolean[] daysOfRepeatArr = alarmEntity.getDaysOfRepeatArr();
-        daysOfRepeatArr[DaysOfWeek.IsRECURRING] = true;
+        daysOfRepeatArr[Constants.IsRECURRING] = true;
         daysOfRepeatArr[dayOfRepeat] = true;
 
         /* No need to schedule child alarm if parent is disabled
