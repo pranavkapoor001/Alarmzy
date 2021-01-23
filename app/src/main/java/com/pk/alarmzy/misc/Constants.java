@@ -14,4 +14,10 @@ public class Constants {
     public static final int THURSDAY = 5;
     public static final int FRIDAY = 6;
     public static final int SATURDAY = 7;
+
+    public static final String ACTION_DO_NOTHING = "com.pk.alarmzy.DO_NOTHING";
+    public static final String ACTION_MUTE = "com.pk.alarmzy.MUTE";
+    public static final String ACTION_DISMISS = "com.pk.alarmzy.DISMISS";
+    public static final String ACTION_SNOOZE = "com.pk.alarmzy.SNOOZE";
+
 }

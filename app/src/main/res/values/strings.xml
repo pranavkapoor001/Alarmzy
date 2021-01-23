@@ -72,4 +72,18 @@
         <item>60</item>
     </string-array>
 
+    <string-array name="button_action_entries">
+        <item>Do Nothing</item>
+        <item>Mute</item>
+        <item>Dismiss</item>
+        <item>Snooze</item>
+    </string-array>
+
+    <string-array name="button_action_values">
+        <item>com.pk.alarmzy.DO_NOTHING</item>
+        <item>com.pk.alarmzy.MUTE</item>
+        <item>com.pk.alarmzy.DISMISS</item>
+        <item>com.pk.alarmzy.SNOOZE</item>
+    </string-array>
+
 </resources>

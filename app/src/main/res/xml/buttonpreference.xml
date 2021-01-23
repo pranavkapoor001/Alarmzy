@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="com.pk.alarmzy.DO_NOTHING"
+        android:entries="@array/button_action_entries"
+        android:entryValues="@array/button_action_values"
+        android:key="volume_btn_action"
+        android:summary="%s"
+        android:title="Volume button" />
+
+    <ListPreference
+        android:defaultValue="com.pk.alarmzy.DO_NOTHING"
+        android:entries="@array/button_action_entries"
+        android:entryValues="@array/button_action_values"
+        android:key="power_btn_action"
+        android:summary="%s"
+        android:title="Power button" />
+
+</PreferenceScreen>

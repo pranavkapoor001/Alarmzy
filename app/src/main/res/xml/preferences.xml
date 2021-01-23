@@ -43,6 +43,13 @@
         android:title="Enable vibration" />
 
     <Preference
+        android:icon="@drawable/ic_buttons"
+        android:key="button_action"
+        android:summary="Select what buttons do"
+        android:title="Buttons"
+        app:fragment="com.pk.alarmzy.settings.SettingsButtonFragment" />
+
+    <Preference
         android:icon="@drawable/ic_star"
         android:key="rate"
         android:summary="Leave a rating on Google Play"

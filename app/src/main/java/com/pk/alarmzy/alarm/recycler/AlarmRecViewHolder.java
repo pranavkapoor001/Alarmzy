@@ -27,7 +27,6 @@ import com.pk.alarmzy.alarm.db.AlarmRepository;
 import com.pk.alarmzy.alarm.helper.AlarmHelper;
 import com.pk.alarmzy.misc.Constants;
 import com.pk.alarmzy.misc.MyApplication;
-import com.pk.alarmzy.misc.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -162,9 +161,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
                 } else {
                     ah.oldAlarmId = currentEntity.getAlarmId();
                     ah.reEnableAlarm(currentEntity);
-                    Snackbar.make(v, "Alarm Set for " +
-                                    Utils.getFormattedNextAlarmTime(currentEntity.getAlarmTime()),
-                            Snackbar.LENGTH_LONG)
+                    Snackbar.make(v, "Alarm Set for " + formattedTime, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
                 break;

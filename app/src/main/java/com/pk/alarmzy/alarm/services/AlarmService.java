@@ -1,8 +1,10 @@
 package com.pk.alarmzy.alarm.services;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
@@ -21,6 +23,7 @@ import androidx.preference.PreferenceManager;
 
 import com.pk.alarmzy.alarm.AlarmTriggerActivity;
 import com.pk.alarmzy.alarm.helper.NotificationHelper;
+import com.pk.alarmzy.misc.Constants;
 
 // Note: Define service in AndroidManifest.xml
 
@@ -31,7 +34,6 @@ public class AlarmService extends Service {
     private Handler handler;
     private Runnable crescendoRunnable;
     private SharedPreferences sharedPref;
-
 
     //----------------------------- Lifecycle methods --------------------------------------------//
 
@@ -47,6 +49,11 @@ public class AlarmService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "AlarmService Started");
+
+        // Register mute action receiver
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.ACTION_MUTE);
+        registerReceiver(MuteActionReceiver, filter);
 
         /* This can produce npe
          * Check if key exists then fetch value
@@ -79,7 +86,6 @@ public class AlarmService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -94,6 +100,8 @@ public class AlarmService extends Service {
             // Stop vibration
             v.cancel();
         }
+
+        unregisterReceiver(MuteActionReceiver);
     }
 
     // Return null here as bound service is not used
@@ -249,5 +257,31 @@ public class AlarmService extends Service {
                 v.vibrate(vibratePattern, 0);
             }
         }
+    }
+
+    //-------------------------------- ActionBtn Methods -----------------------------------------//
+    /* This method:
+     * Handles alarm sound mute action from broadcasts
+     */
+    private final BroadcastReceiver MuteActionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Handle MUTE broadcast
+            if (Constants.ACTION_MUTE.equals(intent.getAction())) {
+                muteAlarm();
+            }
+        }
+    };
+
+    /* This method:
+     * Stops alarm sound and vibration
+     */
+    public void muteAlarm() {
+        if (handler != null && crescendoRunnable != null)
+            handler.removeCallbacks(crescendoRunnable);
+
+        // Stop sound and vibration
+        player.stop();
+        v.cancel();
     }
 }

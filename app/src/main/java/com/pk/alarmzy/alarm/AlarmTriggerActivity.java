@@ -2,13 +2,16 @@ package com.pk.alarmzy.alarm;
 
 import android.app.Application;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -39,6 +42,8 @@ public class AlarmTriggerActivity extends AppCompatActivity {
     private Handler handler;
     private Runnable silenceRunnable;
     private AlarmEntity alarmEntity;
+    private SharedPreferences sharedPref;
+    private String actionBtnPref;
 
 
     //----------------------------- Lifecycle methods --------------------------------------------//
@@ -50,6 +55,14 @@ public class AlarmTriggerActivity extends AppCompatActivity {
 
         // Wakeup screen
         turnOnScreen();
+
+        // Register Power button (screen off) intent receiver
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(PowerBtnReceiver, filter);
+
+        // Get Settings shared preferences
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Find views
         tvAlarmTime = findViewById(R.id.trigger_alarm_time);
@@ -86,11 +99,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         btnSnoozeAlarm.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
             @Override
             public void onSlideComplete(@NonNull SlideToActView slideToActView) {
-                // Create new snooze alarm
-                AlarmHelper ah = new AlarmHelper();
-                ah.snoozeAlarm();
-
-                stopAlarmService();
+                snoozeAlarm();
             }
         });
 
@@ -102,8 +111,9 @@ public class AlarmTriggerActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler = null;
-    }
 
+        unregisterReceiver(PowerBtnReceiver);
+    }
 
     //----------------------------- Build UI Data ------------------------------------------------//
 
@@ -285,6 +295,14 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         finish();
     }
 
+    public void snoozeAlarm() {
+        // Create new snooze alarm
+        AlarmHelper ah = new AlarmHelper();
+        ah.snoozeAlarm();
+
+        stopAlarmService();
+    }
+
     private void turnOnScreen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setTurnScreenOn(true);
@@ -299,6 +317,57 @@ public class AlarmTriggerActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
                     WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
                     WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
+        }
+    }
+
+    //-------------------------------- ActionBtn Methods -----------------------------------------//
+
+    /* This method:
+     * Receives Volume button press
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+                keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+
+            // Get volume key pref
+            actionBtnPref = sharedPref.getString("volume_btn_action", Constants.ACTION_DO_NOTHING);
+            if (actionBtnPref != null)
+                actionBtnHandler(actionBtnPref);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /* This method:
+     * Receives Power button press (Screen off event)
+     */
+    private final BroadcastReceiver PowerBtnReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null && intent.getAction() != null) {
+                if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+
+                    // Get power key pref
+                    actionBtnPref = sharedPref.getString("power_btn_action", Constants.ACTION_DO_NOTHING);
+                    if (actionBtnPref != null)
+                        actionBtnHandler(actionBtnPref);
+                }
+            }
+        }
+    };
+
+    private void actionBtnHandler(String action) {
+        switch (action) {
+            case Constants.ACTION_MUTE:
+                // Mute is handled by MuteActionReceiver in AlarmService
+                sendBroadcast(new Intent().setAction(Constants.ACTION_MUTE));
+                break;
+            case Constants.ACTION_DISMISS:
+                stopAlarmService();
+                break;
+            case Constants.ACTION_SNOOZE:
+                snoozeAlarm();
+                break;
         }
     }
 }
