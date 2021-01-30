@@ -27,6 +27,7 @@ import com.pk.alarmzy.alarm.db.AlarmRepository;
 import com.pk.alarmzy.alarm.helper.AlarmHelper;
 import com.pk.alarmzy.alarm.helper.NotificationHelper;
 import com.pk.alarmzy.alarm.services.AlarmService;
+import com.pk.alarmzy.databinding.ActivityAlarmTriggerBinding;
 import com.pk.alarmzy.misc.Constants;
 import com.pk.alarmzy.misc.MyApplication;
 
@@ -36,9 +37,13 @@ import java.util.Locale;
 
 public class AlarmTriggerActivity extends AppCompatActivity {
 
+    // UI Components
+    private ActivityAlarmTriggerBinding binding;
+    private TextView tvAlarmTime, tvAlarmTitle;
+
+    // vars
     private static final String TAG = "AlarmTriggerActivity";
     private boolean isSnoozed = false;
-    private TextView tvAlarmTime, tvAlarmTitle;
     private Handler handler;
     private Runnable silenceRunnable;
     private AlarmEntity alarmEntity;
@@ -51,7 +56,8 @@ public class AlarmTriggerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alarm_trigger);
+        binding = ActivityAlarmTriggerBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         // Wakeup screen
         turnOnScreen();
@@ -64,11 +70,11 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         // Get Settings shared preferences
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // Find views
-        tvAlarmTime = findViewById(R.id.trigger_alarm_time);
-        tvAlarmTitle = findViewById(R.id.trigger_alarm_title);
-        SlideToActView btnDismissAlarm = findViewById(R.id.btn_dismiss_alarm);
-        SlideToActView btnSnoozeAlarm = findViewById(R.id.btn_snooze_alarm);
+        // Get views
+        tvAlarmTime = binding.triggerAlarmTime;
+        tvAlarmTitle = binding.triggerAlarmTitle;
+        SlideToActView btnDismissAlarm = binding.btnDismissAlarm;
+        SlideToActView btnSnoozeAlarm = binding.btnSnoozeAlarm;
 
         Intent intent = getIntent();
 

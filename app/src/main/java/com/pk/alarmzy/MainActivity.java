@@ -27,6 +27,7 @@ import com.pk.alarmzy.alarm.db.AlarmViewModel;
 import com.pk.alarmzy.alarm.helper.AlarmHelper;
 import com.pk.alarmzy.alarm.helper.NotificationHelper;
 import com.pk.alarmzy.alarm.recycler.AlarmRecViewAdapter;
+import com.pk.alarmzy.databinding.ActivityMainBinding;
 import com.pk.alarmzy.misc.Utils;
 import com.pk.alarmzy.settings.SettingsActivity;
 
@@ -38,14 +39,12 @@ public class MainActivity extends AppCompatActivity {
     // UI Components
     private ImageView noAlarmsImage;
     private TextView noAlarmsText;
+    private ActivityMainBinding binding;
 
     // vars
     private RecyclerView mRecyclerView;
     private AlarmRecViewAdapter mAdapter;
     private AlarmHelper alarmHelper;
-
-    // Store selected hour, minute by TimePicker
-    private int mHour, mMinute;
 
 
     //----------------------------- Lifecycle methods --------------------------------------------//
@@ -53,12 +52,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        // Find views
-        noAlarmsImage = findViewById(R.id.image_when_empty);
-        noAlarmsText = findViewById(R.id.text_when_empty);
-        mRecyclerView = findViewById(R.id.item_alarm_recyclerView);
+        // Get views
+        noAlarmsImage = binding.imageWhenEmpty;
+        noAlarmsText = binding.textWhenEmpty;
+        mRecyclerView = binding.itemAlarmRecyclerView;
+
+        // Get helper
         alarmHelper = new AlarmHelper();
 
         // Initialize Recycler view and view model
@@ -151,9 +153,6 @@ public class MainActivity extends AppCompatActivity {
                 c.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 c.set(Calendar.MINUTE, minute);
                 c.set(Calendar.SECOND, 0);
-
-                mHour = hourOfDay;
-                mMinute = minute;
 
                 alarmHelper.createAlarm(c);
 
