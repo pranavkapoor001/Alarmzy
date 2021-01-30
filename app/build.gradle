@@ -33,14 +33,14 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     def lifecycle_version = "2.2.0"
-    def room_version = "2.2.5"
+    def room_version = "2.2.6"
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.2.0"
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:2.2.0"
     // Annotation processor
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     // Room
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
