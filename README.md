@@ -23,3 +23,6 @@ Alarm Clock app with all essential features and no ads
 - Slide to snooze / dismiss alarm
 - Swipe to delete alarm
 - Gradually increase alarm volume
+
+* Translate Alarmzy in your language:
+https://crowdin.com/project/alarmzy

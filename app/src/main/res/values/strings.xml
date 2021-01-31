@@ -6,6 +6,27 @@
     <string name="alarm">Alarm</string>
     <string name="snoozed_alarm">Snoozed Alarm</string>
     <string name="settings">Settings</string>
+    <string name="alarm_for">Alarm for</string>
+    <string name="disabled">Disabled</string>
+    <string name="alarm_set_for">Alarm Set for</string>
+    <string name="alarm_deleted">Alarm Deleted</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="alarm_removed">Alarm Removed</string>
+    <string name="notification_channel_description">Notifications From Alarmzy</string>
+    <string name="snoozing_till">Snoozing till</string>
+    <string name="missed_alarm">Missed Alarm</string>
+
+    <string name="do_nothing">Do nothing</string>
+    <string name="mute">Mute</string>
+    <string name="snooze">Snooze</string>
+    <string name="when_volume_button_is_pressed">when volume button is pressed</string>
+    <string name="when_power_button_is_pressed">when power button is pressed</string>
+    <string name="less_than_a_minute_from_now">less than a minute from now</string>
+    <string name="minutes_from_now">minutes from now</string>
+    <string name="hours_and">hours and</string>
+
+    <!-- Days - for selecting repeating alarm day-->
     <string name="mon">M</string>
     <string name="tue">T</string>
     <string name="wed">W</string>
@@ -14,6 +35,11 @@
     <string name="sat">S</string>
     <string name="sun">S</string>
 
+    <!-- Settings preference start -->
+
+    <!-- Shown in settings - snooze timeout-->
+    <string name="snooze_summary">Select timeout for snooze</string>
+    <string name="snooze_title">Snooze Time</string>
     <string-array name="snooze_length_entries">
         <item>1 Minute</item>
         <item>5 Minutes</item>
@@ -23,8 +49,7 @@
         <item>25 Minutes</item>
         <item>30 Minutes</item>
     </string-array>
-
-    <string-array name="snooze_length_values">
+    <string-array name="snooze_length_values" translatable="false">
         <item>1</item>
         <item>5</item>
         <item>10</item>
@@ -34,20 +59,25 @@
         <item>30</item>
     </string-array>
 
+    <!-- Shown in settings - silence timeout-->
+    <string name="silence_summary">Silence alarm after (minutes)</string>
+    <string name="silence_title">Silence Timeout</string>
     <string-array name="silence_timeout_entries">
         <item>Never</item>
         <item>5 Minutes</item>
         <item>10 Minutes</item>
         <item>15 Minutes</item>
     </string-array>
-
-    <string-array name="silence_timeout_values">
+    <string-array name="silence_timeout_values" translatable="false">
         <item>0</item>
         <item>5</item>
         <item>10</item>
         <item>15</item>
     </string-array>
 
+    <!-- Shown in settings - crescendo time-->
+    <string name="crescendo_summary">Alarm volume will increase slowly</string>
+    <string name="crescendo_title">Gradually increase volume</string>
     <string-array name="crescendo_entries">
         <item>Off</item>
         <item>5 Seconds</item>
@@ -59,8 +89,7 @@
         <item>50 Seconds</item>
         <item>60 Seconds</item>
     </string-array>
-
-    <string-array name="crescendo_values">
+    <string-array name="crescendo_values" translatable="false">
         <item>0</item>
         <item>5</item>
         <item>10</item>
@@ -72,18 +101,32 @@
         <item>60</item>
     </string-array>
 
+    <!-- Shown in settings - buttons-->
+    <string name="buttons_summary">Select what buttons do</string>
+    <string name="buttons_title">Buttons</string>
     <string-array name="button_action_entries">
         <item>Do Nothing</item>
         <item>Mute</item>
         <item>Dismiss</item>
         <item>Snooze</item>
     </string-array>
-
-    <string-array name="button_action_values">
+    <string-array name="button_action_values" translatable="false">
         <item>com.pk.alarmzy.DO_NOTHING</item>
         <item>com.pk.alarmzy.MUTE</item>
         <item>com.pk.alarmzy.DISMISS</item>
         <item>com.pk.alarmzy.SNOOZE</item>
     </string-array>
+
+    <!-- Shown in settings - miscellaneous options-->
+    <string name="ringtone_summary">Select the default alarm ring sound</string>
+    <string name="ringtone_title">Choose ringtone</string>
+    <string name="vibrate_summary">Vibrate with alarm</string>
+    <string name="vibrate_title">Enable vibration</string>
+    <string name="rating_summary">Leave a rating on Google Play</string>
+    <string name="rating_title">Rate Alarmzy</string>
+    <string name="volume_button">Volume button</string>
+    <string name="power_button">Power button</string>
+
+    <!-- Settings preference end -->
 
 </resources>
