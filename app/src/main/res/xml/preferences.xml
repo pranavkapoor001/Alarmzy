@@ -7,8 +7,8 @@
         android:entryValues="@array/snooze_length_values"
         android:icon="@drawable/ic_snooze"
         android:key="snoozeLength"
-        android:summary="Select timeout for snooze"
-        android:title="Snooze Time"
+        android:summary="@string/snooze_summary"
+        android:title="@string/snooze_title"
         app:defaultValue="10" />
 
     <ListPreference
@@ -17,8 +17,8 @@
         android:entryValues="@array/silence_timeout_values"
         android:icon="@drawable/ic_silence"
         android:key="silenceTimeout"
-        android:summary="Silence alarm after (minutes)"
-        android:title="Silence Timeout" />
+        android:summary="@string/silence_summary"
+        android:title="@string/silence_title" />
 
     <ListPreference
         android:defaultValue="0"
@@ -26,34 +26,34 @@
         android:entryValues="@array/crescendo_values"
         android:icon="@drawable/ic_volume_down"
         android:key="crescendoTime"
-        android:summary="Alarm volume will increase slowly"
-        android:title="Gradually increase volume" />
+        android:summary="@string/crescendo_summary"
+        android:title="@string/crescendo_title" />
 
     <Preference
         android:icon="@drawable/ic_volume_up"
         android:key="ringtone"
-        android:summary="Select the default alarm ring sound"
-        android:title="Choose ringtone" />
+        android:summary="@string/ringtone_summary"
+        android:title="@string/ringtone_title" />
 
     <SwitchPreferenceCompat
         android:defaultValue="true"
         android:icon="@drawable/ic_vibration"
         android:key="vibrateEnabled"
-        android:summary="Vibrate with alarm"
-        android:title="Enable vibration" />
+        android:summary="@string/vibrate_summary"
+        android:title="@string/vibrate_title" />
 
     <Preference
         android:icon="@drawable/ic_buttons"
         android:key="button_action"
-        android:summary="Select what buttons do"
-        android:title="Buttons"
+        android:summary="@string/buttons_summary"
+        android:title="@string/buttons_title"
         app:fragment="com.pk.alarmzy.settings.SettingsButtonFragment" />
 
     <Preference
         android:icon="@drawable/ic_star"
         android:key="rate"
-        android:summary="Leave a rating on Google Play"
-        android:title="Rate Alarmzy">
+        android:summary="@string/rating_summary"
+        android:title="@string/rating_title">
         <intent
             android:action="android.intent.action.VIEW"
             android:data="https://play.google.com/store/apps/details?id=com.pk.alarmzy" />

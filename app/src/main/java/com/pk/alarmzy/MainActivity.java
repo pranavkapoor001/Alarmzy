@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 int adapterPos = viewHolder.getAdapterPosition();
                 AlarmEntity currentEntity = mAdapter.getAlarmRecView(adapterPos);
                 alarmHelper.cancelAlarm(currentEntity, true, true, -1);
-                Snackbar.make(viewHolder.itemView, "Alarm Removed", Snackbar.LENGTH_LONG)
+                Snackbar.make(viewHolder.itemView, getString(R.string.alarm_removed), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
                 alarmHelper.createAlarm(c);
 
-                Snackbar.make(findViewById(android.R.id.content), "Alarm Set for "
+                Snackbar.make(findViewById(android.R.id.content), getString(R.string.alarm_set_for) + " "
                         + Utils.getFormattedNextAlarmTime(c.getTimeInMillis()), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }

@@ -7,7 +7,7 @@
         android:entryValues="@array/button_action_values"
         android:key="volume_btn_action"
         android:summary="%s"
-        android:title="Volume button" />
+        android:title="@string/volume_button" />
 
     <ListPreference
         android:defaultValue="com.pk.alarmzy.DO_NOTHING"
@@ -15,6 +15,6 @@
         android:entryValues="@array/button_action_values"
         android:key="power_btn_action"
         android:summary="%s"
-        android:title="Power button" />
+        android:title="@string/power_button" />
 
 </PreferenceScreen>

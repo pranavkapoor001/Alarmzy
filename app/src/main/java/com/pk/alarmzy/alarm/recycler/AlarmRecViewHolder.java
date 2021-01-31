@@ -39,6 +39,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
     private AlarmHelper ah;
     private AlarmEntity currentEntity;
     private String formattedTime;
+    private Context context;
 
     // UI Components
     private TextView tvAlarmTime;
@@ -53,6 +54,9 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
 
     public AlarmRecViewHolder(@NonNull View itemView) {
         super(itemView);
+
+        // Get context
+        context = itemView.getContext();
 
         // Find views
         tvAlarmTime = itemView.findViewById(R.id.item_alarm_time);
@@ -156,19 +160,20 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
             case R.id.item_alarm_enabled:
                 if (!switchAlarmEnabled.isChecked()) {
                     ah.cancelAlarm(currentEntity, false, true, -1);
-                    Snackbar.make(v, "Alarm for " + formattedTime + " disabled", Snackbar.LENGTH_LONG)
+                    Snackbar.make(v, context.getString(R.string.alarm_for) + " " + formattedTime + " " + R.string.disabled,
+                            Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
                     ah.oldAlarmId = currentEntity.getAlarmId();
                     ah.reEnableAlarm(currentEntity);
-                    Snackbar.make(v, "Alarm Set for " + formattedTime, Snackbar.LENGTH_LONG)
+                    Snackbar.make(v, context.getString(R.string.alarm_set_for) + " " + formattedTime, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
                 break;
             case R.id.item_alarm_delete:
                 // pass alarm id and true to delete: if false then just disable alarm
                 ah.cancelAlarm(currentEntity, true, true, -1);
-                Snackbar.make(v, "Alarm Deleted", Snackbar.LENGTH_LONG)
+                Snackbar.make(v, context.getString(R.string.alarm_deleted), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 break;
             case R.id.item_alarm_show_repeat:
@@ -233,7 +238,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
 
     public void alarmTitleBuilder() {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(itemView.getContext());
-        alertBuilder.setTitle("Alarm Title");
+        alertBuilder.setTitle(context.getString(R.string.alarm_title));
 
         final EditText titleInput = new EditText(MyApplication.getContext());
         titleInput.setTextColor(Color.WHITE);
@@ -248,7 +253,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
         InputMethodManager imm = (InputMethodManager) MyApplication.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
-        alertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        alertBuilder.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 AlarmRepository ar = new AlarmRepository(MyApplication.getContext());
@@ -259,7 +264,7 @@ public class AlarmRecViewHolder extends RecyclerView.ViewHolder implements View.
                 }
             }
         });
-        alertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alertBuilder.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Nothing

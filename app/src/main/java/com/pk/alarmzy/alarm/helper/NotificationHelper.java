@@ -53,7 +53,7 @@ public class NotificationHelper {
         notificationChannel.enableLights(true);
         notificationChannel.setLightColor(Color.GREEN);
         notificationChannel.enableVibration(true);
-        notificationChannel.setDescription("Notifications From Alarmzy");
+        notificationChannel.setDescription(mContext.getString(R.string.notification_channel_description));
         mNotifyManager.createNotificationChannel(notificationChannel);
 
         Log.i(TAG, "createNotificationChannel: Channel Created");
@@ -78,7 +78,7 @@ public class NotificationHelper {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 mContext, PRIMARY_CHANNEL_ID)
-                .setContentTitle("Alarm")
+                .setContentTitle(mContext.getString(R.string.alarm))
                 .setContentText(formattedTime)
                 .setSmallIcon(R.drawable.ic_alarm)
                 .setAutoCancel(true)
@@ -137,8 +137,8 @@ public class NotificationHelper {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 mContext, PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_alarm)
-                .setContentTitle("Alarm")
-                .setContentText("Snoozing till " + formattedTime)
+                .setContentTitle(mContext.getString(R.string.alarm))
+                .setContentText(mContext.getString(R.string.snoozing_till) + " " + formattedTime)
                 .setOngoing(true)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
@@ -165,8 +165,8 @@ public class NotificationHelper {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 mContext, PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_alarm)
-                .setContentTitle("Alarm")
-                .setContentText("Missed Alarm: " + formattedTime)
+                .setContentTitle(mContext.getString(R.string.alarm))
+                .setContentText(mContext.getString(R.string.missed_alarm) + ": " + formattedTime)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_ALARM);

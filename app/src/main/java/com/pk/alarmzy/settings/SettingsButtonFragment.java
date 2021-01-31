@@ -24,19 +24,19 @@ public class SettingsButtonFragment extends PreferenceFragmentCompat {
                 public CharSequence provideSummary(ListPreference preference) {
                     switch (preference.getValue()) {
                         case Constants.ACTION_DO_NOTHING:
-                            volBtnText = "Do nothing";
+                            volBtnText = getString(R.string.do_nothing);
                             break;
                         case Constants.ACTION_MUTE:
-                            volBtnText = "Mute";
+                            volBtnText = getString(R.string.mute);
                             break;
                         case Constants.ACTION_DISMISS:
-                            volBtnText = "Dismiss";
+                            volBtnText = getString(R.string.dismiss);
                             break;
                         case Constants.ACTION_SNOOZE:
-                            volBtnText = "Snooze";
+                            volBtnText = getString(R.string.snooze);
                             break;
                     }
-                    volBtnText = volBtnText + " when volume button is pressed";
+                    volBtnText = volBtnText + " " + getString(R.string.when_volume_button_is_pressed);
                     return volBtnText;
                 }
             });
@@ -52,19 +52,19 @@ public class SettingsButtonFragment extends PreferenceFragmentCompat {
                 public CharSequence provideSummary(ListPreference preference) {
                     switch (preference.getValue()) {
                         case Constants.ACTION_DO_NOTHING:
-                            powerBtnText = "Do nothing";
+                            powerBtnText = getString(R.string.do_nothing);
                             break;
                         case Constants.ACTION_MUTE:
-                            powerBtnText = "Mute";
+                            powerBtnText = getString(R.string.mute);
                             break;
                         case Constants.ACTION_DISMISS:
-                            powerBtnText = "Dismiss";
+                            powerBtnText = getString(R.string.dismiss);
                             break;
                         case Constants.ACTION_SNOOZE:
-                            powerBtnText = "Snooze";
+                            powerBtnText = getString(R.string.snooze);
                             break;
                     }
-                    powerBtnText = powerBtnText + " when volume button is pressed";
+                    powerBtnText = powerBtnText + " " + getString(R.string.when_power_button_is_pressed);
                     return powerBtnText;
                 }
             });
