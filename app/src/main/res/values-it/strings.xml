@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Alarmzy</string>
+    <string name="dismiss">Spegni</string>
+    <string name="no_alarms_set">Nessuna sveglia impostata</string>
+    <string name="alarm_title">Nome Sveglia</string>
+    <string name="alarm">Sveglia</string>
+    <string name="snoozed_alarm">Posticipa Sveglia</string>
+    <string name="settings">Impostazioni</string>
+    <string name="alarm_for">Sveglia per</string>
+    <string name="disabled">Disabilita</string>
+    <string name="alarm_set_for">Sveglia impostata per</string>
+    <string name="alarm_deleted">Sveglia eliminata</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Elimina</string>
+    <string name="alarm_removed">Sveglia Rimossa</string>
+    <string name="notification_channel_description">Notifiche Da Alarmzy</string>
+    <string name="snoozing_till">Posticipata fino a</string>
+    <string name="missed_alarm">Sveglia persa</string>
+    <string name="do_nothing">Non fare nulla</string>
+    <string name="mute">Silenzia</string>
+    <string name="snooze">Posticipa</string>
+    <string name="when_volume_button_is_pressed">quando si preme il pulsante volume</string>
+    <string name="when_power_button_is_pressed">quando si preme il pulsante di accensione</string>
+    <string name="less_than_a_minute_from_now">meno di un minuto da adesso</string>
+    <string name="minutes_from_now">minuti da adesso</string>
+    <string name="hours_and">ore e</string>
+    <!-- Days - for selecting repeating alarm day-->
+    <string name="mon">L</string>
+    <string name="tue">M</string>
+    <string name="wed">M</string>
+    <string name="thu">G</string>
+    <string name="fri">V</string>
+    <string name="sat">S</string>
+    <string name="sun">D</string>
+    <!-- Settings preference start -->
+    <!-- Shown in settings - snooze timeout-->
+    <string name="snooze_summary">Seleziona timeout per posticipare</string>
+    <string name="snooze_title">Tempo di ripetizione</string>
+    <string-array name="snooze_length_entries">
+        <item>1 minuto</item>
+        <item>5 Minuti</item>
+        <item>10 Minuti</item>
+        <item>15 Minuti</item>
+        <item>20 Minuti</item>
+        <item>25 Minuti</item>
+        <item>30 Minuti</item>
+    </string-array>
+    <!-- Shown in settings - silence timeout-->
+    <string name="silence_summary">Silenzia l\'allarme dopo (minuti)</string>
+    <string name="silence_title">Timeout Silenzio</string>
+    <string-array name="silence_timeout_entries">
+        <item>Mai</item>
+        <item>5 Minuti</item>
+        <item>10 Minuti</item>
+        <item>15 Minuti</item>
+    </string-array>
+    <!-- Shown in settings - crescendo time-->
+    <string name="crescendo_summary">Il volume degli allarmi aumenterà lentamente</string>
+    <string name="crescendo_title">Aumento graduale del volume</string>
+    <string-array name="crescendo_entries">
+        <item>Spento</item>
+        <item>5 Secondi</item>
+        <item>10 Secondi</item>
+        <item>15 Secondi</item>
+        <item>20 Secondi</item>
+        <item>30 Secondi</item>
+        <item>40 Secondi</item>
+        <item>50 Secondi</item>
+        <item>60 Secondi</item>
+    </string-array>
+    <!-- Shown in settings - buttons-->
+    <string name="buttons_summary">Azione dei tasti</string>
+    <string name="buttons_title">Tasti</string>
+    <string-array name="button_action_entries">
+        <item>Non fare niente</item>
+        <item>Silenzia</item>
+        <item>Spegni</item>
+        <item>Posticipa</item>
+    </string-array>
+    <!-- Shown in settings - miscellaneous options-->
+    <string name="ringtone_summary">Seleziona la suoneria predefinita della sveglia</string>
+    <string name="ringtone_title">Scegli suoneria</string>
+    <string name="vibrate_summary">Vibra con sveglia</string>
+    <string name="vibrate_title">Abilita vibrazione</string>
+    <string name="rating_summary">Lascia una recensione su Google Play Store</string>
+    <string name="rating_title">Vota Alarmzy</string>
+    <string name="volume_button">Pulsanti Volume</string>
+    <string name="power_button">Tasto Power</string>
+    <!-- Settings preference end -->
+</resources>
