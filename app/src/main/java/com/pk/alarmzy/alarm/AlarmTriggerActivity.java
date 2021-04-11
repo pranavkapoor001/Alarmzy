@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
@@ -49,6 +50,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
     private AlarmEntity alarmEntity;
     private SharedPreferences sharedPref;
     private String actionBtnPref;
+    private PowerManager.WakeLock wakeLock;
 
 
     //----------------------------- Lifecycle methods --------------------------------------------//
@@ -58,6 +60,15 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAlarmTriggerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "Alarmzy::AlarmTriggerWakeLock");
+
+        /* Acquire wakelock with 15 minutes timeout in case its not released from stopAlarmService()
+         * Where 15 minutes is the max silence timeout that can be selected by user
+         */
+        wakeLock.acquire(900000);
 
         // Wakeup screen
         turnOnScreen();
@@ -289,6 +300,7 @@ public class AlarmTriggerActivity extends AppCompatActivity {
 
     // Stop service and finish activity
     public void stopAlarmService() {
+        wakeLock.release();
         Intent intent = new Intent(AlarmTriggerActivity.this, AlarmService.class);
         stopService(intent);
 
