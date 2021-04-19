@@ -26,6 +26,14 @@
     <string name="minutes_from_now">minutes from now</string>
     <string name="hours_and">hours and</string>
 
+    <string name="fetching_weather_at_your_location">Fetching weather at your location</string>
+    <string name="failed_to_get_location">Failed to get location</string>
+    <string name="location_updated">Location updated</string>
+    <string name="please_enable_Google_location_services">Please enable Google location services</string>
+    <string name="enable">Enable</string>
+    <string name="location_access_required_for_weather">Location access required for weather</string>
+    <string name="allow">Allow</string>
+
     <!-- Days - for selecting repeating alarm day-->
     <string name="mon">M</string>
     <string name="tue">T</string>
@@ -115,6 +123,21 @@
         <item>com.pk.alarmzy.MUTE</item>
         <item>com.pk.alarmzy.DISMISS</item>
         <item>com.pk.alarmzy.SNOOZE</item>
+    </string-array>
+
+    <!-- Shown in settings - weather -->
+    <string name="weather_summary">Show weather information with alarm</string>
+    <string name="weather_summary_on">Show weather when alarm rings</string>
+    <string name="weather_summary_off">Hide weather</string>
+    <string name="weather_title">Weather</string>
+    <string name="weather_temperature_unit">Temperature unit</string>
+    <string-array name="weather_unit_entries">
+        <item>Celsius</item>
+        <item>Fahrenheit</item>
+    </string-array>
+    <string-array name="weather_unit_values" translatable="false">
+        <item>metric</item>
+        <item>imperial</item>
     </string-array>
 
     <!-- Shown in settings - miscellaneous options-->

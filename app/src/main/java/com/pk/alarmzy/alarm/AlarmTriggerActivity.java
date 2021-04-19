@@ -13,24 +13,34 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
 import com.ncorti.slidetoact.SlideToActView;
 import com.pk.alarmzy.R;
+import com.pk.alarmzy.Utils.Constants.Constants;
+import com.pk.alarmzy.Utils.Constants.PreferenceKeys;
+import com.pk.alarmzy.Utils.LocationUtils;
 import com.pk.alarmzy.alarm.db.AlarmEntity;
 import com.pk.alarmzy.alarm.db.AlarmRepository;
 import com.pk.alarmzy.alarm.helper.AlarmHelper;
 import com.pk.alarmzy.alarm.helper.NotificationHelper;
 import com.pk.alarmzy.alarm.services.AlarmService;
 import com.pk.alarmzy.databinding.ActivityAlarmTriggerBinding;
-import com.pk.alarmzy.misc.Constants;
 import com.pk.alarmzy.misc.MyApplication;
+import com.pk.alarmzy.weather.WeatherRepository;
+import com.pk.alarmzy.weather.WeatherResponse;
+import com.pk.alarmzy.weather.WeatherViewModel;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,7 +50,8 @@ public class AlarmTriggerActivity extends AppCompatActivity {
 
     // UI Components
     private ActivityAlarmTriggerBinding binding;
-    private TextView tvAlarmTime, tvAlarmTitle;
+    private TextView tvAlarmTime, tvAlarmTitle, tvTemperature, tvWeatherType;
+    private ImageView ivWeatherIcon;
 
     // vars
     private static final String TAG = "AlarmTriggerActivity";
@@ -84,6 +95,9 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         // Get views
         tvAlarmTime = binding.triggerAlarmTime;
         tvAlarmTitle = binding.triggerAlarmTitle;
+        tvTemperature = binding.temperature;
+        tvWeatherType = binding.weatherType;
+        ivWeatherIcon = binding.weatherIcon;
         SlideToActView btnDismissAlarm = binding.btnDismissAlarm;
         SlideToActView btnSnoozeAlarm = binding.btnSnoozeAlarm;
 
@@ -100,6 +114,9 @@ public class AlarmTriggerActivity extends AppCompatActivity {
 
         // Get alarm type and build data for UI
         buildDisplayInfo(alarmId);
+
+        // Initialize weather info
+        initWeatherViewModel();
 
         // SlideToActView Listeners
 
@@ -130,6 +147,28 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         handler = null;
 
         unregisterReceiver(PowerBtnReceiver);
+    }
+
+    private void initWeatherViewModel() {
+        /* Check if weather info is enabled by user and location is saved, return if not
+         * Since at this point, we cannot request location permission and getting location from gms
+         * now will cause delay
+         */
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        final boolean enableWeather = sharedPref.getBoolean(PreferenceKeys.KEY_WEATHER_ENABLED, true);
+        if (!enableWeather || !(new LocationUtils(this).isLocationSaved())) {
+            Log.i(TAG, "Weather not enable or location not saved, skipping weather display");
+            return;
+        }
+
+        WeatherViewModel viewModel = new ViewModelProvider(this).get(WeatherViewModel.class);
+        viewModel.getWeather().observe(this, new Observer<WeatherResponse>() {
+            @Override
+            public void onChanged(WeatherResponse weatherResponse) {
+
+                showWeather(weatherResponse);
+            }
+        });
     }
 
     //----------------------------- Build UI Data ------------------------------------------------//
@@ -216,10 +255,10 @@ public class AlarmTriggerActivity extends AppCompatActivity {
 
                 /* Get alarm title
                  * If alarmTitle is "Alarm Title" (User didn't set any custom title)
-                 * then show title as "Alarm"
+                 * then remove the view
                  */
                 if (alarmEntity.getAlarmTitle().trim().equals(getString(R.string.alarm_title)))
-                    tvAlarmTitle.setText(R.string.alarm);
+                    tvAlarmTitle.setVisibility(View.GONE);
                 else
                     tvAlarmTitle.setText(alarmEntity.getAlarmTitle());
             }
@@ -243,6 +282,27 @@ public class AlarmTriggerActivity extends AppCompatActivity {
         });
     }
 
+    // Display weather information
+    private void showWeather(WeatherResponse weatherResponse) {
+        // Check temperature unit
+        String temperature;
+        if (WeatherRepository.weatherUnit.equals("metric"))
+            temperature = weatherResponse.main.temp + " °C";
+        else
+            temperature = weatherResponse.main.temp + " °F";
+
+        // Display ambient,min and max temperature
+        tvTemperature.setText(temperature);
+
+        // Display weather type
+        tvWeatherType.setText(weatherResponse.weatherList.get(0).main);
+
+        // Load weather icon
+        final String imageUrl = "https://openweathermap.org/img/wn/" /* base url*/
+                + weatherResponse.weatherList.get(0).icon /* img icon code */
+                + "@2x.png" /* icon size and extension */;
+        Picasso.get().load(imageUrl).into(ivWeatherIcon);
+    }
 
     //------------------------------- Get Silence Timeout ----------------------------------------//
 

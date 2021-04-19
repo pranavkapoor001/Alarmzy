@@ -7,7 +7,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.pk.alarmzy.R;
-import com.pk.alarmzy.misc.Constants;
+import com.pk.alarmzy.Utils.Constants.Constants;
 
 public class SettingsButtonFragment extends PreferenceFragmentCompat {
     @Override

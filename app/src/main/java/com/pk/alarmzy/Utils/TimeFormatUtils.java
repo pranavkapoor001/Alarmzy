@@ -1,10 +1,11 @@
-package com.pk.alarmzy.misc;
+package com.pk.alarmzy.Utils;
 
 import android.content.Context;
 
 import com.pk.alarmzy.R;
+import com.pk.alarmzy.misc.MyApplication;
 
-public class Utils {
+public class TimeFormatUtils {
 
     public static String getFormattedNextAlarmTime(long time) {
 

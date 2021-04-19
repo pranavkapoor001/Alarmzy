@@ -1,4 +1,4 @@
-package com.pk.alarmzy.misc;
+package com.pk.alarmzy.Utils.Constants;
 
 public class Constants {
 
@@ -15,6 +15,9 @@ public class Constants {
     public static final int FRIDAY = 6;
     public static final int SATURDAY = 7;
 
+    /* Action button keys
+     * Used to decide action on power or volume button press while alarm is ringing
+     */
     public static final String ACTION_DO_NOTHING = "com.pk.alarmzy.DO_NOTHING";
     public static final String ACTION_MUTE = "com.pk.alarmzy.MUTE";
     public static final String ACTION_DISMISS = "com.pk.alarmzy.DISMISS";

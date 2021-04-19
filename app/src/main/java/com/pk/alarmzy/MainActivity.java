@@ -2,8 +2,12 @@ package com.pk.alarmzy;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +16,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,13 +28,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.pk.alarmzy.Utils.Constants.PermissionRequestCodes;
+import com.pk.alarmzy.Utils.Constants.PreferenceKeys;
+import com.pk.alarmzy.Utils.LocationUtils;
+import com.pk.alarmzy.Utils.PermissionUtils;
+import com.pk.alarmzy.Utils.TimeFormatUtils;
 import com.pk.alarmzy.alarm.db.AlarmEntity;
 import com.pk.alarmzy.alarm.db.AlarmViewModel;
 import com.pk.alarmzy.alarm.helper.AlarmHelper;
 import com.pk.alarmzy.alarm.helper.NotificationHelper;
 import com.pk.alarmzy.alarm.recycler.AlarmRecViewAdapter;
 import com.pk.alarmzy.databinding.ActivityMainBinding;
-import com.pk.alarmzy.misc.Utils;
 import com.pk.alarmzy.settings.SettingsActivity;
 
 import java.util.Calendar;
@@ -39,12 +49,14 @@ public class MainActivity extends AppCompatActivity {
     // UI Components
     private ImageView noAlarmsImage;
     private TextView noAlarmsText;
-    private ActivityMainBinding binding;
 
     // vars
+    private static final String TAG = "MainActivity";
     private RecyclerView mRecyclerView;
     private AlarmRecViewAdapter mAdapter;
     private AlarmHelper alarmHelper;
+    private LocationUtils locationUtils;
+    private PermissionUtils permissionUtils;
 
 
     //----------------------------- Lifecycle methods --------------------------------------------//
@@ -52,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         // Get views
@@ -86,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Set default values on first launch
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        // Check & request location permission if weather is enabled
+        checkLocationPermission();
     }
 
 
@@ -157,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                 alarmHelper.createAlarm(c);
 
                 Snackbar.make(findViewById(android.R.id.content), getString(R.string.alarm_set_for) + " "
-                        + Utils.getFormattedNextAlarmTime(c.getTimeInMillis()), Snackbar.LENGTH_LONG)
+                        + TimeFormatUtils.getFormattedNextAlarmTime(c.getTimeInMillis()), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         };
@@ -170,6 +185,26 @@ public class MainActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
+    private void checkLocationPermission() {
+        // Check if weather info is enabled by user, return if not
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        final boolean enableWeather = sharedPref.
+                getBoolean(PreferenceKeys.KEY_WEATHER_ENABLED, true);
+        if (!enableWeather)
+            return;
+
+        // Initialize helpers
+        locationUtils = new LocationUtils(this);
+        permissionUtils = new PermissionUtils(this);
+
+        // No need to update location
+        if (locationUtils.isLocationSaved())
+            return;
+
+        // Start permission check process then get location
+        locationUtils.getLocation();
+
+    }
 
     //----------------------------- MenuOptions methods ------------------------------------------//
 
@@ -188,5 +223,31 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    /*---------------------- Permission & activity result callbacks ------------------------------*/
+
+    // Called when user manually grants/denies permission
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        // Show SnackBar if permission is denied
+        if (requestCode == PermissionRequestCodes.LOCATION_REQUEST_CODE
+                && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+            Log.w(TAG, "onRequestPermissionsResult: Denied");
+            permissionUtils.showPermissionRationale();
+        } else {
+            Log.v(TAG, "onRequestPermissionsResult: Granted");
+            locationUtils.getLocation();
+        }
+    }
+
+    // Called after system app settings or GMS location dialog is launched to request permission
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        permissionUtils.handleOnActivityResult(requestCode, resultCode);
     }
 }

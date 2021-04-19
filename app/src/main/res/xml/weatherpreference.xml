@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="weather_enabled"
+        android:summaryOff="@string/weather_summary_off"
+        android:summaryOn="@string/weather_summary_on"
+        android:title="Weather" />
+
+    <ListPreference
+        android:defaultValue="metric"
+        android:entries="@array/weather_unit_entries"
+        android:entryValues="@array/weather_unit_values"
+        android:key="weather_unit"
+        android:title="@string/weather_temperature_unit"
+        app:useSimpleSummaryProvider="true" />
+
+    <Preference
+        android:key="weather_location"
+        android:title="Update Location" />
+
+</PreferenceScreen>

@@ -25,6 +25,13 @@
     <string name="less_than_a_minute_from_now">meno di un minuto da adesso</string>
     <string name="minutes_from_now">minuti da adesso</string>
     <string name="hours_and">ore e</string>
+    <string name="fetching_weather_at_your_location">Ottieni il meteo nella tua posizione</string>
+    <string name="failed_to_get_location">Impossibile rilevare la posizione</string>
+    <string name="location_updated">Posizione aggiornata</string>
+    <string name="please_enable_Google_location_services">Abilita i Servizi di Localizzazione</string>
+    <string name="enable">Attiva</string>
+    <string name="location_access_required_for_weather">Accesso alla posizione richiesto per il meteo</string>
+    <string name="allow">Permetti</string>
     <!-- Days - for selecting repeating alarm day-->
     <string name="mon">L</string>
     <string name="tue">M</string>
@@ -78,6 +85,12 @@
         <item>Spegni</item>
         <item>Posticipa</item>
     </string-array>
+    <!-- Shown in settings - weather -->
+    <string name="weather_summary">Mostra informazioni meteo con allarme</string>
+    <string name="weather_summary_on">Mostra meteo quando anelli di allarme</string>
+    <string name="weather_summary_off">Nascondi meteo</string>
+    <string name="weather_title">Meteo</string>
+    <string name="weather_temperature_unit">Unità di Temperatura</string>
     <!-- Shown in settings - miscellaneous options-->
     <string name="ringtone_summary">Seleziona la suoneria predefinita della sveglia</string>
     <string name="ringtone_title">Scegli suoneria</string>

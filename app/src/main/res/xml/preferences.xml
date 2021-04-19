@@ -50,6 +50,13 @@
         app:fragment="com.pk.alarmzy.settings.SettingsButtonFragment" />
 
     <Preference
+        android:icon="@drawable/ic_weather"
+        android:key="weather"
+        android:summary="@string/weather_summary"
+        android:title="@string/weather_title"
+        app:fragment="com.pk.alarmzy.settings.SettingsWeatherFragment" />
+
+    <Preference
         android:icon="@drawable/ic_star"
         android:key="rate"
         android:summary="@string/rating_summary"
