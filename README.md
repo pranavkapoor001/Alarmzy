@@ -9,7 +9,7 @@ Alarm Clock app with all essential features and no ads
 
 # Screenshots
 
-<img src="screenshots/AllAlarms.jpeg" height="400" alt="Screenshot"/> <img src="screenshots/AlarmTrigger.jpeg" height="400" alt="Screenshot"/> <img src="screenshots/RepeatingAlarms.jpeg" height="400" alt="Screenshot"/> <img src="screenshots/Settings.jpeg" height="400" alt="Screenshot"/>
+<img src="screenshots/AllAlarms.png" height="400" alt="Screenshot"/> <img src="screenshots/AlarmTrigger.png" height="400" alt="Screenshot"/> <img src="screenshots/RepeatingAlarms.jpeg" height="400" alt="Screenshot"/> <img src="screenshots/Settings.png" height="400" alt="Screenshot"/>
 
 
 # Features
